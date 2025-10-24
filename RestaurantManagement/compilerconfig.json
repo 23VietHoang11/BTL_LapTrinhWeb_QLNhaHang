@@ -1,0 +1,9 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/bootstrap.min.css",
+    "inputFile": "scss/bootstrap.scss",
+    "options": {
+      "outputStyle": "compressed"
+    }
+  }
+]
