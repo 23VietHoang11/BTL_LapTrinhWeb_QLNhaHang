@@ -1,0 +1,295 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+
+<header>
+    <div class="user-info">
+        <p>Đỗ Hoàng Hiếu</p>
+    </div>
+</header>
+
+<!-- Phần Dashboard ban đầu -->
+<div class="dashboard" id="dashboard">
+    <!-- Nội dung Dashboard hiện tại -->
+    <div class="filters">
+        <button>Hôm nay</button>
+        <button>Tháng này</button>
+        <button>Năm nay</button>
+        <button>Tất cả</button>
+    </div>
+    <div class="stats">
+        <div class="stat-item">
+            <h3>Hóa đơn</h3>
+            <p>1867</p>
+        </div>
+        <div class="stat-item">
+            <h3>Doanh thu</h3>
+            <p>1.689.600.000 đ</p>
+        </div>
+        <div class="stat-item">
+            <h3>Khách hàng</h3>
+            <p>4366</p>
+        </div>
+    </div>
+    <div class="chart">
+        <h3>Tất cả</h3>
+        <div class="chart-content"></div>
+    </div>
+</div>
+
+<!-- Phần Đặt bàn -->
+<div class="booking-schedule" id="tableBookingContent" style="display: none;">
+    <h2>Lịch đặt bàn</h2>
+    <button class="create-booking-btn">Tạo đơn đặt bàn</button>
+    <div class="booking-cards">
+        <!-- Thẻ đặt bàn 1 -->
+        <div class="booking-card">
+            <h3>Đỗ Hoàng Hiếu - 000000001</h3>
+            <div class="booking-details">
+                <p>⏰ 16 - 18 giờ</p>
+                <p>👥 5</p>
+                <p>💰 0 đ</p>
+            </div>
+            <button class="confirm-btn">Khách nhận bàn</button>
+        </div>
+
+        <!-- Thẻ đặt bàn 2 -->
+        <div class="booking-card">
+            <h3>Phạm Đình Kiên - 000000002</h3>
+            <div class="booking-details">
+                <p>⏰ 10 - 12 giờ</p>
+                <p>👥 2</p>
+                <p>💰 200.000 đ</p>
+            </div>
+            <button class="confirm-btn">Khách nhận bàn</button>
+        </div>
+
+        <!-- Thẻ đặt bàn 3 -->
+        <div class="booking-card">
+            <h3>Nguyễn Tuấn Anh - 000000003</h3>
+            <div class="booking-details">
+                <p>⏰ 12 - 14 giờ</p>
+                <p>👥 4</p>
+                <p>💰 150.000 đ</p>
+            </div>
+            <button class="confirm-btn">Khách nhận bàn</button>
+        </div>
+
+        <!-- Thẻ đặt bàn 4 -->
+        <div class="booking-card">
+            <h3>Nguyễn Việt Hoàng - 000000004</h3>
+            <div class="booking-details">
+                <p>⏰ 8 - 10 giờ</p>
+                <p>👥 3</p>
+                <p>💰 300.000 đ</p>
+            </div>
+            <button class="confirm-btn">Khách nhận bàn</button>
+        </div>
+
+        <!-- Thẻ đặt bàn 5 -->
+        <div class="booking-card">
+            <h3>Đỗ Hoàng Minh - 000000005</h3>
+            <div class="booking-details">
+                <p>⏰ 14 - 16 giờ</p>
+                <p>👥 6</p>
+                <p>💰 500.000 đ</p>
+            </div>
+            <button class="confirm-btn">Khách nhận bàn</button>
+        </div>
+
+        <!-- Thẻ đặt bàn 6 -->
+        <div class="booking-card">
+            <h3>Không Có Tiền - 000000006</h3>
+            <div class="booking-details">
+                <p>⏰ 18 - 20 giờ</p>
+                <p>👥 4</p>
+                <p>💰 250.000 đ</p>
+            </div>
+            <button class="confirm-btn">Khách nhận bàn</button>
+        </div>
+    </div>
+</div>
+
+<!-- Phần Hóa đơn -->
+<div class="invoice-section" id="invoiceContent" style="display: none;">
+    <h2>Đơn hiện tại</h2>
+    <button class="create-invoice-btn">Tạo đơn mới</button>
+    <!-- Đơn hàng -->
+    <div class="invoice-card">
+        <h3>Sảnh VIP</h3>
+        <div class="invoice-details">
+            <div class="table-number">
+                <p>Số bàn</p>
+                <p>5</p>
+            </div>
+            <div class="guest-count">
+                <p>👥 6</p>
+            </div>
+            <div class="timer">
+                <p>⏳ 00:01:20</p>
+            </div>
+            <div class="total-amount">
+                <p>💰 1.200.000 đ</p>
+            </div>
+        </div>
+        <div class="invoice-actions">
+            <button class="more-options">...</button>
+            <button class="pay-btn">Thanh toán</button>
+        </div>
+    </div>
+    <!-- Các đơn hàng khác -->
+    <!-- Đơn hàng 2 -->
+    <div class="invoice-card">
+        <h3>Sảnh ngoài trời</h3>
+        <div class="invoice-details">
+            <div class="table-number">
+                <p>Số bàn</p>
+                <p>10</p>
+            </div>
+            <div class="guest-count">
+                <p>👥 8</p>
+            </div>
+            <div class="timer">
+                <p>⏳ 00:00:35</p>
+            </div>
+            <div class="total-amount">
+                <p>💰 3.500.000 đ</p>
+            </div>
+        </div>
+        <div class="invoice-actions">
+            <button class="more-options">...</button>
+            <button class="pay-btn">Thanh toán</button>
+        </div>
+    </div>
+</div>
+
+<!-- Phần Thực đơn -->
+<div class="menu-section" id="menuContent" style="display: none;">
+    <h2>Thêm mặt hàng</h2>
+    <div class="menu-container">
+        <div class="menu-image">
+            <img src="~/admin/images/cocacola.png" alt="Chọn ảnh mặt hàng" id="item-image">
+            <button>Chọn ảnh mặt hàng</button>
+            <p>Dung lượng file tối đa 1 MB</p>
+            <p>Định dạng: JPEG, PNG</p>
+
+        </div>
+        <div class="menu-details">
+            <div class="form-group">
+                <label for="item-name">Tên mặt hàng (*)</label>
+                <input type="text" id="item-name" placeholder="Coca Cola">
+            </div>
+            <div class="form-group">
+                <label for="item-type">Loại mặt hàng (*)</label>
+                <select id="item-type">
+                    <option>Đồ uống</option>
+                    <option>Thức ăn</option>
+                    <!-- Các loại khác -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="unit">Đơn vị tính (*)</label>
+                <select id="unit">
+                    <option>Ly</option>
+                    <option>Chai</option>
+                    <!-- Các đơn vị khác -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="notes">Ghi chú</label>
+                <input type="text" id="notes" placeholder="VD: Được tùy chọn">
+            </div>
+            <h3>Giá mặt hàng</h3>
+            <div class="form-group">
+                <label for="price-name">Tên giá (*)</label>
+                <input type="text" id="price-name" placeholder="Giá thường">
+            </div>
+            <div class="form-group">
+                <label for="sale-price">Giá bán (*)</label>
+                <input type="number" id="sale-price" placeholder="15000">
+            </div>
+            <div class="form-group">
+                <label for="cost-price">Giá vốn (*)</label>
+                <input type="number" id="cost-price" placeholder="7000">
+            </div>
+            <button class="add-price-btn">+ Thêm giá</button>
+            <div class="action-buttons">
+                <button class="delete-btn">Xóa</button>
+                <button class="save-btn">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Phần Nhân viên -->
+<div class="staff-section" id="staffContent" style="display: none;">
+    <h2>Danh sách nhân viên</h2>
+    <div class="staff-cards">
+        <!-- Nhân viên 1 -->
+        <div class="staff-card">
+            <h3>Đỗ Hoàng Hiếu</h3>
+            <p>Chức vụ: Quản lý</p>
+            <p>Giới tính:Nam</p>
+        </div>
+
+        <!-- Nhân viên 2 -->
+        <div class="staff-card">
+            <h3>Phạm Đình Kiên</h3>
+            <p>Chức vụ: Bếp trưởng</p>
+            <p>Giới tính:Nam</p>
+        </div>
+
+        <!-- Nhân viên 3 -->
+        <div class="staff-card">
+            <h3>Nguyễn Tuấn Anh </h3>
+            <p>Chức vụ: Phục vụ</p>
+            <p>Giới tính:Nam</p>
+        </div>
+
+        <!-- Nhân viên 4 -->
+        <div class="staff-card">
+            <h3>Bế Việt Hoàng </h3>
+            <p>Chức vụ: Thu ngân</p>
+            <p>Giới tính:Nam</p>
+        </div>
+
+        <!-- Nhân viên 5 -->
+        <div class="staff-card">
+            <h3>Đỗ Hoàng Minh </h3>
+            <p>Chức vụ: Bảo vệ</p>
+            <p>Giới tính:Nam</p>
+        </div>
+        <!-- Nhân viên 6 -->
+        <div class="staff-card">
+            <h3>Không Có Tiền </h3>
+            <p>Chức vụ: Bảo vệ</p>
+            <p>Giới tính:Nam</p>
+        </div>
+    </div>
+    <div class="menu-details">
+        <div class="form-group">
+            <label for="item-name">Tên nhân viên (*)</label>
+            <input type="text" id="item-name" placeholder="Đỗ Hoàng Hiếu">
+        </div>
+        <div class="form-group">
+            <label for="item-type">giới tính (*)</label>
+            <select id="item-type">
+                <option>Nam </option>
+                <option>Nữ</option>
+                <!-- Các loại khác -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="unit">Chức vụ (*)</label>
+            <select id="unit">
+                <option>Quản Lý</option>
+                <option>Bếp trưởng</option>
+                <option>Phục vụ</option>
+                <option>thu ngân</option>
+                <option>bảo vệ</option>
+                <!-- Các đơn vị khác -->
+            </select>
+        </div>
+        <button class="nutnv">Thêm nhân viên</button>
+        <button class="nutnv2">xóa nhân viên</button>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/AdminLoginLayout.cshtml";
+}
+<div class="left-panel">
+    <h1>Welcome</h1>
+    <h3>Please login to Admin Dashboard.</h3>
+    <form action="#" method="post" id="login">
+        <div class="input">
+            <div class="icon">
+                <input type="text" id="username" name="username" placeholder="Tên đăng nhập" onfocus="this.placeholder=''" onblur="this.placeholder='Tên đăng nhập'" required>
+                <img src="~/admin/images/user.png">
+            </div>
+        </div>
+        <div class="input">
+            <div class="icon">
+                <input type="password" id="password" name="password" placeholder="Mật khẩu" onfocus="this.placeholder=''" onblur="this.placeholder='Mật khẩu'" required>
+                <img src="~/admin/images/lock.png">
+            </div>
+        </div>
+        <button type="submit">Đăng nhập</button>
+    </form>
+</div>
+<div class="divider"></div>
+<div class="right-panel">
+    <img src="~/admin/images/logo.png" alt="Logo">
+    <h2>H2AK's restaurant.</h2>
+</div>

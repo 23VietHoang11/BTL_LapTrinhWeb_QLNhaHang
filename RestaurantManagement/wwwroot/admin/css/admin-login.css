@@ -1,0 +1,118 @@
+body {
+    font-family: "Arian LT Demi";
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: #0f3c47;
+    height: 100vh;
+}
+
+
+.login-container {
+    display: flex;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.login-container h1 {
+    margin-top: 100px;
+    font-size: 50px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.login-container h3 {
+  font-size: 15px;
+  margin-bottom: 80px;
+  text-align: left;
+}
+
+.input {
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.input label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+button {
+    width: 51%;
+    padding: 10px;
+    background-color: #f1672b;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    float: left;
+}
+
+button:hover {
+    background-color: #d55b25;
+}
+
+.icon {
+    position: relative;
+}
+
+.icon input {
+    width: 50%;
+    padding: 10px 0px 10px 5px; 
+    color: #fff;
+    background-color: #FFFFFF1A;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.icon input::placeholder {
+  color: #ccc;
+}
+
+.icon img {
+    right: 10px;
+    top: 50%; 
+    transform: translate(-140%, 30%);
+    width: 25px;
+    height: 25px;
+}
+
+.login-container button {
+  margin-top: 10px;
+}
+
+.divider {
+    width: 1px;
+    background-color: white;
+    height: 80%;
+    align-self: center;
+}
+
+.left-panel {
+    width: 50%;
+    display: inline-block;
+    float: left;
+    padding-left: 30px;
+}
+
+.right-panel {
+    width: 50%;
+    display: flex;
+    float: right;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-panel h2 {
+    font-size: 40px;
+    margin-left: 20px;
+}
+
+.right-panel img {
+    height: 100px;
+    width: 100px;
+}
