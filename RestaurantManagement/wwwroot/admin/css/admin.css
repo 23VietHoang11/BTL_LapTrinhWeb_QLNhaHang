@@ -67,6 +67,7 @@ button {
     overflow-y: auto;
 }
 
+
 .main-content {
     margin-left: 260px;
     padding: 20px;
@@ -196,16 +197,45 @@ button {
 .has-submenu .arrow {
     margin-left: auto;
     transition: transform 0.3s ease;
+    position: relative;
 }
 
 .submenu {
     background-color: #161623;
-    padding-left: 40px; /* Thụt lề cho menu con */
-    display: none; /* JS sẽ xử lý việc hiển thị */
+    
+/*    display: none;*/
+    width: 100%;
+/*    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;*/
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-out;
 }
 
+.main-menu li.has-submenu.active > .submenu {
+    max-height: 500px; 
+}
+
+.main-menu .submenu {
+    /* !! ĐẢM BẢO CÓ DÒNG NÀY !! */
+    width: 100%;
+    /* Và giữ nguyên code trượt mượt của bạn */
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-out;
+}
+
+.main-menu li.has-submenu {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
     .submenu .menu-item {
-        padding-left: 20px; /* Thụt lề thêm cho item con */
+        padding-left: 15px; /* Thụt lề thêm cho item con */
         font-size: 0.9rem;
     }
 
@@ -221,12 +251,13 @@ button {
 
 /* --- Trạng thái Sidebar thu gọn --- */
 .sidebar.collapsed {
-    width: 80px;
+    width: 0px;
 }
 
+
     .sidebar.collapsed + .main-content {
-        margin-left: 80px;
-        width: calc(100% - 80px);
+        margin-left: 20px;
+        width: calc(100% - 20px);
     }
 
     .sidebar.collapsed .sidebar-logo span,

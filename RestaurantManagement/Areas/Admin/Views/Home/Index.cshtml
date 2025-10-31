@@ -11,7 +11,7 @@
 
     <div class="sidebar">
         <div class="sidebar-logo">
-            <img src="https://via.placeholder.com/40" alt="Logo"> <span>Hi Long Admin</span>
+            <img src="~/admin/images/cutlery.png" alt="Logo"> <span>Hi Long Admin</span>
         </div>
 
         <ul class="main-menu">
@@ -31,8 +31,23 @@
                     <li class="menu-item" data-target="menuAdd">Thêm món ăn mới</li>
                 </ul>
             </li>
+            <li class="menu-item" data-target="tableBookingContent">
+                <span class="icon">🪑</span> Quản Lý Đặt Bàn
+            </li>
+            <li class="menu-item" data-target="invoiceContent">
+                <span class="icon">🧾</span> Quản Lý Hóa Đơn
+            </li>
+
             <li class="menu-item" data-target="postContent">
                 <span class="icon">📄</span> Quản Lý Bài Viết
+            </li>
+            <li class="menu-item has-submenu" data-target="roleContent">
+                <span class="icon">🧑‍⚖️</span> Quản Lý Vai Trò
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="roleList">Danh sách vai trò</li>
+                    <li class="menu-item" data-target="rolePermissions">Phân quyền</li>
+                </ul>
             </li>
             <li class="menu-item has-submenu" data-target="otherContent">
                 <span class="icon">⚙️</span> Quản Lý Khác
@@ -48,20 +63,6 @@
                 <ul class="submenu">
                     <li class="menu-item" data-target="staffList">Danh sách tài khoản</li>
                     <li class="menu-item" data-target="staffAddEdit">Thêm/Sửa tài khoản</li>
-                </ul>
-            </li>
-            <li class="menu-item" data-target="tableBookingContent">
-                <span class="icon">🪑</span> Quản Lý Đặt Bàn
-            </li>
-            <li class="menu-item" data-target="invoiceContent">
-                <span class="icon">🧾</span> Quản Lý Hóa Đơn
-            </li>
-            <li class="menu-item has-submenu" data-target="roleContent">
-                <span class="icon">🧑‍⚖️</span> Quản Lý Vai Trò
-                <span class="arrow">▶</span>
-                <ul class="submenu">
-                    <li class="menu-item" data-target="roleList">Danh sách vai trò</li>
-                    <li class="menu-item" data-target="rolePermissions">Phân quyền</li>
                 </ul>
             </li>
         </ul>
@@ -135,7 +136,6 @@
                 </div>
                 <div class="chart-container">
                     <p>Biểu đồ sẽ hiển thị ở đây</p>
-                    <div style="background-color: #eee; height: 250px; display: flex; align-items: center; justify-content: center;">Biểu đồ tròn giả định</div>
                 </div>
                 <div class="chart-legend">
                     <div><span class="legend-color" style="background-color: #6c5ce7;"></span> Hủy đơn</div>
