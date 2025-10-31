@@ -1,295 +1,756 @@
-﻿@{
-    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
-}
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
 
-<header>
-    <div class="user-info">
-        <p>Đỗ Hoàng Hiếu</p>
+    <link rel="stylesheet" href="~/admin/css/admin.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="https://via.placeholder.com/40" alt="Logo"> <span>Hi Long Admin</span>
+        </div>
+
+        <ul class="main-menu">
+            <li class="menu-item active" data-target="dashboard">
+                <span class="icon">🏠</span> Dashboard
+            </li>
+        </ul>
+
+        <div class="sidebar-header">Quản lý danh sách</div>
+        <ul class="main-menu">
+            <li class="menu-item has-submenu" data-target="menuContent">
+                <span class="icon">🍴</span> Quản Lý Món Ăn
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="menuList">Danh sách món ăn</li>
+                    <li class="menu-item" data-target="menuCategories">Danh mục sản phẩm</li>
+                    <li class="menu-item" data-target="menuAdd">Thêm món ăn mới</li>
+                </ul>
+            </li>
+            <li class="menu-item" data-target="postContent">
+                <span class="icon">📄</span> Quản Lý Bài Viết
+            </li>
+            <li class="menu-item has-submenu" data-target="otherContent">
+                <span class="icon">⚙️</span> Quản Lý Khác
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="settingGeneral">Cài đặt chung</li>
+                    <li class="menu-item" data-target="settingAdvanced">Cài đặt nâng cao</li>
+                </ul>
+            </li>
+            <li class="menu-item has-submenu" data-target="staffContent">
+                <span class="icon">👥</span> Quản Lý Tài khoản
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="staffList">Danh sách tài khoản</li>
+                    <li class="menu-item" data-target="staffAddEdit">Thêm/Sửa tài khoản</li>
+                </ul>
+            </li>
+            <li class="menu-item" data-target="tableBookingContent">
+                <span class="icon">🪑</span> Quản Lý Đặt Bàn
+            </li>
+            <li class="menu-item" data-target="invoiceContent">
+                <span class="icon">🧾</span> Quản Lý Hóa Đơn
+            </li>
+            <li class="menu-item has-submenu" data-target="roleContent">
+                <span class="icon">🧑‍⚖️</span> Quản Lý Vai Trò
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="roleList">Danh sách vai trò</li>
+                    <li class="menu-item" data-target="rolePermissions">Phân quyền</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="sidebar-header">Tư vấn</div>
+        <ul class="main-menu">
+            <li class="menu-item" data-target="supportContent">
+                <span class="icon">💬</span> Tư vấn với khách hàng
+            </li>
+        </ul>
     </div>
-</header>
 
-<!-- Phần Dashboard ban đầu -->
-<div class="dashboard" id="dashboard">
-    <!-- Nội dung Dashboard hiện tại -->
-    <div class="filters">
-        <button>Hôm nay</button>
-        <button>Tháng này</button>
-        <button>Năm nay</button>
-        <button>Tất cả</button>
-    </div>
-    <div class="stats">
-        <div class="stat-item">
-            <h3>Hóa đơn</h3>
-            <p>1867</p>
-        </div>
-        <div class="stat-item">
-            <h3>Doanh thu</h3>
-            <p>1.689.600.000 đ</p>
-        </div>
-        <div class="stat-item">
-            <h3>Khách hàng</h3>
-            <p>4366</p>
-        </div>
-    </div>
-    <div class="chart">
-        <h3>Tất cả</h3>
-        <div class="chart-content"></div>
-    </div>
-</div>
+    <div class="main-content">
 
-<!-- Phần Đặt bàn -->
-<div class="booking-schedule" id="tableBookingContent" style="display: none;">
-    <h2>Lịch đặt bàn</h2>
-    <button class="create-booking-btn">Tạo đơn đặt bàn</button>
-    <div class="booking-cards">
-        <!-- Thẻ đặt bàn 1 -->
-        <div class="booking-card">
-            <h3>Đỗ Hoàng Hiếu - 000000001</h3>
-            <div class="booking-details">
-                <p>⏰ 16 - 18 giờ</p>
-                <p>👥 5</p>
-                <p>💰 0 đ</p>
+        <header>
+            <div class="header-left">
+                <button class="toggle-sidebar">☰</button>
+                <h1 id="page-title">Dashboard</h1>
             </div>
-            <button class="confirm-btn">Khách nhận bàn</button>
-        </div>
-
-        <!-- Thẻ đặt bàn 2 -->
-        <div class="booking-card">
-            <h3>Phạm Đình Kiên - 000000002</h3>
-            <div class="booking-details">
-                <p>⏰ 10 - 12 giờ</p>
-                <p>👥 2</p>
-                <p>💰 200.000 đ</p>
+            <div class="user-info">
+                <span class="user-name">Đỗ Hoàng Hiếu</span>
+                <img src="https://via.placeholder.com/30" alt="Avatar" class="user-avatar">
             </div>
-            <button class="confirm-btn">Khách nhận bàn</button>
-        </div>
+        </header>
 
-        <!-- Thẻ đặt bàn 3 -->
-        <div class="booking-card">
-            <h3>Nguyễn Tuấn Anh - 000000003</h3>
-            <div class="booking-details">
-                <p>⏰ 12 - 14 giờ</p>
-                <p>👥 4</p>
-                <p>💰 150.000 đ</p>
+        <div class="dashboard content-wrapper active" id="dashboard">
+            <div class="filters">
+                <button>Hôm nay</button>
+                <button>Tháng này</button>
+                <button>Năm nay</button>
+                <button class="active">Tất cả</button>
             </div>
-            <button class="confirm-btn">Khách nhận bàn</button>
-        </div>
-
-        <!-- Thẻ đặt bàn 4 -->
-        <div class="booking-card">
-            <h3>Nguyễn Việt Hoàng - 000000004</h3>
-            <div class="booking-details">
-                <p>⏰ 8 - 10 giờ</p>
-                <p>👥 3</p>
-                <p>💰 300.000 đ</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-details">
+                        <h3>Số lượng tài khoản</h3>
+                        <p>16</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">📄</div>
+                    <div class="stat-details">
+                        <h3>Số lượng bài viết</h3>
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🍴</div>
+                    <div class="stat-details">
+                        <h3>Số lượng món ăn</h3>
+                        <p>10</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🧾</div>
+                    <div class="stat-details">
+                        <h3>Số lượng danh mục</h3>
+                        <p>7</p>
+                    </div>
+                </div>
             </div>
-            <button class="confirm-btn">Khách nhận bàn</button>
+            <div class="chart-section">
+                <h3>Thống Kê Hóa Đơn</h3>
+                <div class="chart-filters">
+                    <select>
+                        <option>Cả năm</option>
+                        <option>Tháng 1</option>
+                        <option>Tháng 2</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <p>Biểu đồ sẽ hiển thị ở đây</p>
+                    <div style="background-color: #eee; height: 250px; display: flex; align-items: center; justify-content: center;">Biểu đồ tròn giả định</div>
+                </div>
+                <div class="chart-legend">
+                    <div><span class="legend-color" style="background-color: #6c5ce7;"></span> Hủy đơn</div>
+                    <div><span class="legend-color" style="background-color: #00b894;"></span> Chờ thanh toán cọc</div>
+                    <div><span class="legend-color" style="background-color: #fdcb6e;"></span> Hết hạn thanh toán cọc</div>
+                    <div><span class="legend-color" style="background-color: #e84393;"></span> Đã thanh toán cọc</div>
+                    <div><span class="legend-color" style="background-color: #0984e3;"></span> Chờ thanh toán toàn bộ đơn</div>
+                    <div><span class="legend-color" style="background-color: #f1c40f;"></span> Hoàn thành đơn</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Thẻ đặt bàn 5 -->
-        <div class="booking-card">
-            <h3>Đỗ Hoàng Minh - 000000005</h3>
-            <div class="booking-details">
-                <p>⏰ 14 - 16 giờ</p>
-                <p>👥 6</p>
-                <p>💰 500.000 đ</p>
-            </div>
-            <button class="confirm-btn">Khách nhận bàn</button>
-        </div>
-
-        <!-- Thẻ đặt bàn 6 -->
-        <div class="booking-card">
-            <h3>Không Có Tiền - 000000006</h3>
-            <div class="booking-details">
-                <p>⏰ 18 - 20 giờ</p>
-                <p>👥 4</p>
-                <p>💰 250.000 đ</p>
-            </div>
-            <button class="confirm-btn">Khách nhận bàn</button>
-        </div>
-    </div>
-</div>
-
-<!-- Phần Hóa đơn -->
-<div class="invoice-section" id="invoiceContent" style="display: none;">
-    <h2>Đơn hiện tại</h2>
-    <button class="create-invoice-btn">Tạo đơn mới</button>
-    <!-- Đơn hàng -->
-    <div class="invoice-card">
-        <h3>Sảnh VIP</h3>
-        <div class="invoice-details">
-            <div class="table-number">
-                <p>Số bàn</p>
-                <p>5</p>
-            </div>
-            <div class="guest-count">
-                <p>👥 6</p>
-            </div>
-            <div class="timer">
-                <p>⏳ 00:01:20</p>
-            </div>
-            <div class="total-amount">
-                <p>💰 1.200.000 đ</p>
-            </div>
-        </div>
-        <div class="invoice-actions">
-            <button class="more-options">...</button>
-            <button class="pay-btn">Thanh toán</button>
-        </div>
-    </div>
-    <!-- Các đơn hàng khác -->
-    <!-- Đơn hàng 2 -->
-    <div class="invoice-card">
-        <h3>Sảnh ngoài trời</h3>
-        <div class="invoice-details">
-            <div class="table-number">
-                <p>Số bàn</p>
-                <p>10</p>
-            </div>
-            <div class="guest-count">
-                <p>👥 8</p>
-            </div>
-            <div class="timer">
-                <p>⏳ 00:00:35</p>
-            </div>
-            <div class="total-amount">
-                <p>💰 3.500.000 đ</p>
-            </div>
-        </div>
-        <div class="invoice-actions">
-            <button class="more-options">...</button>
-            <button class="pay-btn">Thanh toán</button>
-        </div>
-    </div>
-</div>
-
-<!-- Phần Thực đơn -->
-<div class="menu-section" id="menuContent" style="display: none;">
-    <h2>Thêm mặt hàng</h2>
-    <div class="menu-container">
-        <div class="menu-image">
-            <img src="~/admin/images/cocacola.png" alt="Chọn ảnh mặt hàng" id="item-image">
-            <button>Chọn ảnh mặt hàng</button>
-            <p>Dung lượng file tối đa 1 MB</p>
-            <p>Định dạng: JPEG, PNG</p>
-
-        </div>
-        <div class="menu-details">
-            <div class="form-group">
-                <label for="item-name">Tên mặt hàng (*)</label>
-                <input type="text" id="item-name" placeholder="Coca Cola">
-            </div>
-            <div class="form-group">
-                <label for="item-type">Loại mặt hàng (*)</label>
-                <select id="item-type">
+        <div class="content-wrapper" id="menuList">
+            <h2>Danh sách món ăn</h2>
+            <div class="toolbar">
+                <input type="text" placeholder="Tên" class="filter-input">
+                <select class="filter-select">
+                    <option>Danh mục</option>
                     <option>Đồ uống</option>
                     <option>Thức ăn</option>
-                    <!-- Các loại khác -->
                 </select>
+                <button class="action-btn delete-selected-btn">Xóa mục đã chọn</button>
+                <button class="action-btn delete-temp-btn">Sản phẩm tạm xóa</button>
             </div>
-            <div class="form-group">
-                <label for="unit">Đơn vị tính (*)</label>
-                <select id="unit">
-                    <option>Ly</option>
-                    <option>Chai</option>
-                    <!-- Các đơn vị khác -->
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>STT</th>
+                            <th>HÌNH ẢNH</th>
+                            <th>TÊN SẢN PHẨM</th>
+                            <th>DANH MỤC</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>GIÁ</th>
+                            <th>THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>1</td>
+                            <td><img src="https://via.placeholder.com/50" alt="Lau Cua Dong"></td>
+                            <td>Lẩu Cua Đồng</td>
+                            <td>Món chính</td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td>220.000 VND</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>2</td>
+                            <td><img src="https://via.placeholder.com/50" alt="Canh ca loc"></td>
+                            <td>Canh cá lóc</td>
+                            <td>Món chính</td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td>60.000 VND</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>3</td>
+                            <td><img src="https://via.placeholder.com/50" alt="Lau mam"></td>
+                            <td>Lẩu Mắm</td>
+                            <td>Món chính</td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td>150.000 VND</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>4</td>
+                            <td><img src="https://via.placeholder.com/50" alt="Nuoc Sam Dua"></td>
+                            <td>Nước Sâm Dứa</td>
+                            <td>Đồ uống</td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td>25.000 VND</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>5</td>
+                            <td><img src="https://via.placeholder.com/50" alt="Coca Cola"></td>
+                            <td>Nước Ngọt Coca Cola</td>
+                            <td>Đồ uống</td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td>18.000 VND</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <span>Số lượng mục</span>
+                <select>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="notes">Ghi chú</label>
-                <input type="text" id="notes" placeholder="VD: Được tùy chọn">
-            </div>
-            <h3>Giá mặt hàng</h3>
-            <div class="form-group">
-                <label for="price-name">Tên giá (*)</label>
-                <input type="text" id="price-name" placeholder="Giá thường">
-            </div>
-            <div class="form-group">
-                <label for="sale-price">Giá bán (*)</label>
-                <input type="number" id="sale-price" placeholder="15000">
-            </div>
-            <div class="form-group">
-                <label for="cost-price">Giá vốn (*)</label>
-                <input type="number" id="cost-price" placeholder="7000">
-            </div>
-            <button class="add-price-btn">+ Thêm giá</button>
-            <div class="action-buttons">
-                <button class="delete-btn">Xóa</button>
-                <button class="save-btn">Lưu lại</button>
+                <div class="pages">
+                    <button>&lt;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>&gt;</button>
+                </div>
             </div>
         </div>
+
+        <div class="content-wrapper" id="menuCategories">
+            <h2>Danh mục sản phẩm</h2>
+            <p>Nội dung quản lý danh mục sản phẩm sẽ hiển thị ở đây...</p>
+        </div>
+
+        <div class="content-wrapper" id="menuAdd">
+            <h2>Thêm mặt hàng mới</h2>
+            <div class="menu-container">
+                <div class="menu-image">
+                    <img src="https://via.placeholder.com/150" alt="Chọn ảnh mặt hàng" id="item-image">
+                    <button class="upload-image-btn">Chọn ảnh mặt hàng</button>
+                    <p>Dung lượng file tối đa 1 MB</p>
+                    <p>Định dạng: JPEG, PNG</p>
+                </div>
+                <div class="menu-details">
+                    <div class="form-group">
+                        <label for="item-name">Tên mặt hàng (*)</label>
+                        <input type="text" id="item-name" placeholder="Coca Cola">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-type">Loại mặt hàng (*)</label>
+                        <select id="item-type">
+                            <option>Đồ uống</option>
+                            <option>Thức ăn</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="unit">Đơn vị tính (*)</label>
+                        <select id="unit">
+                            <option>Ly</option>
+                            <option>Chai</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Ghi chú</label>
+                        <input type="text" id="notes" placeholder="VD: Được tùy chọn">
+                    </div>
+                    <h3>Giá mặt hàng</h3>
+                    <div class="form-group">
+                        <label for="price-name">Tên giá (*)</label>
+                        <input type="text" id="price-name" placeholder="Giá thường">
+                    </div>
+                    <div class="form-group">
+                        <label for="sale-price">Giá bán (*)</label>
+                        <input type="number" id="sale-price" placeholder="15000">
+                    </div>
+                    <div class="form-group">
+                        <label for="cost-price">Giá vốn (*)</label>
+                        <input type="number" id="cost-price" placeholder="7000">
+                    </div>
+                    <button class="add-price-btn">+ Thêm giá</button>
+                    <div class="action-buttons">
+                        <button class="delete-btn">Xóa</button>
+                        <button class="save-btn">Lưu lại</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper" id="postContent">
+            <h1>Quản Lý Bài Viết</h1>
+            <p>Nội dung trang quản lý bài viết sẽ hiển thị ở đây...</p>
+        </div>
+
+        <div class="content-wrapper" id="settingGeneral">
+            <h2>Cài đặt chung</h2>
+            <p>Nội dung cài đặt chung sẽ hiển thị ở đây...</p>
+        </div>
+
+        <div class="content-wrapper" id="settingAdvanced">
+            <h2>Cài đặt nâng cao</h2>
+            <p>Nội dung cài đặt nâng cao sẽ hiển thị ở đây...</p>
+        </div>
+
+        <div class="content-wrapper" id="staffList">
+            <h2>Danh sách tài khoản</h2>
+            <div class="toolbar">
+                <input type="text" placeholder="Tìm kiếm tài khoản ở đây!" class="search-input">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ẢNH ĐẠI DIỆN</th>
+                            <th>TÊN ĐẦY ĐỦ</th>
+                            <th>EMAIL</th>
+                            <th>SĐT</th>
+                            <th>LOẠI NGƯỜI DÙNG</th>
+                            <th>VAI TRÒ (DÀNH CHO NHÂN VIÊN)</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
+                            <td>Quốc Trọng</td>
+                            <td>qtd839324@gmail.com</td>
+                            <td>0123456789</td>
+                            <td><span class="badge staff-type">Nhân Viên</span></td>
+                            <td><span class="badge role-type">Super Admin</span></td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
+                            <td>Anh Đạt</td>
+                            <td>dattran0212@gmail.com</td>
+                            <td>0877544323</td>
+                            <td><span class="badge staff-type">Nhân Viên</span></td>
+                            <td><span class="badge role-type">Nhân Viên</span></td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
+                            <td>Long Đẹp Zai</td>
+                            <td>longdz@gmail.com</td>
+                            <td>0877544323</td>
+                            <td><span class="badge staff-type">Nhân Viên</span></td>
+                            <td><span class="badge role-type">Nhân Viên</span></td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
+                            <td>Anh Kong</td>
+                            <td>kongkk@gmail.com</td>
+                            <td>0877544323</td>
+                            <td><span class="badge customer-type">Khách Hàng</span></td>
+                            <td></td>
+                            <td><span class="status active">Hoạt động</span></td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <span>Số lượng mục</span>
+                <select>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                </select>
+                <div class="pages">
+                    <button>&lt;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>&gt;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper" id="staffAddEdit">
+            <h2>Thêm/Sửa tài khoản</h2>
+            <div class="menu-details">
+                <div class="form-group">
+                    <label for="staff-name">Tên nhân viên (*)</label>
+                    <input type="text" id="staff-name" placeholder="Đỗ Hoàng Hiếu">
+                </div>
+                <div class="form-group">
+                    <label for="staff-gender">Giới tính (*)</label>
+                    <select id="staff-gender">
+                        <option>Nam</option>
+                        <option>Nữ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="staff-role">Chức vụ (*)</label>
+                    <select id="staff-role">
+                        <option>Quản Lý</option>
+                        <option>Bếp trưởng</option>
+                        <option>Phục vụ</option>
+                        <option>Thu ngân</option>
+                        <option>Bảo vệ</option>
+                    </select>
+                </div>
+                <button class="btn-primary">Thêm nhân viên</button>
+                <button class="btn-danger">Xóa nhân viên</button>
+            </div>
+        </div>
+
+        <div class="content-wrapper" id="tableBookingContent">
+            <h2>Lịch đặt bàn</h2>
+            <button class="create-booking-btn">Tạo đơn đặt bàn</button>
+            <div class="booking-cards">
+                <div class="booking-card">
+                    <h3>Đỗ Hoàng Hiếu - 000000001</h3>
+                    <div class="booking-details">
+                        <p>⏰ 16 - 18 giờ</p>
+                        <p>👥 5</p>
+                        <p>💰 0 đ</p>
+                    </div>
+                    <button class="confirm-btn">Khách nhận bàn</button>
+                </div>
+                <div class="booking-card">
+                    <h3>Phạm Đình Kiên - 000000002</h3>
+                    <div class="booking-details">
+                        <p>⏰ 10 - 12 giờ</p>
+                        <p>👥 2</p>
+                        <p>💰 200.000 đ</p>
+                    </div>
+                    <button class="confirm-btn">Khách nhận bàn</button>
+                </div>
+                <div class="booking-card">
+                    <h3>Nguyễn Tuấn Anh - 000000003</h3>
+                    <div class="booking-details">
+                        <p>⏰ 12 - 14 giờ</p>
+                        <p>👥 4</p>
+                        <p>💰 150.000 đ</p>
+                    </div>
+                    <button class="confirm-btn">Khách nhận bàn</button>
+                </div>
+                <div class="booking-card">
+                    <h3>Nguyễn Việt Hoàng - 000000004</h3>
+                    <div class="booking-details">
+                        <p>⏰ 8 - 10 giờ</p>
+                        <p>👥 3</p>
+                        <p>💰 300.000 đ</p>
+                    </div>
+                    <button class="confirm-btn">Khách nhận bàn</button>
+                </div>
+                <div class="booking-card">
+                    <h3>Đỗ Hoàng Minh - 000000005</h3>
+                    <div class="booking-details">
+                        <p>⏰ 14 - 16 giờ</p>
+                        <p>👥 6</p>
+                        <p>💰 500.000 đ</p>
+                    </div>
+                    <button class="confirm-btn">Khách nhận bàn</button>
+                </div>
+                <div class="booking-card">
+                    <h3>Không Có Tiền - 000000006</h3>
+                    <div class="booking-details">
+                        <p>⏰ 18 - 20 giờ</p>
+                        <p>👥 4</p>
+                        <p>💰 250.000 đ</p>
+                    </div>
+                    <button class="confirm-btn">Khách nhận bàn</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper" id="invoiceContent">
+            <h2>Đơn hiện tại</h2>
+            <button class="create-invoice-btn">Tạo đơn mới</button>
+            <div class="invoice-list">
+                <div class="invoice-card">
+                    <h3>Sảnh VIP</h3>
+                    <div class="invoice-details">
+                        <div class="table-number"><p>Số bàn</p><p>5</p></div>
+                        <div class="guest-count"><p>👥 6</p></div>
+                        <div class="timer"><p>⏳ 00:01:20</p></div>
+                        <div class="total-amount"><p>💰 1.200.000 đ</p></div>
+                    </div>
+                    <div class="invoice-actions">
+                        <button class="more-options">...</button>
+                        <button class="pay-btn">Thanh toán</button>
+                    </div>
+                </div>
+                <div class="invoice-card">
+                    <h3>Sảnh ngoài trời</h3>
+                    <div class="invoice-details">
+                        <div class="table-number"><p>Số bàn</p><p>10</p></div>
+                        <div class="guest-count"><p>👥 8</p></div>
+                        <div class="timer"><p>⏳ 00:00:35</p></div>
+                        <div class="total-amount"><p>💰 3.500.000 đ</p></div>
+                    </div>
+                    <div class="invoice-actions">
+                        <button class="more-options">...</button>
+                        <button class="pay-btn">Thanh toán</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper" id="roleList">
+            <h2>Danh sách vai trò</h2>
+            <div class="toolbar">
+                <input type="text" placeholder="Tìm kiếm vai trò ở đây!" class="search-input">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>TÊN</th>
+                            <th>MÔ TẢ</th>
+                            <th>NGÀY TẠO</th>
+                            <th>NGÀY CẬP NHẬT</th>
+                            <th>THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Nhân viên 3</td>
+                            <td></td>
+                            <td>28/11/2024 12:43</td>
+                            <td>03/12/2024 09:30</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Nhân viên tư vấn</td>
+                            <td>Chức năng này để cho nhân viên chỉ để tư vấn cho khách hàng</td>
+                            <td>28/11/2024 10:24</td>
+                            <td>03/12/2024 09:35</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Nhân viên</td>
+                            <td></td>
+                            <td>15/11/2024 13:55</td>
+                            <td>15/11/2024 13:55</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Super Admin</td>
+                            <td>Đây là Admin có quyền hạn cao nhất</td>
+                            <td>11/11/2024 16:02</td>
+                            <td>11/11/2024 16:02</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Tư vấn viên</td>
+                            <td></td>
+                            <td>30/10/2024 13:55</td>
+                            <td>30/10/2024 13:55</td>
+                            <td class="actions">
+                                <button class="btn-edit">Sửa</button>
+                                <button class="btn-delete">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <span>Số lượng mục</span>
+                <select>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                </select>
+                <div class="pages">
+                    <button>&lt;</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>&gt;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-wrapper" id="rolePermissions">
+            <h2>Phân quyền</h2>
+            <p>Nội dung phân quyền sẽ hiển thị ở đây...</p>
+        </div>
+
+
+        <div class="content-wrapper" id="supportContent">
+            <h1>Tư vấn với khách hàng</h1>
+            <p>Nội dung trang tư vấn với khách hàng sẽ hiển thị ở đây...</p>
+        </div>
+
     </div>
-</div>
-<!-- Phần Nhân viên -->
-<div class="staff-section" id="staffContent" style="display: none;">
-    <h2>Danh sách nhân viên</h2>
-    <div class="staff-cards">
-        <!-- Nhân viên 1 -->
-        <div class="staff-card">
-            <h3>Đỗ Hoàng Hiếu</h3>
-            <p>Chức vụ: Quản lý</p>
-            <p>Giới tính:Nam</p>
-        </div>
 
-        <!-- Nhân viên 2 -->
-        <div class="staff-card">
-            <h3>Phạm Đình Kiên</h3>
-            <p>Chức vụ: Bếp trưởng</p>
-            <p>Giới tính:Nam</p>
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.sidebar .menu-item');
+            const contentWrappers = document.querySelectorAll('.main-content .content-wrapper');
+            const pageTitle = document.getElementById('page-title');
 
-        <!-- Nhân viên 3 -->
-        <div class="staff-card">
-            <h3>Nguyễn Tuấn Anh </h3>
-            <p>Chức vụ: Phục vụ</p>
-            <p>Giới tính:Nam</p>
-        </div>
+            function updateContent(targetId) {
+                // Ẩn tất cả nội dung
+                contentWrappers.forEach(content => {
+                    content.classList.remove('active');
+                });
 
-        <!-- Nhân viên 4 -->
-        <div class="staff-card">
-            <h3>Bế Việt Hoàng </h3>
-            <p>Chức vụ: Thu ngân</p>
-            <p>Giới tính:Nam</p>
-        </div>
+                // Hiển thị nội dung được chọn
+                const targetContent = document.getElementById(targetId);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                    // Cập nhật tiêu đề trang
+                    if (targetContent.querySelector('h1')) {
+                        pageTitle.textContent = targetContent.querySelector('h1').textContent;
+                    } else if (targetContent.querySelector('h2')) {
+                        pageTitle.textContent = targetContent.querySelector('h2').textContent;
+                    } else {
+                        pageTitle.textContent = targetId.charAt(0).toUpperCase() + targetId.slice(1); // Mặc định nếu không có h1/h2
+                    }
+                }
+            }
 
-        <!-- Nhân viên 5 -->
-        <div class="staff-card">
-            <h3>Đỗ Hoàng Minh </h3>
-            <p>Chức vụ: Bảo vệ</p>
-            <p>Giới tính:Nam</p>
-        </div>
-        <!-- Nhân viên 6 -->
-        <div class="staff-card">
-            <h3>Không Có Tiền </h3>
-            <p>Chức vụ: Bảo vệ</p>
-            <p>Giới tính:Nam</p>
-        </div>
-    </div>
-    <div class="menu-details">
-        <div class="form-group">
-            <label for="item-name">Tên nhân viên (*)</label>
-            <input type="text" id="item-name" placeholder="Đỗ Hoàng Hiếu">
-        </div>
-        <div class="form-group">
-            <label for="item-type">giới tính (*)</label>
-            <select id="item-type">
-                <option>Nam </option>
-                <option>Nữ</option>
-                <!-- Các loại khác -->
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="unit">Chức vụ (*)</label>
-            <select id="unit">
-                <option>Quản Lý</option>
-                <option>Bếp trưởng</option>
-                <option>Phục vụ</option>
-                <option>thu ngân</option>
-                <option>bảo vệ</option>
-                <!-- Các đơn vị khác -->
-            </select>
-        </div>
-        <button class="nutnv">Thêm nhân viên</button>
-        <button class="nutnv2">xóa nhân viên</button>
-    </div>
-</div>
+            // Xử lý click vào menu chính và menu con
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Ngăn sự kiện click lan ra các menu cha
+                    e.stopPropagation();
+
+                    const targetId = this.getAttribute('data-target');
+
+                    // Xóa trạng thái active của tất cả menu items
+                    menuItems.forEach(menu => {
+                        menu.classList.remove('active');
+                    });
+
+                    // Thêm trạng thái active cho item hiện tại
+                    this.classList.add('active');
+
+                    // Nếu có submenu, toggle hiển thị submenu
+                    if (this.classList.contains('has-submenu')) {
+                        const submenu = this.querySelector('.submenu');
+                        if (submenu) {
+                            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+                            this.querySelector('.arrow').style.transform = submenu.style.display === 'block' ? 'rotate(90deg)' : 'rotate(0deg)';
+                        }
+                    } else {
+                        // Nếu không phải submenu cha, ẩn tất cả các submenu khác
+                        document.querySelectorAll('.sidebar ul.submenu').forEach(sub => {
+                            sub.style.display = 'none';
+                            if (sub.closest('.has-submenu')) {
+                                sub.closest('.has-submenu').querySelector('.arrow').style.transform = 'rotate(0deg)';
+                            }
+                        });
+                        // Đảm bảo submenu của mục cha vẫn mở nếu có
+                        let parentSubmenu = this.closest('ul.submenu');
+                        if (parentSubmenu) {
+                            parentSubmenu.style.display = 'block';
+                            if (parentSubmenu.closest('.has-submenu')) {
+                                parentSubmenu.closest('.has-submenu').classList.add('active'); // Kích hoạt cha
+                                parentSubmenu.closest('.has-submenu').querySelector('.arrow').style.transform = 'rotate(90deg)';
+                            }
+                        }
+                    }
+
+                    // Cập nhật nội dung chính
+                    updateContent(targetId);
+                });
+            });
+
+            // Khởi tạo trạng thái ban đầu
+            // Mở submenu cho mục active ban đầu (Dashboard)
+            const initialActiveMenuItem = document.querySelector('.sidebar .menu-item.active');
+            if (initialActiveMenuItem) {
+                const targetId = initialActiveMenuItem.getAttribute('data-target');
+                updateContent(targetId);
+                let parentSubmenu = initialActiveMenuItem.closest('ul.submenu');
+                if (parentSubmenu) {
+                    parentSubmenu.style.display = 'block';
+                    if (parentSubmenu.closest('.has-submenu')) {
+                        parentSubmenu.closest('.has-submenu').querySelector('.arrow').style.transform = 'rotate(90deg)';
+                    }
+                }
+            }
+
+            // Xử lý nút toggle sidebar (nếu có)
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            const sidebar = document.querySelector('.sidebar');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
