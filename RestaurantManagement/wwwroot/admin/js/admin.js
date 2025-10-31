@@ -1,4 +1,9 @@
+
 document.addEventListener("DOMContentLoaded", function () {
+
+
+
+
     // Tập hợp các phần tử của từng phần trong giao diện
     const sections = {
         dashboard: document.getElementById("dashboard"),
