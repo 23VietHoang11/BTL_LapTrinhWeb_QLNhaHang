@@ -1,28 +1,88 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/AdminLoginLayout.cshtml";
 }
-<div class="left-panel">
-    <h1>Welcome</h1>
-    <h3>Please login to Admin Dashboard.</h3>
-    <form action="#" method="post" id="login">
-        <div class="input">
-            <div class="icon">
-                <input type="text" id="username" name="username" placeholder="Tên đăng nhập" onfocus="this.placeholder=''" onblur="this.placeholder='Tên đăng nhập'" required>
-                <img src="~/admin/images/user.png">
-            </div>
+
+<div class="login-card">
+    <div class="card-decoration">
+        <div class="deco-line line-1"></div>
+        <div class="deco-line line-2"></div>
+        <div class="deco-line line-3"></div>
+    </div>
+
+    <div class="login-header">
+        <div class="creative-logo">
+            <img src="~/admin/images/cutlery.png" alt="Logo">
         </div>
-        <div class="input">
-            <div class="icon">
-                <input type="password" id="password" name="password" placeholder="Mật khẩu" onfocus="this.placeholder=''" onblur="this.placeholder='Mật khẩu'" required>
-                <img src="~/admin/images/lock.png">
+        <h2>Welcome to Restaurant Management System</h2>
+        <p>Please enter your account</p>
+    </div>
+
+    <form class="login-form" id="loginForm" novalidate>
+        <div class="form-group">
+            <div class="input-wrapper">
+                <div class="input-decoration"></div>
+                <input type="email" id="email" name="email" required autocomplete="email">
+                <label for="email">Email Address</label>
+                <div class="input-waves">
+                    <div class="wave wave-1"></div>
+                    <div class="wave wave-2"></div>
+                    <div class="wave wave-3"></div>
+                </div>
             </div>
+            <span class="error-message" id="emailError"></span>
         </div>
-        <button type="submit">Đăng nhập</button>
-        <button type="submit" style="background-color: #56c3ac">Đăng kí</button>
+
+        <div class="form-group">
+            <div class="input-wrapper password-wrapper">
+                <div class="input-decoration"></div>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+                <label for="password">Password</label>
+                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Toggle password visibility">
+                    <span class="toggle-icon"></span>
+                </button>
+                <div class="input-waves">
+                    <div class="wave wave-1"></div>
+                    <div class="wave wave-2"></div>
+                    <div class="wave wave-3"></div>
+                </div>
+            </div>
+            <span class="error-message" id="passwordError"></span>
+        </div>
+
+        <div class="form-options">
+            <div class="remember-wrapper">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember" class="checkbox-label">
+                    <div class="checkbox-creative">
+                        <div class="check-mark"></div>
+                    </div>
+                    Remember me
+                </label>
+            </div>
+            <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">
+            <span class="btn-bg"></span>
+            <span class="btn-text">Sign In</span>
+            <span class="btn-loader">
+                <div class="loader-dot dot-1"></div>
+                <div class="loader-dot dot-2"></div>
+                <div class="loader-dot dot-3"></div>
+            </span>
+        </button>
     </form>
-</div>
-<div class="divider"></div>
-<div class="right-panel">
-    <img src="~/admin/images/cutlery.png" alt="Logo">
-    <h2>H2AK's restaurant.</h2>
+
+    <div class="signup-link">
+        <p>Don't have an account? <a href="~/Admin/Home/RegisterAcc">Sign Up</a></p>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        <div class="success-animation">
+            <div class="success-circle"></div>
+            <div class="success-checkmark">✓</div>
+        </div>
+        <h3>Welcome, Creator!</h3>
+        <p>Entering your creative dimension...</p>
+    </div>
 </div>
