@@ -657,93 +657,91 @@
             const menuItems = document.querySelectorAll('.sidebar .menu-item');
             const contentWrappers = document.querySelectorAll('.main-content .content-wrapper');
             const pageTitle = document.getElementById('page-title');
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
 
+            // --- Hàm cập nhật nội dung chính ---
             function updateContent(targetId) {
-                // Ẩn tất cả nội dung
+                if (!targetId) return; // Không làm gì nếu item không có data-target
+
                 contentWrappers.forEach(content => {
                     content.classList.remove('active');
                 });
 
-                // Hiển thị nội dung được chọn
                 const targetContent = document.getElementById(targetId);
                 if (targetContent) {
                     targetContent.classList.add('active');
+
                     // Cập nhật tiêu đề trang
-                    if (targetContent.querySelector('h1')) {
-                        pageTitle.textContent = targetContent.querySelector('h1').textContent;
-                    } else if (targetContent.querySelector('h2')) {
-                        pageTitle.textContent = targetContent.querySelector('h2').textContent;
-                    } else {
-                        pageTitle.textContent = targetId.charAt(0).toUpperCase() + targetId.slice(1); // Mặc định nếu không có h1/h2
+                    const titleEl = targetContent.querySelector('h1') || targetContent.querySelector('h2');
+                    if (titleEl) {
+                        pageTitle.textContent = titleEl.textContent;
+                    } else if (targetId === 'dashboard') {
+                        pageTitle.textContent = 'Dashboard'; // Fallback cho trang chủ
                     }
                 }
             }
 
-            // Xử lý click vào menu chính và menu con
+            // --- Xử lý click vào menu ---
             menuItems.forEach(item => {
                 item.addEventListener('click', function(e) {
-                    // Ngăn sự kiện click lan ra các menu cha
                     e.stopPropagation();
 
                     const targetId = this.getAttribute('data-target');
+                    const isSubmenuParent = this.classList.contains('has-submenu');
+                    const parentLi = this.closest('.has-submenu');
 
-                    // Xóa trạng thái active của tất cả menu items
-                    menuItems.forEach(menu => {
-                        menu.classList.remove('active');
+                    // 1. Xử lý TRẠNG THÁI ACTIVE
+                    // Xóa tất cả active trước
+                    menuItems.forEach(i => {
+                        i.classList.remove('active');
                     });
 
-                    // Thêm trạng thái active cho item hiện tại
-                    this.classList.add('active');
+                    if (parentLi) {
+                        // === Click vào item CON ===
+                        // 1. Kích hoạt cha của nó (để có màu xanh)
+                        parentLi.classList.add('active');
+                        // Item con (this) không được add active
 
-                    // Nếu có submenu, toggle hiển thị submenu
-                    if (this.classList.contains('has-submenu')) {
-                        const submenu = this.querySelector('.submenu');
-                        if (submenu) {
-                            submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-                            this.querySelector('.arrow').style.transform = submenu.style.display === 'block' ? 'rotate(90deg)' : 'rotate(0deg)';
-                        }
+                    } else if (isSubmenuParent) {
+                        // === Click vào item CHA ===
+                        // 1. Dùng toggle để vừa mở/đóng, vừa giữ màu xanh
+                        this.classList.toggle('active');
+
                     } else {
-                        // Nếu không phải submenu cha, ẩn tất cả các submenu khác
-                        document.querySelectorAll('.sidebar ul.submenu').forEach(sub => {
-                            sub.style.display = 'none';
-                            if (sub.closest('.has-submenu')) {
-                                sub.closest('.has-submenu').querySelector('.arrow').style.transform = 'rotate(0deg)';
-                            }
-                        });
-                        // Đảm bảo submenu của mục cha vẫn mở nếu có
-                        let parentSubmenu = this.closest('ul.submenu');
-                        if (parentSubmenu) {
-                            parentSubmenu.style.display = 'block';
-                            if (parentSubmenu.closest('.has-submenu')) {
-                                parentSubmenu.closest('.has-submenu').classList.add('active'); // Kích hoạt cha
-                                parentSubmenu.closest('.has-submenu').querySelector('.arrow').style.transform = 'rotate(90deg)';
-                            }
-                        }
+                        // === Click vào item ĐƠN (như Dashboard) ===
+                        // 1. Kích hoạt chính nó
+                        this.classList.add('active');
                     }
 
-                    // Cập nhật nội dung chính
+                    // 2. Xử lý ĐÓNG các menu khác
+                    // Nếu click vào 1 item cha, hoặc 1 item đơn (không phải item con)
+                    if (!parentLi) {
+                        document.querySelectorAll('.has-submenu').forEach(otherParent => {
+                            if (otherParent !== this) {
+                                otherParent.classList.remove('active'); // Đóng tất cả các cha khác
+                            }
+                        });
+                    }
+
+                    // 3. Cập nhật nội dung (luôn luôn chạy)
                     updateContent(targetId);
                 });
             });
 
-            // Khởi tạo trạng thái ban đầu
-            // Mở submenu cho mục active ban đầu (Dashboard)
+            // --- Khởi tạo trang ---
             const initialActiveMenuItem = document.querySelector('.sidebar .menu-item.active');
             if (initialActiveMenuItem) {
                 const targetId = initialActiveMenuItem.getAttribute('data-target');
                 updateContent(targetId);
-                let parentSubmenu = initialActiveMenuItem.closest('ul.submenu');
-                if (parentSubmenu) {
-                    parentSubmenu.style.display = 'block';
-                    if (parentSubmenu.closest('.has-submenu')) {
-                        parentSubmenu.closest('.has-submenu').querySelector('.arrow').style.transform = 'rotate(90deg)';
-                    }
+
+                const parent = initialActiveMenuItem.closest('.has-submenu');
+                if (parent) {
+                    parent.classList.add('active');
                 }
             }
 
-            // Xử lý nút toggle sidebar (nếu có)
-            const toggleBtn = document.querySelector('.toggle-sidebar');
-            const sidebar = document.querySelector('.sidebar');
+            // --- Xử lý nút Toggle Sidebar ---
             if (toggleBtn) {
                 toggleBtn.addEventListener('click', function() {
                     sidebar.classList.toggle('collapsed');

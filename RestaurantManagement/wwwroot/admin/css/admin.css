@@ -240,9 +240,9 @@ button {
     }
 
         .submenu .menu-item.active {
-            background: none;
-            color: #a7baff; /* Màu khác cho item con active */
-            font-weight: 600;
+            background: none; /* Giữ nguyên: không có nền xanh */
+                        color: inherit; /* SỬA LẠI: Kế thừa màu chữ bình thường */
+                        font-weight: inherit; /* SỬA LẠI: Kế thừa font-weight bình thường */
         }
 
             .submenu .menu-item.active::before {
