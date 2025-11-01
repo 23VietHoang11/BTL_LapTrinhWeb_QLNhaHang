@@ -201,7 +201,7 @@ button {
 }
 
 .submenu {
-    background-color: #161623;
+    background-color: #4A69BD;
     
 /*    display: none;*/
     width: 100%;
@@ -252,6 +252,7 @@ button {
 /* --- Trạng thái Sidebar thu gọn --- */
 .sidebar.collapsed {
     width: 0px;
+    overflow: hidden;
 }
 
 
@@ -262,8 +263,10 @@ button {
 
     .sidebar.collapsed .sidebar-logo span,
     .sidebar.collapsed .sidebar-header,
-    .sidebar.collapsed .menu-item span:not(.icon),
     .sidebar.collapsed .arrow {
+        display: none;
+    }
+    .sidebar.collapsed .menu-item span:not(.icon) {
         display: none;
     }
 
