@@ -5,13 +5,13 @@ namespace RestaurantManagement.Models.Entities;
 
 public partial class TaiKhoan
 {
-    public int IdtaiKhoan { get; set; }
+    public int IDTaiKhoan { get; set; }
 
-    public int IdnhanVien { get; set; }
+    public int IDNhanVien { get; set; }
 
     public string TenDangNhap { get; set; } = null!;
 
-    public string MatKhauHash { get; set; } = null!;
+    public string MatKhau { get; set; } = null!;
 
     public string? TrangThai { get; set; }
 
