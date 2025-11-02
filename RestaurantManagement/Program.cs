@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RestaurantManagement.Data;
@@ -15,7 +16,32 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<QLNhaHangContext>();
 builder.Services.AddControllersWithViews();
 
+// Thêm dịch vụ Xác thực
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "H2AK_RestaurantAuth"; // Tên cookie
+        options.LoginPath = "/Account/Login";     // Đường dẫn đến trang đăng nhập
+        options.LogoutPath = "/Account/Logout";    // Đường dẫn đến trang đăng xuất
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Trang "Cấm truy cập"
+        options.ExpireTimeSpan = TimeSpan.FromDays(1); // Thời gian cookie hết hạn
+    });
+
+// Thêm dịch vụ HTTP Context Accessor (để đọc Session/Cookie)
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(); // Thêm Session (nếu bạn cần dùng)
+
 var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+// === KÍCH HOẠT XÁC THỰC ===
+app.UseSession(); // Kích hoạt Session
+app.UseAuthentication(); // BẮT BUỘC: Kích hoạt xác thực (đọc cookie)
+app.UseAuthorization();  // BẮT BUỘC: Kích hoạt phân quyền
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

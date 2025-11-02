@@ -5,7 +5,7 @@ namespace RestaurantManagement.Models.Entities;
 
 public partial class Quyen
 {
-    public int Idquyen { get; set; }
+    public int IDQuyen { get; set; }
 
     public string TenQuyen { get; set; } = null!;
 
