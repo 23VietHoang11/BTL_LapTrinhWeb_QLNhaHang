@@ -1,14 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RestaurantManagement.Areas.Admin.Models;
+using RestaurantManagement.Models.Entities;
+using System.Data.Common;
 
 namespace RestaurantManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class HomeController : Controller
     {
+        private readonly QLNhaHangContext _context;
+        public HomeController(QLNhaHangContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            // Lấy danh sách đặt bàn (cần inject DbContext)
+            var danhSachDatBan = _context.DatBans
+                                         .Include(d => d.IdkhachHangNavigation) // Lấy thông tin khách hàng
+                                         .OrderByDescending(d => d.ThoiGian)
+                                         .ToList();
+
+            return View(danhSachDatBan); // Truyền danh sách vào View
         }
 
         public IActionResult LoginAdmin()
@@ -32,5 +47,9 @@ namespace RestaurantManagement.Areas.Admin.Controllers
             }
             return View(model);
         }
+
+        // Ví dụ: BookingViewModel.cs
+
+        
     }
 }

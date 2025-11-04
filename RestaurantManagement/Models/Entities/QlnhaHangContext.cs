@@ -49,9 +49,7 @@ public partial class QLNhaHangContext : DbContext
 
     public virtual DbSet<TonKho> TonKhos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=QLNhaHang;Persist Security Info=True;User ID=sa;Password=123;TrustServerCertificate=True");
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BanAn>(entity =>

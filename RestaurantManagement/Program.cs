@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<QLNhaHangContext>(options =>
     options.UseSqlServer(connectionString));
+var qlnhConnectionString = builder.Configuration.GetConnectionString("QLNhaHangConnection") ?? throw new InvalidOperationException("Connection string 'QLNhaHangConnection' not found.");
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
