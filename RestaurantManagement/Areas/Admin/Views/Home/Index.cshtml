@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model IEnumerable<RestaurantManagement.Models.Entities.DatBan>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -480,63 +481,28 @@
         </div>
 
         <div class="content-wrapper" id="tableBookingContent">
-            <h2>Lịch đặt bàn</h2>
-            <button class="create-booking-btn">Tạo đơn đặt bàn</button>
+            [cite_start]<h2>Lịch đặt bàn</h2> [cite: 99]
+            [cite_start]<button class="create-booking-btn">Tạo đơn đặt bàn</button> [cite: 99]
             <div class="booking-cards">
-                <div class="booking-card">
-                    <h3>Đỗ Hoàng Hiếu - 000000001</h3>
-                    <div class="booking-details">
-                        <p>⏰ 16 - 18 giờ</p>
-                        <p>👥 5</p>
-                        <p>💰 0 đ</p>
+                @* Bắt đầu vòng lặp hiển thị dữ liệu từ Model *@
+                @foreach (var datBan in Model)
+                {
+                    <div class="booking-card">
+                        <h3>@datBan.IdkhachHangNavigation.HoTenKh - @datBan.IddatBan.ToString("D9")</h3>
+                        <div class="booking-details">
+                            <p>⏰ @datBan.ThoiGian.ToString("HH:mm dd/MM/yyyy")</p>
+                            <p>👥 @datBan.SoLuongKh</p>
+                            <p>📝 @datBan.GhiChu</p>
+                            <p>✨ **@datBan.TrangThai**</p>
+                        </div>
+                        <button class="confirm-btn">Khách nhận bàn</button>
+                        @* Thêm các nút thao tác khác như Sửa, Hủy... *@
                     </div>
-                    <button class="confirm-btn">Khách nhận bàn</button>
-                </div>
-                <div class="booking-card">
-                    <h3>Phạm Đình Kiên - 000000002</h3>
-                    <div class="booking-details">
-                        <p>⏰ 10 - 12 giờ</p>
-                        <p>👥 2</p>
-                        <p>💰 200.000 đ</p>
-                    </div>
-                    <button class="confirm-btn">Khách nhận bàn</button>
-                </div>
-                <div class="booking-card">
-                    <h3>Nguyễn Tuấn Anh - 000000003</h3>
-                    <div class="booking-details">
-                        <p>⏰ 12 - 14 giờ</p>
-                        <p>👥 4</p>
-                        <p>💰 150.000 đ</p>
-                    </div>
-                    <button class="confirm-btn">Khách nhận bàn</button>
-                </div>
-                <div class="booking-card">
-                    <h3>Nguyễn Việt Hoàng - 000000004</h3>
-                    <div class="booking-details">
-                        <p>⏰ 8 - 10 giờ</p>
-                        <p>👥 3</p>
-                        <p>💰 300.000 đ</p>
-                    </div>
-                    <button class="confirm-btn">Khách nhận bàn</button>
-                </div>
-                <div class="booking-card">
-                    <h3>Đỗ Hoàng Minh - 000000005</h3>
-                    <div class="booking-details">
-                        <p>⏰ 14 - 16 giờ</p>
-                        <p>👥 6</p>
-                        <p>💰 500.000 đ</p>
-                    </div>
-                    <button class="confirm-btn">Khách nhận bàn</button>
-                </div>
-                <div class="booking-card">
-                    <h3>Không Có Tiền - 000000006</h3>
-                    <div class="booking-details">
-                        <p>⏰ 18 - 20 giờ</p>
-                        <p>👥 4</p>
-                        <p>💰 250.000 đ</p>
-                    </div>
-                    <button class="confirm-btn">Khách nhận bàn</button>
-                </div>
+                }
+                @* Kết thúc vòng lặp *@
+
+                @* Các booking-card tĩnh trước đó sẽ bị xóa/thay thế *@
+
             </div>
         </div>
 

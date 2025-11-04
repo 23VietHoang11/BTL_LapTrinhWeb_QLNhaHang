@@ -49,9 +49,7 @@ public partial class QLNhaHangContext : DbContext
 
     public virtual DbSet<TonKho> TonKhos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=QLNhaHang;Persist Security Info=True;User ID=sa;Password=123;TrustServerCertificate=True");
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BanAn>(entity =>
@@ -348,30 +346,30 @@ public partial class QLNhaHangContext : DbContext
 
         modelBuilder.Entity<Quyen>(entity =>
         {
-            entity.HasKey(e => e.Idquyen).HasName("PK__Quyen__B3A2827E970DEFBE");
+            entity.HasKey(e => e.IDQuyen).HasName("PK__Quyen__B3A2827E970DEFBE");
 
             entity.ToTable("Quyen");
 
             entity.HasIndex(e => e.TenQuyen, "UQ__Quyen__5637EE7992E70F48").IsUnique();
 
-            entity.Property(e => e.Idquyen).HasColumnName("IDQuyen");
+            entity.Property(e => e.IDQuyen).HasColumnName("IDQuyen");
             entity.Property(e => e.MoTa).HasMaxLength(255);
             entity.Property(e => e.TenQuyen).HasMaxLength(50);
         });
 
         modelBuilder.Entity<TaiKhoan>(entity =>
         {
-            entity.HasKey(e => e.IdtaiKhoan).HasName("PK__TaiKhoan__BC5F907C1EF66573");
+            entity.HasKey(e => e.IDTaiKhoan).HasName("PK__TaiKhoan__BC5F907C1EF66573");
 
             entity.ToTable("TaiKhoan");
 
             entity.HasIndex(e => e.TenDangNhap, "UQ__TaiKhoan__55F68FC007CE6683").IsUnique();
 
-            entity.HasIndex(e => e.IdnhanVien, "UQ__TaiKhoan__7AC2D9F6D8F4C6B1").IsUnique();
+            entity.HasIndex(e => e.IDNhanVien, "UQ__TaiKhoan__7AC2D9F6D8F4C6B1").IsUnique();
 
-            entity.Property(e => e.IdtaiKhoan).HasColumnName("IDTaiKhoan");
-            entity.Property(e => e.IdnhanVien).HasColumnName("IDNhanVien");
-            entity.Property(e => e.MatKhauHash).HasMaxLength(255);
+            entity.Property(e => e.IDTaiKhoan).HasColumnName("IDTaiKhoan");
+            entity.Property(e => e.IDNhanVien).HasColumnName("IDNhanVien");
+            entity.Property(e => e.MatKhau).HasMaxLength(255);
             entity.Property(e => e.NgayTao)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -383,7 +381,7 @@ public partial class QLNhaHangContext : DbContext
                 .HasDefaultValue("Hoạt động");
 
             entity.HasOne(d => d.IdnhanVienNavigation).WithOne(p => p.TaiKhoan)
-                .HasForeignKey<TaiKhoan>(d => d.IdnhanVien)
+                .HasForeignKey<TaiKhoan>(d => d.IDNhanVien)
                 .HasConstraintName("FK__TaiKhoan__IDNhan__5EBF139D");
 
             entity.HasMany(d => d.Idquyens).WithMany(p => p.IdtaiKhoans)
