@@ -1,0 +1,25 @@
+﻿@model RestaurantManagement.Models.Entities.DatBan
+
+
+<h2>Phân bàn cho khách hàng</h2>
+ 
+<p><strong>Khách hàng:</strong> @Model.IdkhachHangNavigation.HoTenKh</p>
+<p><strong>SĐT:</strong> @Model.IdkhachHangNavigation.Sdt</p>
+<p><strong>Thời gian:</strong> @Model.ThoiGian</p>
+<p><strong>Ghi chú:</strong> @Model.GhiChu</p>
+
+<form asp-action="AssignTable" method="post">
+    <input type="hidden" name="id" value="@Model.IddatBan" />
+
+    <div class="form-group">
+        <label>Chọn bàn</label>
+        <select name="idBanAn" class="form-control">
+            @foreach (var b in ViewBag.DanhSachBan)
+            {
+                <option value="@b.IDBanAn">Bàn @b.IDBanAn - Loại: @b.LoaiBan (Sức chứa: @b.SucChua)</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Xác nhận đặt bàn</button>
+</form>
