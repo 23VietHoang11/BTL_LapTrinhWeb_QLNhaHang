@@ -1,0 +1,44 @@
+﻿@model List<RestaurantManagement.Models.ViewModels.DatBanAdminViewModel>
+
+<h2>Danh sách đặt bàn</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên KH</th>
+            <th>SĐT</th>
+            <th>Thời gian</th>
+            <th>Số lượng</th>
+            <th>Trạng thái</th>
+            <th>Ghi chú</th>
+            <th>Bàn</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IDDatBan</td>
+                <td>@item.TenKhachHang</td>
+                <td>@item.SDT</td>
+                <td>@item.ThoiGian.ToString("HH:mm dd/MM/yyyy")</td>
+                <td>@item.SoLuongKH</td>
+                <td>@item.TrangThai</td>
+                <td>@item.GhiChu</td>
+                <td>@(item.IDBanAn ?? 0)</td>
+                <td>
+                    @if (item.TrangThai == "Chờ xác nhận")
+                    {
+                        <a href="@Url.Action("AssignTable", "DatBan", new { id = item.IDDatBan })" class="btn btn-primary">Phân bàn</a>
+                    }
+                    else
+                    {
+                        <span class="text-success">✓ Đã xử lý</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
