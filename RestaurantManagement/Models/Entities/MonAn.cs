@@ -15,6 +15,10 @@ public partial class MonAn
 
     public string? Loai { get; set; }
 
+    // === THÊM DÒNG NÀY VÀO ===
+    public string? HinhAnh { get; set; }
+    // ===========================
+
     public virtual ICollection<ChiTietHoaDon> ChiTietHoaDons { get; set; } = new List<ChiTietHoaDon>();
 
     public virtual ICollection<MonAnNguyenLieu> MonAnNguyenLieus { get; set; } = new List<MonAnNguyenLieu>();
