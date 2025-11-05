@@ -195,9 +195,25 @@
         </div>
 
         <div class="content-wrapper" id="tableBookingContent">
-            @foreach (var datBan in Model)
-            {
-            }
+            <h2>Lịch đặt bàn</h2>
+            <div class="booking-cards">
+                @* Bắt đầu vòng lặp hiển thị dữ liệu từ Model *@
+                @foreach (var datBan in Model)
+                {
+                    <div class="booking-card">
+                        <h3>@(datBan.IdkhachHangNavigation?.HoTenKh ?? "Khách vãng lai") - @datBan.IddatBan.ToString("D9")</h3>
+                        <div class="booking-details">
+                            <p>⏰ @datBan.ThoiGian.ToString("HH:mm dd/MM/yyyy")</p>
+                            <p>👥 @datBan.SoLuongKh</p>
+                            <p>📝 @datBan.GhiChu</p>
+                            <p>✨ <strong>@datBan.TrangThai</strong></p>
+                        </div>
+                        <button class="confirm-btn">Khách nhận bàn</button>
+                        @* Thêm các nút thao tác khác như Sửa, Hủy... *@
+                    </div>
+                }
+                @* Kết thúc vòng lặp *@
+            </div>
         </div>
 
         <div class="content-wrapper" id="invoiceContent">
