@@ -94,9 +94,15 @@ namespace RestaurantManagement.Controllers
             return View();
         }
 
-        public IActionResult Menu()
+        public async Task<IActionResult> Menu()
         {
-            return View();
+            // 1. Lấy tất cả Món Ăn từ CSDL
+            var model = await _context.MonAns
+                                      .OrderBy(m => m.Loai) // Sắp xếp theo Loại
+                                      .ToListAsync();
+
+            // 2. Gửi danh sách này ra View
+            return View(model);
         }
 
         public IActionResult Service()
@@ -104,14 +110,39 @@ namespace RestaurantManagement.Controllers
             return View();
         }
 
-        public IActionResult Team()
+        public async Task<IActionResult> Team()
         {
-            return View();
+            // Lấy 4 nhân viên (ví dụ) để hiển thị
+            var teamMembers = await _context.NhanViens
+                .OrderBy(nv => nv.IdnhanVien) // Sắp xếp
+                .Take(4) // Chỉ lấy 4 người
+                .Select(nv => new NhanVien
+                {
+                    HoTenNv = nv.HoTenNv,
+                    ChucVu = nv.ChucVu,
+                    GioiTinh = nv.GioiTinh,
+                    Sdt = nv.Sdt
+                    // (Lưu ý: Chúng ta không lấy lương, SĐT... ra trang Home)
+                })
+                .ToListAsync();
+
+            // Gửi danh sách team này ra View
+            return View(teamMembers);
         }
 
-        public IActionResult Testimonials()
+        public async Task<IActionResult> Testimonials()
         {
-            return View();
+            // 1. Lấy 4 Ghi Chú mới nhất từ DatBan
+            //    (Và join với KhachHang để lấy Tên)
+            var testimonials = await _context.DatBans
+                .Include(db => db.IdkhachHangNavigation) // Join với bảng KhachHang
+                .Where(db => !string.IsNullOrEmpty(db.GhiChu)) // Chỉ lấy DatBan CÓ Ghi Chú
+                .OrderByDescending(db => db.ThoiGian) // Lấy các ghi chú mới nhất
+                .Take(4) // Lấy 4 cái (cho carousel)
+                .ToListAsync();
+
+            // 2. Gửi danh sách Testimonials này ra View
+            return View(testimonials);
         }
     }
 }

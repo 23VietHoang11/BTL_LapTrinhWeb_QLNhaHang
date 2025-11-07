@@ -23,37 +23,42 @@
 
         <div class="sidebar-header">Quản lý danh sách</div>
         <ul class="main-menu">
+
             <li class="menu-item has-submenu" data-target="menuContent">
                 <span class="icon">🍴</span> Quản Lý Món Ăn
                 <span class="arrow">▶</span>
                 <ul class="submenu">
                     <li class="menu-item" data-target="menuList">Danh sách món ăn</li>
-                    <li class="menu-item" data-target="menuCategories">Danh mục sản phẩm</li>
-                    <li class="menu-item" data-target="menuAdd">Thêm món ăn mới</li>
+                    <li class="menu-item" data-target="menuAddEdit">Thêm/Sửa món ăn</li>
                 </ul>
             </li>
+
             <li class="menu-item" data-target="tableBookingContent">
                 <span class="icon">🪑</span> Quản Lý Đặt Bàn
             </li>
-            <li class="menu-item" data-target="invoiceContent">
-                <span class="icon">🧾</span> Quản Lý Hóa Đơn
+
+            <li class="menu-item has-submenu" data-target="invoiceParent">
+                <span class="icon">🧾</span> Quản Lý Đơn Hàng
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="invoiceContent">Danh sách đơn hàng</li>
+                    <li class="menu-item" data-target="invoiceAddEdit">Thêm/Sửa đơn hàng</li>
+                </ul>
             </li>
 
-            <li class="menu-item" data-target="#">
+            <li class="menu-item has-submenu" data-target="khoContent">
                 <span class="icon">🏠</span> Quản Lý Kho
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li class="menu-item" data-target="nguyenLieuList">Danh sách nguyên liệu</li>
+                    <li class="menu-item" data-target="nguyenLieuAddEdit">Thêm/Sửa nguyên liệu</li>
+                </ul>
             </li>
 
             <li class="menu-item" data-target="postContent">
                 <span class="icon">📄</span> Quản Lý Bài Viết
             </li>
-            <li class="menu-item has-submenu" data-target="roleContent">
-                <span class="icon">🧑‍⚖️</span> Quản Lý Vai Trò
-                <span class="arrow">▶</span>
-                <ul class="submenu">
-                    <li class="menu-item" data-target="roleList">Danh sách vai trò</li>
-                    <li class="menu-item" data-target="rolePermissions">Phân quyền</li>
-                </ul>
-            </li>
+           
             <li class="menu-item has-submenu" data-target="otherContent">
                 <span class="icon">⚙️</span> Quản Lý Khác
                 <span class="arrow">▶</span>
@@ -71,7 +76,6 @@
                 </ul>
             </li>
         </ul>
-
         <div class="sidebar-header">Tư vấn</div>
         <ul class="main-menu">
             <li class="menu-item" data-target="supportContent">
@@ -88,8 +92,8 @@
                 <h1 id="page-title">Dashboard</h1>
             </div>
             <div class="user-info">
-                <span class="user-name">Đỗ Hoàng Hiếu</span>
-                <img src="#" alt="Avatar" class="user-avatar">
+                <span class="user-name">Admin</span>
+                <img src="favicon-16x16.png" alt="Avatar" class="user-avatar">
             </div>
         </header>
 
@@ -156,183 +160,167 @@
         <div class="content-wrapper" id="menuList">
             <h2>Danh sách món ăn</h2>
             <div class="toolbar">
-                <input type="text" placeholder="Tên" class="filter-input">
-                <select class="filter-select">
-                    <option>Danh mục</option>
-                    <option>Đồ uống</option>
-                    <option>Thức ăn</option>
-                </select>
-                <button class="action-btn delete-selected-btn">Xóa mục đã chọn</button>
-                <button class="action-btn delete-temp-btn">Sản phẩm tạm xóa</button>
+                <input type="text" id="monan-search-input" placeholder="Tìm kiếm món ăn (tên, loại...)" class="search-input">
             </div>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th><input type="checkbox"></th>
-                            <th>STT</th>
                             <th>HÌNH ẢNH</th>
                             <th>TÊN SẢN PHẨM</th>
-                            <th>DANH MỤC</th>
-                            <th>TRẠNG THÁI</th>
-                            <th>GIÁ</th>
+                            <th>LOẠI</th>
+                            <th>ĐƠN VỊ TÍNH</th>
+                            <th>GIÁ BÁN</th>
                             <th>THAO TÁC</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>1</td>
-                            <td><img src="https://via.placeholder.com/50" alt="Lau Cua Dong"></td>
-                            <td>Lẩu Cua Đồng</td>
-                            <td>Món chính</td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td>220.000 VND</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>2</td>
-                            <td><img src="https://via.placeholder.com/50" alt="Canh ca loc"></td>
-                            <td>Canh cá lóc</td>
-                            <td>Món chính</td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td>60.000 VND</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>3</td>
-                            <td><img src="https://via.placeholder.com/50" alt="Lau mam"></td>
-                            <td>Lẩu Mắm</td>
-                            <td>Món chính</td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td>150.000 VND</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>4</td>
-                            <td><img src="https://via.placeholder.com/50" alt="Nuoc Sam Dua"></td>
-                            <td>Nước Sâm Dứa</td>
-                            <td>Đồ uống</td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td>25.000 VND</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>5</td>
-                            <td><img src="https://via.placeholder.com/50" alt="Coca Cola"></td>
-                            <td>Nước Ngọt Coca Cola</td>
-                            <td>Đồ uống</td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td>18.000 VND</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
             <div class="pagination">
                 <span>Số lượng mục</span>
-                <select>
-                    <option>5</option>
-                    <option>10</option>
-                    <option>20</option>
+                <select id="monan-items-per-page">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
                 </select>
-                <div class="pages">
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>&gt;</button>
+                <div class="pages" id="monan-pagination">
                 </div>
             </div>
         </div>
 
-        <div class="content-wrapper" id="menuCategories">
-            <h2>Danh mục sản phẩm</h2>
-            <p>Nội dung quản lý danh mục sản phẩm sẽ hiển thị ở đây...</p>
+        <div class="content-wrapper" id="menuAddEdit">
+            <h2>Thêm/Sửa món ăn</h2>
+            <div class="menu-details">
+                <input type="hidden" id="monan-id" value="">
+
+                <div class="form-group">
+                    <label for="monan-name">Tên mặt hàng (*)</label>
+                    <input type="text" id="monan-name" placeholder="Coca Cola">
+                </div>
+                <div class="form-group">
+                    <label for="monan-type">Loại mặt hàng (*)</label>
+                    <select id="monan-type">
+                        <option value="Đồ uống">Đồ uống</option>
+                        <option value="Món chính">Món chính</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="monan-unit">Đơn vị tính (*)</label>
+                    <input type="text" id="monan-unit" placeholder="Chai / Ly / Đĩa">
+                </div>
+                <div class="form-group">
+                    <label for="monan-price">Giá bán (*)</label>
+                    <input type="number" id="monan-price" placeholder="15000" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="monan-image">URL Hình ảnh</label>
+                    <input type="text" id="monan-image" placeholder="https://.../hinh.png">
+                </div>
+
+                <button id="btn-save-monan" class="btn-primary">Lưu (Thêm mới)</button>
+                <button id="btn-update-monan" class="btn-warning">Cập nhật (Sửa)</button>
+                <button id="btn-delete-monan" class="btn-danger">Xóa Món ăn</button>
+            </div>
         </div>
 
-        <div class="content-wrapper" id="menuAdd">
-            <h2>Thêm mặt hàng mới</h2>
-            <div class="menu-container">
-                <div class="menu-image">
-                    <img src="https://via.placeholder.com/150" alt="Chọn ảnh mặt hàng" id="item-image">
-                    <button class="upload-image-btn">Chọn ảnh mặt hàng</button>
-                    <p>Dung lượng file tối đa 1 MB</p>
-                    <p>Định dạng: JPEG, PNG</p>
+        <div class="content-wrapper" id="nguyenLieuList">
+            <h2>Danh sách nguyên liệu</h2>
+            <div class="toolbar">
+                <input type="text" id="nguyenlieu-search-input" placeholder="Tìm kiếm nguyên liệu (tên, loại...)" class="search-input">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>HÌNH ẢNH</th>
+                            <th>TÊN NGUYÊN LIỆU</th>
+                            <th>ĐƠN VỊ TÍNH</th>
+                            <th>LOẠI</th>
+                            <th>SỐ LƯỢNG</th>
+                            <th>NGÀY NHẬP</th>
+                            <th>THAO TÁC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <span>Số lượng mục</span>
+                <select id="nguyenlieu-items-per-page">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <div class="pages" id="nguyenlieu-pagination">
                 </div>
-                <div class="menu-details">
-                    <div class="form-group">
-                        <label for="item-name">Tên mặt hàng (*)</label>
-                        <input type="text" id="item-name" placeholder="Coca Cola">
-                    </div>
-                    <div class="form-group">
-                        <label for="item-type">Loại mặt hàng (*)</label>
-                        <select id="item-type">
-                            <option>Đồ uống</option>
-                            <option>Thức ăn</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="unit">Đơn vị tính (*)</label>
-                        <select id="unit">
-                            <option>Ly</option>
-                            <option>Chai</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="notes">Ghi chú</label>
-                        <input type="text" id="notes" placeholder="VD: Được tùy chọn">
-                    </div>
-                    <h3>Giá mặt hàng</h3>
-                    <div class="form-group">
-                        <label for="price-name">Tên giá (*)</label>
-                        <input type="text" id="price-name" placeholder="Giá thường">
-                    </div>
-                    <div class="form-group">
-                        <label for="sale-price">Giá bán (*)</label>
-                        <input type="number" id="sale-price" placeholder="15000">
-                    </div>
-                    <div class="form-group">
-                        <label for="cost-price">Giá vốn (*)</label>
-                        <input type="number" id="cost-price" placeholder="7000">
-                    </div>
-                    <button class="add-price-btn">+ Thêm giá</button>
-                    <div class="action-buttons">
-                        <button class="delete-btn">Xóa</button>
-                        <button class="save-btn">Lưu lại</button>
-                    </div>
+            </div>
+        </div>
+        <div class="content-wrapper" id="nguyenLieuAddEdit">
+            <h2>Thêm/Sửa nguyên liệu</h2>
+            <div class="menu-details">
+                <input type="hidden" id="nguyenlieu-id" value="">
+
+                <div class="form-group">
+                    <label for="nguyenlieu-name">Tên nguyên liệu (*)</label>
+                    <input type="text" id="nguyenlieu-name" placeholder="Thịt bò">
                 </div>
+                <div class="form-group">
+                    <label for="nguyenlieu-unit">Đơn vị tính (*)</label>
+                    <input type="text" id="nguyenlieu-unit" placeholder="Kg / Lít / Cái">
+                </div>
+                <div class="form-group">
+                    <label for="nguyenlieu-type">Loại nguyên liệu (*)</label>
+                    <input type="text" id="nguyenlieu-type" placeholder="Thịt / Rau / Gia vị">
+                </div>
+
+                <div class="form-group">
+                    <label for="nguyenlieu-quantity">Số lượng</label>
+                    <input type="number" id="nguyenlieu-quantity" placeholder="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="nguyenlieu-date">Ngày nhập</label>
+                    <input type="date" id="nguyenlieu-date">
+                </div>
+                <div class="form-group">
+                    <label for="nguyenlieu-image">URL Hình ảnh</label>
+                    <input type="text" id="nguyenlieu-image" placeholder="https://.../hinh.png">
+                </div>
+                <button id="btn-save-nguyenlieu" class="btn-primary">Lưu (Thêm mới)</button>
+                <button id="btn-update-nguyenlieu" class="btn-warning">Cập nhật (Sửa)</button>
+                <button id="btn-delete-nguyenlieu" class="btn-danger">Xóa Nguyên liệu</button>
             </div>
         </div>
 
         <div class="content-wrapper" id="postContent">
-            <h1>Quản Lý Bài Viết</h1>
-            <p>Nội dung trang quản lý bài viết sẽ hiển thị ở đây...</p>
+            <h2>Hòm thư liên hệ</h2>
+            <div class="toolbar">
+                <input type="text" id="lienhe-search-input" placeholder="Tìm kiếm tin nhắn..." class="search-input">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NGÀY GỬI</th>
+                            <th>NGƯỜI GỬI</th>
+                            <th>EMAIL</th>
+                            <th>TIÊU ĐỀ</th>
+                            <th>NỘI DUNG</th>
+                            <th>TRẠNG THÁI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="content-wrapper" id="settingGeneral">
             <h2>Cài đặt chung</h2>
             <p>Nội dung cài đặt chung sẽ hiển thị ở đây...</p>
         </div>
-
         <div class="content-wrapper" id="settingAdvanced">
             <h2>Cài đặt nâng cao</h2>
             <p>Nội dung cài đặt nâng cao sẽ hiển thị ở đây...</p>
@@ -341,90 +329,34 @@
         <div class="content-wrapper" id="staffList">
             <h2>Danh sách tài khoản</h2>
             <div class="toolbar">
-                <input type="text" placeholder="Tìm kiếm tài khoản ở đây!" class="search-input">
+                <input type="text" id="staff-search-input" placeholder="Tìm kiếm tài khoản ở đây!" class="search-input">
             </div>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th>ẢNH ĐẠI DIỆN</th>
                             <th>TÊN ĐẦY ĐỦ</th>
                             <th>EMAIL</th>
                             <th>SĐT</th>
-                            <th>LOẠI NGƯỜI DÙNG</th>
-                            <th>VAI TRÒ (DÀNH CHO NHÂN VIÊN)</th>
-                            <th>TRẠNG THÁI</th>
+                            <th>VAI TRÒ</th>
+                            <th>NGÀY SINH</th>
+                            <th>SỐ CCCD</th>
+                            <th>GIỚI TÍNH</th>
                             <th>THAO TÁC</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
-                            <td>Quốc Trọng</td>
-                            <td>qtd839324@gmail.com</td>
-                            <td>0123456789</td>
-                            <td><span class="badge staff-type">Nhân Viên</span></td>
-                            <td><span class="badge role-type">Super Admin</span></td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
-                            <td>Anh Đạt</td>
-                            <td>dattran0212@gmail.com</td>
-                            <td>0877544323</td>
-                            <td><span class="badge staff-type">Nhân Viên</span></td>
-                            <td><span class="badge role-type">Nhân Viên</span></td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
-                            <td>Long Đẹp Zai</td>
-                            <td>longdz@gmail.com</td>
-                            <td>0877544323</td>
-                            <td><span class="badge staff-type">Nhân Viên</span></td>
-                            <td><span class="badge role-type">Nhân Viên</span></td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://via.placeholder.com/30" alt="Avatar"></td>
-                            <td>Anh Kong</td>
-                            <td>kongkk@gmail.com</td>
-                            <td>0877544323</td>
-                            <td><span class="badge customer-type">Khách Hàng</span></td>
-                            <td></td>
-                            <td><span class="status active">Hoạt động</span></td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
             <div class="pagination">
                 <span>Số lượng mục</span>
-                <select>
-                    <option>5</option>
-                    <option>10</option>
-                    <option>20</option>
+                <select id="staff-items-per-page">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
                 </select>
-                <div class="pages">
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>&gt;</button>
+                <div class="pages" id="staff-pagination">
                 </div>
             </div>
         </div>
@@ -432,209 +364,128 @@
         <div class="content-wrapper" id="staffAddEdit">
             <h2>Thêm/Sửa tài khoản</h2>
             <div class="menu-details">
+                <input type="hidden" id="staff-id" value="">
+                <div class="form-group">
+                    <label for="staff-username">Tên đăng nhập (*)</label>
+                    <input type="text" id="staff-username" placeholder="hieudohoang">
+                </div>
+                <div class="form-group">
+                    <label for="staff-password">Mật khẩu (*)</label>
+                    <input type="password" id="staff-password" placeholder="Nhập để tạo mới hoặc thay đổi">
+                    <small>Để trống nếu không muốn đổi mật khẩu khi cập nhật.</small>
+                </div>
                 <div class="form-group">
                     <label for="staff-name">Tên nhân viên (*)</label>
                     <input type="text" id="staff-name" placeholder="Đỗ Hoàng Hiếu">
                 </div>
                 <div class="form-group">
-                    <label for="staff-name">Email</label>
-                    <input type="text" id="staff-name" placeholder="abc123@gmail.com">
+                    <label for="staff-email">Email</label>
+                    <input type="email" id="staff-email" placeholder="abc123@gmail.com">
                 </div>
                 <div class="form-group">
-                    <label for="staff-name">Số điện thoại</label>
-                    <input type="text" id="staff-name" placeholder="0123456789">
+                    <label for="staff-phone">Số điện thoại</label>
+                    <input type="text" id="staff-phone" placeholder="0123456789">
                 </div>
                 <div class="form-group">
-                    <label for="staff-name">Ngày sinh (*)</label>
-                    <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                    <label for="staff-dob">Ngày sinh (*)</label>
+                    <input type="date" id="staff-dob" name="dateOfBirth" required>
                 </div>
                 <div class="form-group">
-                    <label for="staff-name">Số CCCD (*)</label>
-                    <input type="text" id="staff-name" placeholder="1234565667">
+                    <label for="staff-cccd">Số CCCD (*)</label>
+                    <input type="text" id="staff-cccd" placeholder="1234565667">
                 </div>
                 <div class="form-group">
                     <label for="staff-gender">Giới tính (*)</label>
                     <select id="staff-gender">
-                        <option>Nam</option>
-                        <option>Nữ</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="staff-name">Địa chỉ</label>
-                    <input type="text" id="staff-name" placeholder="Hà Nội">
+                    <label for="staff-address">Địa chỉ</label>
+                    <input type="text" id="staff-address" placeholder="Hà Nội">
                 </div>
                 <div class="form-group">
                     <label for="staff-role">Chức vụ (*)</label>
                     <select id="staff-role">
-                        <option>Quản Lý</option>
-                        <option>Bếp trưởng</option>
-                        <option>Bếp phó</option>
-                        <option>Phục vụ</option>
-                        <option>Thu ngân</option>
-                        <option>Bảo vệ</option>
+                        <option value="Quản Lý">Quản Lý</option>
+                        <option value="Bếp trưởng">Bếp trưởng</option>
+                        <option value="Bếp phó">Bếp phó</option>
+                        <option value="Phục vụ">Phục vụ</option>
+                        <option value="Thu ngân">Thu ngân</option>
+                        <option value="Bảo vệ">Bảo vệ</option>
                     </select>
                 </div>
-                <button class="btn-primary">Thêm nhân viên</button>
-                <button class="btn-warning">Cập nhật thông tin</button>
-                <button class="btn-danger">Xóa nhân viên</button>
+                <button id="btn-add" class="btn-primary">Thêm nhân viên</button>
+                <button id="btn-update" class="btn-warning">Cập nhật thông tin</button>
+                <button id="btn-delete" class="btn-danger">Xóa nhân viên</button>
             </div>
         </div>
 
         <div class="content-wrapper" id="tableBookingContent">
-            <h2>Lịch đặt bàn</h2> 
+            <h2>Lịch đặt bàn</h2>
             <div class="booking-cards">
                 @* Bắt đầu vòng lặp hiển thị dữ liệu từ Model *@
                 @foreach (var datBan in Model)
                 {
                     <div class="booking-card">
-                        <h3>@datBan.IdkhachHangNavigation.HoTenKh - @datBan.IddatBan.ToString("D9")</h3>
+                        <h3>@(datBan.IdkhachHangNavigation?.HoTenKh ?? "Khách vãng lai") - @datBan.IddatBan.ToString("D9")</h3>
                         <div class="booking-details">
                             <p>⏰ @datBan.ThoiGian.ToString("HH:mm dd/MM/yyyy")</p>
                             <p>👥 @datBan.SoLuongKh</p>
                             <p>📝 @datBan.GhiChu</p>
-                            <p>✨ **@datBan.TrangThai**</p>
+                            <p>✨ <strong>@datBan.TrangThai</strong></p>
                         </div>
                         <button class="confirm-btn">Khách nhận bàn</button>
-                        @* Thêm các nút thao tác khác như Sửa, Hủy... *@
                     </div>
                 }
                 @* Kết thúc vòng lặp *@
-
-                @* Các booking-card tĩnh trước đó sẽ bị xóa/thay thế *@
-
             </div>
         </div>
 
         <div class="content-wrapper" id="invoiceContent">
             <h2>Đơn hiện tại</h2>
-            <button class="create-invoice-btn">Tạo đơn mới</button>
             <div class="invoice-list">
-                <div class="invoice-card">
-                    <h3>Sảnh VIP</h3>
-                    <div class="invoice-details">
-                        <div class="table-number"><p>Số bàn</p><p>5</p></div>
-                        <div class="guest-count"><p>👥 6</p></div>
-                        <div class="timer"><p>⏳ 00:01:20</p></div>
-                        <div class="total-amount"><p>💰 1.200.000 đ</p></div>
-                    </div>
-                    <div class="invoice-actions">
-                        <button class="more-options">...</button>
-                        <button class="pay-btn">Thanh toán</button>
-                    </div>
-                </div>
-                <div class="invoice-card">
-                    <h3>Sảnh ngoài trời</h3>
-                    <div class="invoice-details">
-                        <div class="table-number"><p>Số bàn</p><p>10</p></div>
-                        <div class="guest-count"><p>👥 8</p></div>
-                        <div class="timer"><p>⏳ 00:00:35</p></div>
-                        <div class="total-amount"><p>💰 3.500.000 đ</p></div>
-                    </div>
-                    <div class="invoice-actions">
-                        <button class="more-options">...</button>
-                        <button class="pay-btn">Thanh toán</button>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="content-wrapper" id="roleList">
-            <h2>Danh sách vai trò</h2>
-            <div class="toolbar">
-                <input type="text" placeholder="Tìm kiếm vai trò ở đây!" class="search-input">
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>TÊN</th>
-                            <th>MÔ TẢ</th>
-                            <th>NGÀY TẠO</th>
-                            <th>NGÀY CẬP NHẬT</th>
-                            <th>THAO TÁC</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Nhân viên 3</td>
-                            <td></td>
-                            <td>28/11/2024 12:43</td>
-                            <td>03/12/2024 09:30</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Nhân viên tư vấn</td>
-                            <td>Chức năng này để cho nhân viên chỉ để tư vấn cho khách hàng</td>
-                            <td>28/11/2024 10:24</td>
-                            <td>03/12/2024 09:35</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Nhân viên</td>
-                            <td></td>
-                            <td>15/11/2024 13:55</td>
-                            <td>15/11/2024 13:55</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Super Admin</td>
-                            <td>Đây là Admin có quyền hạn cao nhất</td>
-                            <td>11/11/2024 16:02</td>
-                            <td>11/11/2024 16:02</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Tư vấn viên</td>
-                            <td></td>
-                            <td>30/10/2024 13:55</td>
-                            <td>30/10/2024 13:55</td>
-                            <td class="actions">
-                                <button class="btn-edit">Sửa</button>
-                                <button class="btn-delete">Xóa</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="pagination">
-                <span>Số lượng mục</span>
-                <select>
-                    <option>5</option>
-                    <option>10</option>
-                    <option>20</option>
-                </select>
-                <div class="pages">
-                    <button>&lt;</button>
-                    <button class="active">1</button>
-                    <button>2</button>
-                    <button>&gt;</button>
+        <div class="content-wrapper" id="invoiceAddEdit">
+            <h2>Thêm/Sửa đơn hàng</h2>
+            <div class="menu-details">
+                <input type="hidden" id="invoice-id" value="">
+                <div class="form-group">
+                    <label for="invoice-customer-phone">SĐT Khách hàng (*)</label>
+                    <input type="text" id="invoice-customer-phone" placeholder="Nhập SĐT để tìm hoặc tạo mới">
                 </div>
+                <div class="form-group">
+                    <label for="invoice-customer-name">Tên khách hàng (*)</label>
+                    <input type="text" id="invoice-customer-name" placeholder="Nhập tên khách hàng">
+                </div>
+                <div class="form-group">
+                    <label for="invoice-time-input">Thời gian (*)</label>
+                    <input type="datetime-local" id="invoice-time-input">
+                </div>
+                <div class="form-group">
+                    <label for="invoice-guest-count">Số lượng khách</label>
+                    <input type="number" id="invoice-guest-count" placeholder="0" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="invoice-total-amount">Số tiền ban đầu</label>
+                    <input type="number" id="invoice-total-amount" placeholder="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="invoice-notes">Ghi chú</label>
+                    <textarea id="invoice-notes" placeholder="Khách yêu cầu..."></textarea>
+                </div>
+                <button id="btn-save-invoice" class="btn-primary">Lưu (Thêm mới)</button>
+                <button id="btn-update-invoice" class="btn-warning">Cập nhật (Sửa)</button>
+                <button id="btn-delete-invoice" class="btn-danger">Xóa Đơn</button>
+                <button id="btn-cancel-invoice" class="btn-secondary">Hủy</button>
             </div>
         </div>
 
-        <div class="content-wrapper" id="rolePermissions">
-            <h2>Phân quyền</h2>
-            <p>Nội dung phân quyền sẽ hiển thị ở đây...</p>
-        </div>
-
+      
 
         <div class="content-wrapper" id="supportContent">
             <h1>Tư vấn với khách hàng</h1>
@@ -642,104 +493,1163 @@
         </div>
 
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        // --- BIẾN TOÀN CỤC ---
+        let allStaffData = [];
+        let currentPage = 1;
+        let itemsPerPage = 5;
+        let allMonAnData = [];
+        let currentMonAnPage = 1;
+        let itemsPerMonAnPage = 5;
+        let allNguyenLieuData = [];
+        let currentNguyenLieuPage = 1;
+        let itemsPerNguyenLieuPage = 5;
+
+        // --- HÀM HELPER (TẢI HÓA ĐƠN) ---
+        function formatDuration(ms) {
+            if (ms < 0) ms = 0;
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+            const hh = hours.toString().padStart(2, '0');
+            const mm = minutes.toString().padStart(2, '0');
+            const ss = seconds.toString().padStart(2, '0');
+            return `${hh}:${mm}:${ss}`;
+        }
+        async function loadCurrentInvoices() {
+            const container = document.querySelector('#invoiceContent .invoice-list');
+            if (!container) return;
+            container.innerHTML = '<p>Đang tải đơn hàng...</p>';
+            try {
+                const response = await fetch('/api/hoadon/current');
+                if (!response.ok) {
+                    container.innerHTML = '<p>Lỗi: Không thể tải hóa đơn.</p>'; return;
+                }
+                const invoices = await response.json();
+                if (invoices.length === 0) {
+                    container.innerHTML = '<p>Không có đơn hàng nào hiện tại.</p>'; return;
+                }
+                container.innerHTML = '';
+                invoices.forEach(hd => {
+                    let thoiGianGiaoFormatted = '';
+                    if (hd.thoiGianGiao) {
+                        try {
+                            thoiGianGiaoFormatted = new Date(hd.thoiGianGiao).toLocaleString('vi-VN', {
+                                hour: '2-digit', minute: '2-digit',
+                                day: '2-digit', month: '2-digit', year: 'numeric'
+                            });
+                        } catch (e) { thoiGianGiaoFormatted = 'Lỗi ngày'; }
+                    }
+                    const card = `
+                        <div class="invoice-card">
+                            <h3>${hd.hoTenKhachHang || 'Khách vãng lai'}</h3>
+                            <div class="invoice-details">
+                                <div class="table-number"><p>SĐT</p><p>${hd.sdtKhachHang || 'N/A'}</p></div>
+                                <div class="guest-count"><p>👥 ${hd.soLuongKhach || 0}</p></div>
+                                <div class="timer"><p>⏰ ${thoiGianGiaoFormatted}</p></div>
+                                <div class="total-amount"><p>💰 ${hd.tongTien ? hd.tongTien.toLocaleString('vi-VN') : 0} đ</p></div>
+                            </div>
+                            <div class="invoice-actions">
+                                <button class="btn-edit-invoice" data-id="${hd.idHoaDon}">Sửa</button>
+                                <button class="pay-btn" data-id="${hd.idHoaDon}">Thanh toán</button>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            } catch (err) {
+                container.innerHTML = '<p>Lỗi kết nối máy chủ. Không thể tải đơn.</p>';
+                console.error(err);
+            }
+        }
+        async function loadInvoiceCreateForm() {
+            // Dọn dẹp form (logic nhập tay)
+            document.getElementById('invoice-id').value = '';
+            document.getElementById('invoice-customer-phone').value = '';
+            document.getElementById('invoice-customer-name').value = '';
+            document.getElementById('invoice-time-input').value = '';
+            document.getElementById('invoice-guest-count').value = '1';
+            document.getElementById('invoice-total-amount').value = '0';
+            document.getElementById('invoice-notes').value = '';
+
+            document.getElementById('btn-save-invoice').style.display = 'inline-block';
+            document.getElementById('btn-update-invoice').style.display = 'none';
+            document.getElementById('btn-delete-invoice').style.display = 'none';
+        }
+        async function loadHoaDonDeSua(id) {
+            try {
+                const response = await fetch(`/api/hoadon/${id}`);
+                if (!response.ok) {
+                    alert("Không thể tải thông tin hóa đơn."); return;
+                }
+                const data = await response.json();
+                document.getElementById('invoice-id').value = data.idhoaDon;
+                document.getElementById('invoice-customer-phone').value = data.sdtKhachHang;
+                document.getElementById('invoice-customer-name').value = data.hoTenKhachHang;
+                document.getElementById('invoice-time-input').value = data.thoiGianGiao ? new Date(data.thoiGianGiao).toISOString().slice(0, 16) : "";
+                document.getElementById('invoice-guest-count').value = data.soLuongKhach;
+                document.getElementById('invoice-total-amount').value = data.tongTien;
+                document.getElementById('invoice-notes').value = data.ghiChu;
+
+                document.getElementById('btn-save-invoice').style.display = 'none';
+                document.getElementById('btn-update-invoice').style.display = 'inline-block';
+                document.getElementById('btn-delete-invoice').style.display = 'inline-block';
+            } catch (err) {
+                alert("Lỗi tải dữ liệu: " + err.message);
+            }
+        }
+
+                // --- ▼▼▼ THÊM HÀM MỚI (LIÊN HỆ/BÀI VIẾT) ▼▼▼ ---
+        function renderLienHeList(dataToRender) {
+            const tableBody = document.querySelector('#postContent table tbody');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = ''; // Xóa nội dung cũ
+
+            if (dataToRender.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Không có tin nhắn nào.</td></tr>';
+                return;
+            }
+
+            dataToRender.forEach(msg => {
+                const ngayGuiFormatted = new Date(msg.ngayGui).toLocaleString('vi-VN');
+                const row = `
+                    <tr style="${msg.daDoc ? '' : 'font-weight: bold;'}">
+                        <td>${ngayGuiFormatted}</td>
+                        <td>${msg.hoTen}</td>
+                        <td>${msg.email}</td>
+                        <td>${msg.tieuDe || ''}</td>
+                        <td>${msg.noiDung}</td>
+                        <td>${msg.daDoc ? 'Đã đọc' : 'Mới'}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        async function loadLienHeList() {
+            try {
+                const response = await fetch('/api/lienhe');
+                if (!response.ok) {
+                    alert("Không thể tải danh sách tin nhắn."); return;
+                }
+                const allLienHeData = await response.json();
+
+                // Lọc và vẽ
+                const searchTerm = document.getElementById('lienhe-search-input').value.toLowerCase();
+                const filteredData = allLienHeData.filter(msg => {
+                    return (msg.hoTen || '').toLowerCase().includes(searchTerm) ||
+                           (msg.email || '').toLowerCase().includes(searchTerm) ||
+                           (msg.tieuDe || '').toLowerCase().includes(searchTerm) ||
+                           (msg.noiDung || '').toLowerCase().includes(searchTerm);
+                });
+
+                renderLienHeList(filteredData);
+
+            } catch (err) {
+                alert("Lỗi tải danh sách tin nhắn: " + err.message);
+            }
+        }
+
+        // --- HÀM HELPER (NHÂN VIÊN) ---
+        function renderStaffListAndPagination(dataToRender, page) {
+            currentPage = page;
+            const tableBody = document.querySelector('#staffList table tbody');
+            const paginationContainer = document.querySelector('#staffList .pages');
+            if (!tableBody || !paginationContainer) return;
+
+            tableBody.innerHTML = '';
+            paginationContainer.innerHTML = '';
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = dataToRender.slice(start, end);
+
+            paginatedItems.forEach(nv => {
+                let ngaySinhFormatted = '';
+                if (nv.ngaySinh) {
+                    try {
+                        ngaySinhFormatted = new Date(nv.ngaySinh).toLocaleDateString('vi-VN');
+                    } catch (e) { ngaySinhFormatted = nv.ngaySinh; }
+                }
+                const row = `
+                    <tr>
+                        <td>${nv.hoTen}</td>
+                        <td>${nv.email || ''}</td>
+                        <td>${nv.sdt || ''}</td>
+                        <td><span class="badge role-type">${nv.chucVu || ''}</span></td>
+                        <td>${ngaySinhFormatted}</td>
+                        <td>${nv.cccd || ''}</td>
+                        <td>${nv.gioiTinh || ''}</td>
+                        <td class="actions">
+                            <button class="btn-edit" data-id="${nv.id}">Sửa</button>
+                            <button class="btn-delete-list" data-id="${nv.id}">Xóa</button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            const pageCount = Math.ceil(dataToRender.length / itemsPerPage);
+            paginationContainer.innerHTML += `<button data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>&lt;</button>`;
+            for (let i = 1; i <= pageCount; i++) {
+                paginationContainer.innerHTML += `<button data-page="${i}" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            }
+            paginationContainer.innerHTML += `<button data-page="${currentPage + 1}" ${currentPage === pageCount ? 'disabled' : ''}>&gt;</button>`;
+        }
+        async function loadDanhSachNhanVien() {
+            try {
+                const response = await fetch('/api/nhanvien');
+                if (!response.ok) {
+                    alert("Không thể tải danh sách nhân viên."); return;
+                }
+                allStaffData = await response.json();
+                const selectElement = document.getElementById('staff-items-per-page');
+                if (selectElement) itemsPerPage = parseInt(selectElement.value, 10);
+                renderStaffListAndPagination(allStaffData, 1);
+            } catch (err) {
+                alert("Lỗi tải danh sách: " + err.message);
+                allStaffData = [];
+            }
+        }
+        async function loadNhanVienDeSua(id) {
+            try {
+                const response = await fetch(`/api/nhanvien/${id}`);
+                if (!response.ok) {
+                    alert("Không thể tải thông tin nhân viên."); return;
+                }
+                const data = await response.json();
+                document.getElementById('staff-id').value = data.idnhanVien;
+                document.getElementById('staff-username').value = data.tenDangNhap;
+                document.getElementById('staff-name').value = data.hoTenNv;
+                document.getElementById('staff-email').value = data.email;
+                document.getElementById('staff-phone').value = data.sdt;
+                document.getElementById('staff-dob').value = data.ngaySinh ? data.ngaySinh.split('T')[0] : "";
+                document.getElementById('staff-cccd').value = data.cccd;
+                document.getElementById('staff-gender').value = data.gioiTinh;
+                document.getElementById('staff-address').value = data.diaChi;
+                document.getElementById('staff-role').value = data.chucVu;
+                document.getElementById('staff-username').disabled = true;
+                document.getElementById('staff-password').placeholder = "Để trống nếu không muốn đổi mật khẩu";
+            } catch (err) {
+                alert("Lỗi tải dữ liệu: " + err.message);
+            }
+        }
+
+        // --- HÀM HELPER (MÓN ĂN) ---
+        function renderMonAnListAndPagination(dataToRender, page) {
+            currentMonAnPage = page;
+            const tableBody = document.querySelector('#menuList table tbody');
+            const paginationContainer = document.querySelector('#monan-pagination');
+            if (!tableBody || !paginationContainer) return;
+
+            tableBody.innerHTML = '';
+            paginationContainer.innerHTML = '';
+
+            const start = (currentMonAnPage - 1) * itemsPerMonAnPage;
+            const end = start + itemsPerMonAnPage;
+            const paginatedItems = dataToRender.slice(start, end);
+            
+            paginatedItems.forEach(ma => {
+                const row = `
+                    <tr>
+                        <td><img src="${ma.hinhAnh ? '/img/' + ma.hinhAnh : '/img/menu-1.jpg'}" alt="${ma.tenMon}" style="width:50px; height:50px; object-fit:cover;"></td>
+                        <td>${ma.tenMon}</td>
+                        <td>${ma.loai || ''}</td>
+                        <td>${ma.donViTinh || ''}</td>
+                        <td>${ma.gia ? ma.gia.toLocaleString('vi-VN') : 0} đ</td>
+                        <td class="actions">
+                            <button class="btn-edit-monan" data-id="${ma.idmonAn}">Sửa</button>
+                            <button class="btn-delete-monan-list" data-id="${ma.idmonAn}">Xóa</button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            const pageCount = Math.ceil(dataToRender.length / itemsPerMonAnPage);
+            paginationContainer.innerHTML += `<button data-page="${currentMonAnPage - 1}" ${currentMonAnPage === 1 ? 'disabled' : ''}>&lt;</button>`;
+            for (let i = 1; i <= pageCount; i++) {
+                paginationContainer.innerHTML += `<button data-page="${i}" class="${i === currentMonAnPage ? 'active' : ''}">${i}</button>`;
+            }
+            paginationContainer.innerHTML += `<button data-page="${currentMonAnPage + 1}" ${currentMonAnPage === pageCount ? 'disabled' : ''}>&gt;</button>`;
+        }
+        async function loadMonAnList() {
+            try {
+                const response = await fetch('/api/monan');
+                if (!response.ok) {
+                    alert("Không thể tải danh sách món ăn."); return;
+                }
+                allMonAnData = await response.json();
+                const selectElement = document.getElementById('monan-items-per-page');
+                if (selectElement) itemsPerMonAnPage = parseInt(selectElement.value, 10);
+                renderMonAnListAndPagination(allMonAnData, 1);
+            } catch (err) {
+                alert("Lỗi tải danh sách món ăn: " + err.message);
+                allMonAnData = [];
+            }
+        }
+        function loadMonAnCreateForm() {
+            document.getElementById('monan-id').value = '';
+            document.getElementById('monan-name').value = '';
+            document.getElementById('monan-type').value = 'Đồ uống';
+            document.getElementById('monan-unit').value = '';
+            document.getElementById('monan-price').value = '0';
+            document.getElementById('monan-image').value = '';
+
+            document.getElementById('btn-save-monan').style.display = 'inline-block';
+            document.getElementById('btn-update-monan').style.display = 'none';
+            document.getElementById('btn-delete-monan').style.display = 'none';
+        }
+        async function loadMonAnDeSua(id) {
+            try {
+                const response = await fetch(`/api/monan/${id}`);
+                if (!response.ok) {
+                    alert("Không thể tải thông tin món ăn."); return;
+                }
+                const data = await response.json();
+
+                document.getElementById('monan-id').value = data.idmonAn;
+                document.getElementById('monan-name').value = data.tenMon;
+                document.getElementById('monan-type').value = data.loai;
+                document.getElementById('monan-unit').value = data.donViTinh;
+                document.getElementById('monan-price').value = data.gia;
+                document.getElementById('monan-image').value = data.hinhAnh;
+
+                document.getElementById('btn-save-monan').style.display = 'none';
+                document.getElementById('btn-update-monan').style.display = 'inline-block';
+                document.getElementById('btn-delete-monan').style.display = 'inline-block';
+            } catch (err) {
+                alert("Lỗi tải dữ liệu món ăn: " + err.message);
+            }
+        }
+
+        // --- HÀM HELPER (NGUYÊN LIỆU) ---
+        function renderNguyenLieuListAndPagination(dataToRender, page) {
+            currentNguyenLieuPage = page;
+            const tableBody = document.querySelector('#nguyenLieuList table tbody');
+            const paginationContainer = document.querySelector('#nguyenlieu-pagination');
+            if (!tableBody || !paginationContainer) return;
+
+            tableBody.innerHTML = '';
+            paginationContainer.innerHTML = '';
+
+            const start = (currentNguyenLieuPage - 1) * itemsPerNguyenLieuPage;
+            const end = start + itemsPerNguyenLieuPage;
+            const paginatedItems = dataToRender.slice(start, end);
+
+            paginatedItems.forEach(nl => {
+                let ngayNhapFormatted = '';
+                if (nl.ngayNhap) {
+                    try {
+                        ngayNhapFormatted = new Date(nl.ngayNhap).toLocaleDateString('vi-VN');
+                    } catch (e) { }
+                }
+
+                const row = `
+                    <tr>
+                       <td><img src="${nl.hinhAnh ? '/img/' + nl.hinhAnh : '/img/menu-1.jpg'}" alt="${nl.tenNl}" style="width:50px; height:50px; object-fit:cover;"></td>
+                        <td>${nl.tenNl}</td>
+                        <td>${nl.donVi || ''}</td>
+                        <td>${nl.loai || ''}</td>
+                        <td>${nl.soLuong || 0}</td>
+                        <td>${ngayNhapFormatted}</td>
+                        <td class="actions">
+                            <button class="btn-edit-nguyenlieu" data-id="${nl.idnguyenLieu}">Sửa</button>
+                            <button class="btn-delete-nguyenlieu-list" data-id="${nl.idnguyenLieu}">Xóa</button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            const pageCount = Math.ceil(dataToRender.length / itemsPerNguyenLieuPage);
+            paginationContainer.innerHTML += `<button data-page="${currentNguyenLieuPage - 1}" ${currentNguyenLieuPage === 1 ? 'disabled' : ''}>&lt;</button>`;
+            for (let i = 1; i <= pageCount; i++) {
+                paginationContainer.innerHTML += `<button data-page="${i}" class="${i === currentNguyenLieuPage ? 'active' : ''}">${i}</button>`;
+            }
+            paginationContainer.innerHTML += `<button data-page="${currentNguyenLieuPage + 1}" ${currentNguyenLieuPage === pageCount ? 'disabled' : ''}>&gt;</button>`;
+        }
+
+        async function loadNguyenLieuList() {
+            try {
+                const response = await fetch('/api/nguyenlieu');
+                if (!response.ok) {
+                    alert("Không thể tải danh sách nguyên liệu."); return;
+                }
+                allNguyenLieuData = await response.json();
+                const selectElement = document.getElementById('nguyenlieu-items-per-page');
+                if (selectElement) itemsPerNguyenLieuPage = parseInt(selectElement.value, 10);
+                renderNguyenLieuListAndPagination(allNguyenLieuData, 1);
+            } catch (err) {
+                alert("Lỗi tải danh sách nguyên liệu: " + err.message);
+                allNguyenLieuData = [];
+            }
+        }
+
+        function loadNguyenLieuCreateForm() {
+            document.getElementById('nguyenlieu-id').value = '';
+            document.getElementById('nguyenlieu-name').value = '';
+            document.getElementById('nguyenlieu-unit').value = '';
+            document.getElementById('nguyenlieu-type').value = '';
+            document.getElementById('nguyenlieu-quantity').value = '0';
+            document.getElementById('nguyenlieu-date').value = '';
+            document.getElementById('nguyenlieu-image').value = '';
+
+            document.getElementById('btn-save-nguyenlieu').style.display = 'inline-block';
+            document.getElementById('btn-update-nguyenlieu').style.display = 'none';
+            document.getElementById('btn-delete-nguyenlieu').style.display = 'none';
+        }
+
+        async function loadNguyenLieuDeSua(id) {
+            try {
+                const response = await fetch(`/api/nguyenlieu/${id}`);
+                if (!response.ok) {
+                    alert("Không thể tải thông tin nguyên liệu."); return;
+                }
+                const data = await response.json();
+
+                document.getElementById('nguyenlieu-id').value = data.idnguyenLieu;
+                document.getElementById('nguyenlieu-name').value = data.tenNl;
+                document.getElementById('nguyenlieu-unit').value = data.donVi;
+                document.getElementById('nguyenlieu-type').value = data.loai;
+                document.getElementById('nguyenlieu-quantity').value = data.soLuong;
+                document.getElementById('nguyenlieu-date').value = data.ngayNhap ? new Date(data.ngayNhap).toISOString().split('T')[0] : "";
+                document.getElementById('nguyenlieu-image').value = data.hinhAnh;
+
+                document.getElementById('btn-save-nguyenlieu').style.display = 'none';
+                document.getElementById('btn-update-nguyenlieu').style.display = 'inline-block';
+                document.getElementById('btn-delete-nguyenlieu').style.display = 'inline-block';
+            } catch (err) {
+                alert("Lỗi tải dữ liệu nguyên liệu: " + err.message);
+            }
+        }
+
+        // --- HÀM KHỞI CHẠY CHÍNH (KHI TRANG TẢI XONG) ---
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- PHẦN 1: CODE ĐIỀU KHIỂN MENU ---
             const menuItems = document.querySelectorAll('.sidebar .menu-item');
             const contentWrappers = document.querySelectorAll('.main-content .content-wrapper');
             const pageTitle = document.getElementById('page-title');
             const sidebar = document.querySelector('.sidebar');
             const toggleBtn = document.querySelector('.toggle-sidebar');
+            const mainContent = document.querySelector('.main-content');
 
-            // --- Hàm cập nhật nội dung chính ---
             function updateContent(targetId) {
-                if (!targetId) return; // Không làm gì nếu item không có data-target
-
-                contentWrappers.forEach(content => {
-                    content.classList.remove('active');
-                });
+                // Sửa: Bỏ qua tất cả các menu cha
+                if (!targetId || targetId === '#' || targetId === 'invoiceParent' || targetId === 'staffContent' || targetId === 'roleContent' || targetId === 'otherContent' || targetId === 'menuContent' || targetId === 'khoContent') return;
+                contentWrappers.forEach(content => content.classList.remove('active'));
 
                 const targetContent = document.getElementById(targetId);
                 if (targetContent) {
                     targetContent.classList.add('active');
-
-                    // Cập nhật tiêu đề trang
                     const titleEl = targetContent.querySelector('h1') || targetContent.querySelector('h2');
                     if (titleEl) {
                         pageTitle.textContent = titleEl.textContent;
                     } else if (targetId === 'dashboard') {
-                        pageTitle.textContent = 'Dashboard'; // Fallback cho trang chủ
+                        pageTitle.textContent = 'Dashboard';
                     }
                 }
             }
 
-            // --- Xử lý click vào menu ---
             menuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
+                item.addEventListener('click', function (e) {
                     e.stopPropagation();
-
                     const targetId = this.getAttribute('data-target');
                     const isSubmenuParent = this.classList.contains('has-submenu');
                     const parentLi = this.closest('.has-submenu');
 
-                    // 1. Xử lý TRẠNG THÁI ACTIVE
-                    // Xóa tất cả active trước
-                    menuItems.forEach(i => {
-                        i.classList.remove('active');
-                    });
+                    menuItems.forEach(i => i.classList.remove('active'));
 
                     if (parentLi) {
-                        // === Click vào item CON ===
-                        // 1. Kích hoạt cha của nó (để có màu xanh)
                         parentLi.classList.add('active');
-                        // Item con (this) không được add active
-
                     } else if (isSubmenuParent) {
-                        // === Click vào item CHA ===
-                        // 1. Dùng toggle để vừa mở/đóng, vừa giữ màu xanh
                         this.classList.toggle('active');
-
                     } else {
-                        // === Click vào item ĐƠN (như Dashboard) ===
-                        // 1. Kích hoạt chính nó
                         this.classList.add('active');
                     }
 
-                    // 2. Xử lý ĐÓNG các menu khác
-                    // Nếu click vào 1 item cha, hoặc 1 item đơn (không phải item con)
                     if (!parentLi) {
                         document.querySelectorAll('.has-submenu').forEach(otherParent => {
-                            if (otherParent !== this) {
-                                otherParent.classList.remove('active'); // Đóng tất cả các cha khác
+                            if (otherParent !== this && otherParent.getAttribute('data-target') !== this.getAttribute('data-target')) {
+                                otherParent.classList.remove('active');
                             }
                         });
                     }
 
-                    // 3. Cập nhật nội dung (luôn luôn chạy)
                     updateContent(targetId);
+
+                    // GỌI HÀM TẢI DỮ LIỆU TƯƠNG ỨNG
+                    if (targetId === 'staffList') {
+                        loadDanhSachNhanVien();
+                    } else if (targetId === 'invoiceContent') {
+                        loadCurrentInvoices();
+                    } else if (targetId === 'invoiceAddEdit') {
+                        loadInvoiceCreateForm();
+                    } else if (targetId === 'staffAddEdit') {
+                        xoaTrangForm();
+                    }
+                    else if (targetId === 'menuList') {
+                        loadMonAnList();
+                    } else if (targetId === 'menuAddEdit') {
+                        loadMonAnCreateForm();
+                    }
+                    else if (targetId === 'nguyenLieuList') {
+                        loadNguyenLieuList();
+                    } else if (targetId === 'nguyenLieuAddEdit') {
+                        loadNguyenLieuCreateForm();
+                    }
+                    else if (targetId === 'postContent') {
+                    loadLienHeList();
+                }
                 });
             });
 
-            // --- Khởi tạo trang ---
-            const initialActiveMenuItem = document.querySelector('.sidebar .menu-item.active');
+           const initialActiveMenuItem = document.querySelector('.sidebar .menu-item.active');
             if (initialActiveMenuItem) {
                 const targetId = initialActiveMenuItem.getAttribute('data-target');
                 updateContent(targetId);
-
+                if (targetId === 'staffList') loadDanhSachNhanVien();
+                else if (targetId === 'invoiceContent') loadCurrentInvoices();
+                else if (targetId === 'menuList') loadMonAnList();
+                else if (targetId === 'nguyenLieuList') loadNguyenLieuList();
+                else if (targetId === 'postContent') loadLienHeList();
                 const parent = initialActiveMenuItem.closest('.has-submenu');
-                if (parent) {
-                    parent.classList.add('active');
-                }
+                if (parent) parent.classList.add('active');
             }
-
-            // --- Xử lý nút Toggle Sidebar ---
             if (toggleBtn) {
-                toggleBtn.addEventListener('click', function() {
+                toggleBtn.addEventListener('click', function () {
                     sidebar.classList.toggle('collapsed');
                 });
             }
-        });
-    </script>
 
+            // --- PHẦN 2: CODE ĐIỀU KHIỂN FORM NHÂN VIÊN (staffAddEdit) ---
+            const staffIdInput = document.getElementById('staff-id');
+            const usernameInput = document.getElementById('staff-username');
+            const passwordInput = document.getElementById('staff-password');
+            const nameInput = document.getElementById('staff-name');
+            const emailInput = document.getElementById('staff-email');
+            const phoneInput = document.getElementById('staff-phone');
+            const dobInput = document.getElementById('staff-dob');
+            const cccdInput = document.getElementById('staff-cccd');
+            const genderInput = document.getElementById('staff-gender');
+            const addressInput = document.getElementById('staff-address');
+            const roleInput = document.getElementById('staff-role');
+
+            const btnAdd = document.getElementById('btn-add');
+            const btnUpdate = document.getElementById('btn-update');
+            const btnDelete = document.getElementById('btn-delete');
+
+            function layDuLieuTuForm() {
+                return {
+                    id: staffIdInput.value, TenDangNhap: usernameInput.value,
+                    MatKhau: passwordInput.value, HoTenNv: nameInput.value,
+                    Email: emailInput.value, Sdt: phoneInput.value,
+                    NgaySinh: dobInput.value || null, Cccd: cccdInput.value,
+                    GioiTinh: genderInput.value, DiaChi: addressInput.value,
+                    ChucVu: roleInput.value
+                };
+            }
+            function xoaTrangForm() {
+                if (staffIdInput) staffIdInput.value = "";
+                if (usernameInput) usernameInput.value = "";
+                if (passwordInput) passwordInput.value = "";
+                if (nameInput) nameInput.value = "";
+                if (emailInput) emailInput.value = "";
+                if (phoneInput) phoneInput.value = "";
+                if (dobInput) dobInput.value = "";
+                if (cccdInput) cccdInput.value = "";
+                if (addressInput) addressInput.value = "";
+                if (usernameInput) usernameInput.disabled = false;
+                if (passwordInput) passwordInput.placeholder = "Nhập để tạo mới hoặc thay đổi";
+            }
+            if (btnAdd) {
+                btnAdd.addEventListener('click', async () => {
+                    const staffData = layDuLieuTuForm();
+                    if (staffData.id) {
+                        alert("Đang ở chế độ Sửa, không thể Thêm."); return;
+                    }
+                    if (!staffData.TenDangNhap || !staffData.MatKhau || !staffData.HoTenNv || !staffData.Sdt) {
+                        alert("Vui lòng nhập đầy đủ các trường bắt buộc (*)"); return;
+                    }
+                    try {
+                        const response = await fetch('/api/nhanvien', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(staffData)
+                        });
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert('Thêm nhân viên thành công!');
+                            xoaTrangForm();
+                        } else {
+                            alert('Lỗi: ' + result.message);
+                        }
+                    } catch (err) {
+                        alert('Lỗi kết nối máy chủ: ' + err.message);
+                    }
+                });
+            }
+            if (btnUpdate) {
+                btnUpdate.addEventListener('click', async () => {
+                    const staffData = layDuLieuTuForm();
+                    if (!staffData.id) {
+                        alert("Không có nhân viên nào được chọn để cập nhật."); return;
+                    }
+                    const updateModel = {
+                        MatKhau: staffData.MatKhau ? staffData.MatKhau : null,
+                        HoTenNv: staffData.HoTenNv, Sdt: staffData.Sdt,
+                        Email: staffData.Email, DiaChi: staffData.DiaChi,
+                        ChucVu: staffData.ChucVu, NgaySinh: staffData.NgaySinh,
+                        Cccd: staffData.Cccd, GioiTinh: staffData.GioiTinh
+                    };
+                    try {
+                        const response = await fetch(`/api/nhanvien/${staffData.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(updateModel)
+                        });
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert('Cập nhật thành công!');
+                            passwordInput.value = "";
+                        } else {
+                            alert('Lỗi: ' + result.message);
+                        }
+                    } catch (err) {
+                        alert('Lỗi kết nối máy chủ: ' + err.message);
+                    }
+                });
+            }
+            if (btnDelete) {
+                btnDelete.addEventListener('click', async () => {
+                    const staffId = staffIdInput.value;
+                    if (!staffId) {
+                        alert("Không có nhân viên nào được chọn để xóa."); return;
+                    }
+                    if (!confirm(`Bạn có chắc muốn xóa nhân viên ID: ${staffId}?`)) return;
+                    try {
+                        const response = await fetch(`/api/nhanvien/${staffId}`, { method: 'DELETE' });
+                        const result = await response.json();
+                        if (response.ok) {
+                            alert('Xóa thành công!');
+                            xoaTrangForm();
+                        } else {
+                            alert('Lỗi: ' + result.message);
+                        }
+                    } catch (err) {
+                        alert('Lỗi kết nối máy chủ: ' + err.message);
+                    }
+                });
+            }
+
+            // --- PHẦN 3: XỬ LÝ SỰ KIỆN CHUNG (SEARCH, PAGINATION) ---
+
+            // Tìm kiếm/Phân trang NHÂN VIÊN
+            function getFilteredData() {
+                const searchTerm = document.getElementById('staff-search-input').value.toLowerCase();
+                if (!searchTerm) {
+                    return allStaffData;
+                }
+                return allStaffData.filter(nv => {
+                    const hoTen = (nv.hoTen || '').toLowerCase();
+                    const email = (nv.email || '').toLowerCase();
+                    const sdt = (nv.sdt || '').toLowerCase();
+                    const chucVu = (nv.chucVu || '').toLowerCase();
+                    const cccd = (nv.cccd || '').toLowerCase();
+                    const gioiTinh = (nv.gioiTinh || '').toLowerCase();
+                    return hoTen.includes(searchTerm) || email.includes(searchTerm) || sdt.includes(searchTerm) ||
+                           chucVu.includes(searchTerm) || cccd.includes(searchTerm) || gioiTinh.includes(searchTerm);
+                });
+            }
+            const searchInput = document.getElementById('staff-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
+                    const filteredData = getFilteredData();
+                    renderStaffListAndPagination(filteredData, 1);
+                });
+            }
+            const itemsPerPageSelect = document.getElementById('staff-items-per-page');
+            if (itemsPerPageSelect) {
+                itemsPerPageSelect.addEventListener('change', function() {
+                    itemsPerPage = parseInt(this.value, 10);
+                    const filteredData = getFilteredData();
+                    renderStaffListAndPagination(filteredData, 1);
+                });
+            }
+            const lienheSearchInput = document.getElementById('lienhe-search-input');
+        if (lienheSearchInput) {
+            lienheSearchInput.addEventListener('keyup', function() {
+                loadLienHeList(); // Gọi lại hàm load (đã bao gồm lọc)
+            });
+        }
+
+            // Tìm kiếm/Phân trang MÓN ĂN
+            function getFilteredMonAnData() {
+                const searchTerm = document.getElementById('monan-search-input').value.toLowerCase();
+                if (!searchTerm) {
+                    return allMonAnData;
+                }
+                return allMonAnData.filter(ma => {
+                    const ten = (ma.tenMon || '').toLowerCase();
+                    const loai = (ma.loai || '').toLowerCase();
+                    return ten.includes(searchTerm) || loai.includes(searchTerm);
+                });
+            }
+            const monanSearchInput = document.getElementById('monan-search-input');
+            if (monanSearchInput) {
+                monanSearchInput.addEventListener('keyup', function() {
+                    const filteredData = getFilteredMonAnData();
+                    renderMonAnListAndPagination(filteredData, 1);
+                });
+            }
+            const monanItemsPerPageSelect = document.getElementById('monan-items-per-page');
+            if (monanItemsPerPageSelect) {
+                monanItemsPerPageSelect.addEventListener('change', function() {
+                    itemsPerMonAnPage = parseInt(this.value, 10);
+                    const filteredData = getFilteredMonAnData();
+                    renderMonAnListAndPagination(filteredData, 1);
+                });
+            }
+
+            // Tìm kiếm/Phân trang NGUYÊN LIỆU
+            // ▼▼▼ SỬA CODE TÌM KIẾM/PHÂN TRANG NGUYÊN LIỆU ▼▼▼
+            function getFilteredNguyenLieuData() {
+                const searchTerm = document.getElementById('nguyenlieu-search-input').value.toLowerCase();
+                if (!searchTerm) {
+                    return allNguyenLieuData;
+                }
+                return allNguyenLieuData.filter(nl => {
+                    const ten = (nl.tenNl || '').toLowerCase();
+                    const loai = (nl.loai || '').toLowerCase();
+                    return ten.includes(searchTerm) || loai.includes(searchTerm);
+                });
+            }
+            const nguyenlieuSearchInput = document.getElementById('nguyenlieu-search-input');
+            if (nguyenlieuSearchInput) {
+                nguyenlieuSearchInput.addEventListener('keyup', function() {
+                    const filteredData = getFilteredNguyenLieuData();
+                    renderNguyenLieuListAndPagination(filteredData, 1);
+                });
+            }
+            const nguyenlieuItemsPerPageSelect = document.getElementById('nguyenlieu-items-per-page');
+            if (nguyenlieuItemsPerPageSelect) {
+                nguyenlieuItemsPerPageSelect.addEventListener('change', function() {
+                    itemsPerNguyenLieuPage = parseInt(this.value, 10);
+                    const filteredData = getFilteredNguyenLieuData();
+                    renderNguyenLieuListAndPagination(filteredData, 1);
+                });
+            }
+
+            // --- PHẦN 4: SỰ KIỆN CLICK CHUNG (DELEGATION) ---
+            if (mainContent) {
+                mainContent.addEventListener('click', async function(e) {
+
+                    // --- Sự kiện cho TÀI KHOẢN ---
+                    if (e.target && e.target.classList.contains('btn-edit')) {
+                        e.preventDefault();
+                        const staffId = e.target.getAttribute('data-id');
+                        if (staffId) {
+                            document.querySelector('.menu-item[data-target="staffAddEdit"]').click();
+                            loadNhanVienDeSua(staffId);
+                        }
+                    }
+                    if (e.target && e.target.classList.contains('btn-delete-list')) {
+                        e.preventDefault();
+                        const staffId = e.target.getAttribute('data-id');
+                        if (staffId) {
+                            if (!confirm(`Bạn có chắc muốn xóa nhân viên ID: ${staffId}?`)) return;
+                            try {
+                                const response = await fetch(`/api/nhanvien/${staffId}`, { method: 'DELETE' });
+                                const result = await response.json();
+                                if (response.ok) {
+                                    alert('Xóa thành công!');
+                                    await loadDanhSachNhanVien();
+                                    const filteredData = getFilteredData();
+                                    renderStaffListAndPagination(filteredData, 1);
+                                } else {
+                                    alert('Lỗi: ' + result.message);
+                                }
+                            } catch (err) {
+                                alert('Lỗi kết nối máy chủ: ' + err.message);
+                            }
+                        }
+                    }
+                    if (e.target && e.target.closest('#staffList .pages') && e.target.tagName === 'BUTTON') {
+                        e.preventDefault();
+                        const pageNumber = parseInt(e.target.getAttribute('data-page'), 10);
+                        if (!isNaN(pageNumber) && pageNumber > 0) {
+                            const filteredData = getFilteredData();
+                            renderStaffListAndPagination(filteredData, pageNumber);
+                        }
+                    }
+
+                    // --- Sự kiện cho HÓA ĐƠN ---
+                    if (e.target && e.target.classList.contains('pay-btn')) {
+                        e.preventDefault();
+                        const hoaDonId = e.target.getAttribute('data-id');
+                        alert('Bạn đã bấm thanh toán cho Hóa đơn ID: ' + hoaDonId);
+                    }
+                    if (e.target && e.target.classList.contains('btn-edit-invoice')) {
+                        e.preventDefault();
+                        const hoaDonId = e.target.getAttribute('data-id');
+                        if (hoaDonId) {
+                            document.querySelector('.menu-item[data-target="invoiceAddEdit"]').click();
+                            loadHoaDonDeSua(hoaDonId);
+                        }
+                    }
+                    function getInvoiceFormData() {
+                        return {
+                            SdtKhachHang: document.getElementById('invoice-customer-phone').value,
+                            HoTenKhachHang: document.getElementById('invoice-customer-name').value,
+                            ThoiGian: document.getElementById('invoice-time-input').value,
+                            SoLuongKhach: parseInt(document.getElementById('invoice-guest-count').value, 10),
+                            TongTien: parseFloat(document.getElementById('invoice-total-amount').value) || 0,
+                            GhiChu: document.getElementById('invoice-notes').value
+                        };
+                    }
+                    if (e.target && e.target.id === 'btn-save-invoice') {
+                        e.preventDefault();
+                        const data = getInvoiceFormData();
+                        if (!data.SdtKhachHang || !data.HoTenKhachHang || !data.ThoiGian) {
+                            alert('Vui lòng nhập SĐT, Tên khách hàng và Thời gian!'); return;
+                        }
+                        try {
+                            const response = await fetch('/api/hoadon', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="invoiceContent"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-update-invoice') {
+                        e.preventDefault();
+                        const invoiceId = document.getElementById('invoice-id').value;
+                        if (!invoiceId) {
+                            alert("Lỗi: Không tìm thấy ID Hóa đơn để cập nhật."); return;
+                        }
+                        const data = getInvoiceFormData();
+                        if (!data.SdtKhachHang || !data.HoTenKhachHang || !data.ThoiGian) {
+                            alert('Vui lòng nhập SĐT, Tên khách hàng và Thời gian!'); return;
+                        }
+                        try {
+                            const response = await fetch(`/api/hoadon/${invoiceId}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="invoiceContent"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-delete-invoice') {
+                        e.preventDefault();
+                        const invoiceId = document.getElementById('invoice-id').value;
+                        if (!invoiceId) {
+                            alert("Lỗi: Không tìm thấy ID Hóa đơn để xóa."); return;
+                        }
+                        if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn hóa đơn ID: ${invoiceId}?`)) return;
+                        try {
+                            const response = await fetch(`/api/hoadon/${invoiceId}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="invoiceContent"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-cancel-invoice') {
+                        e.preventDefault();
+                        document.querySelector('.menu-item[data-target="invoiceContent"]').click();
+                    }
+
+                    // --- Sự kiện cho MÓN ĂN ---
+                    function getMonAnFormData() {
+                        return {
+                            TenMon: document.getElementById('monan-name').value,
+                            Loai: document.getElementById('monan-type').value,
+                            DonViTinh: document.getElementById('monan-unit').value,
+                            Gia: parseFloat(document.getElementById('monan-price').value) || 0,
+                            HinhAnh: document.getElementById('monan-image').value
+                        };
+                    }
+                    if (e.target && e.target.id === 'btn-save-monan') {
+                        e.preventDefault();
+                        const data = getMonAnFormData();
+                        if (!data.TenMon || !data.Loai || !data.DonViTinh) {
+                            alert('Vui lòng nhập Tên, Loại và Đơn vị tính!'); return;
+                        }
+                        try {
+                            const response = await fetch('/api/monan', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="menuList"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-update-monan') {
+                        e.preventDefault();
+                        const monAnId = document.getElementById('monan-id').value;
+                        if (!monAnId) {
+                            alert("Lỗi: Không tìm thấy ID Món ăn để cập nhật."); return;
+                        }
+                        const data = getMonAnFormData();
+                        if (!data.TenMon || !data.Loai || !data.DonViTinh) {
+                            alert('Vui lòng nhập Tên, Loại và Đơn vị tính!'); return;
+                        }
+                        try {
+                            const response = await fetch(`/api/monan/${monAnId}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="menuList"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-delete-monan') {
+                        e.preventDefault();
+                        const monAnId = document.getElementById('monan-id').value;
+                        if (!monAnId) {
+                            alert("Lỗi: Không tìm thấy ID Món ăn để xóa."); return;
+                        }
+                        if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn món ăn ID: ${monAnId}?`)) return;
+
+                        try {
+                            const response = await fetch(`/api/monan/${monAnId}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="menuList"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.classList.contains('btn-edit-monan')) {
+                        e.preventDefault();
+                        const monAnId = e.target.getAttribute('data-id');
+                        if (monAnId) {
+                            document.querySelector('.menu-item[data-target="menuAddEdit"]').click();
+                            loadMonAnDeSua(monAnId);
+                        }
+                    }
+                    if (e.target && e.target.classList.contains('btn-delete-monan-list')) {
+                        e.preventDefault();
+                        const monAnId = e.target.getAttribute('data-id');
+                        if (!monAnId) {
+                            alert("Lỗi: Không tìm thấy ID Món ăn."); return;
+                        }
+                        if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn món ăn ID: ${monAnId}?`)) return;
+
+                        try {
+                            const response = await fetch(`/api/monan/${monAnId}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                await loadMonAnList();
+                                const filteredData = getFilteredMonAnData();
+                                renderMonAnListAndPagination(filteredData, 1);
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.closest('#monan-pagination') && e.target.tagName === 'BUTTON') {
+                        e.preventDefault();
+                        const pageNumber = parseInt(e.target.getAttribute('data-page'), 10);
+                        if (!isNaN(pageNumber) && pageNumber > 0) {
+                            const filteredData = getFilteredMonAnData();
+                            renderMonAnListAndPagination(filteredData, pageNumber);
+                        }
+                    }
+
+                    // --- Sự kiện cho NGUYÊN LIỆU ---
+                   function getNguyenLieuFormData() {
+                        return {
+                            TenNl: document.getElementById('nguyenlieu-name').value,
+                            DonVi: document.getElementById('nguyenlieu-unit').value,
+                            Loai: document.getElementById('nguyenlieu-type').value,
+                            SoLuong: parseInt(document.getElementById('nguyenlieu-quantity').value, 10) || 0,
+                            NgayNhap: document.getElementById('nguyenlieu-date').value || null,
+                            HinhAnh: document.getElementById('nguyenlieu-image').value
+                        };
+                    }
+                    if (e.target && e.target.id === 'btn-save-nguyenlieu') {
+                        e.preventDefault();
+                        const data = getNguyenLieuFormData();
+                        if (!data.TenNl || !data.DonVi || !data.Loai) {
+                            alert('Vui lòng nhập Tên, Đơn vị tính và Loại!'); return;
+                        }
+                        try {
+                            const response = await fetch('/api/nguyenlieu', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="nguyenLieuList"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-update-nguyenlieu') {
+                        e.preventDefault();
+                        const nguyenLieuId = document.getElementById('nguyenlieu-id').value;
+                        if (!nguyenLieuId) {
+                            alert("Lỗi: Không tìm thấy ID Nguyên liệu để cập nhật."); return;
+                        }
+                        const data = getNguyenLieuFormData();
+                        if (!data.TenNl || !data.DonVi || !data.Loai) {
+                            alert('Vui lòng nhập Tên, Đơn vị tính và Loại!'); return;
+                        }
+                        try {
+                            const response = await fetch(`/api/nguyenlieu/${nguyenLieuId}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(data)
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="nguyenLieuList"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.id === 'btn-delete-nguyenlieu') {
+                        e.preventDefault();
+                        const nguyenLieuId = document.getElementById('nguyenlieu-id').value;
+                        if (!nguyenLieuId) {
+                            alert("Lỗi: Không tìm thấy ID Nguyên liệu để xóa."); return;
+                        }
+                        if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn nguyên liệu ID: ${nguyenLieuId}?`)) return;
+                        try {
+                            const response = await fetch(`/api/nguyenlieu/${nguyenLieuId}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                document.querySelector('.menu-item[data-target="nguyenLieuList"]').click();
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.classList.contains('btn-edit-nguyenlieu')) {
+                        e.preventDefault();
+                        const nguyenLieuId = e.target.getAttribute('data-id');
+                        if (nguyenLieuId) {
+                            document.querySelector('.menu-item[data-target="nguyenLieuAddEdit"]').click();
+                            loadNguyenLieuDeSua(nguyenLieuId);
+                        }
+                    }
+                    if (e.target && e.target.classList.contains('btn-delete-nguyenlieu-list')) {
+                        e.preventDefault();
+                        const nguyenLieuId = e.target.getAttribute('data-id');
+                        if (!nguyenLieuId) {
+                            alert("Lỗi: Không tìm thấy ID Nguyên liệu."); return;
+                        }
+                        if (!confirm(`Bạn có chắc muốn xóa vĩnh viễn nguyên liệu ID: ${nguyenLieuId}?`)) return;
+                        try {
+                            const response = await fetch(`/api/nguyenlieu/${nguyenLieuId}`, {
+                                method: 'DELETE'
+                            });
+                            const result = await response.json();
+                            if (response.ok) {
+                                alert(result.message);
+                                await loadNguyenLieuList();
+                                const filteredData = getFilteredNguyenLieuData();
+                                renderNguyenLieuListAndPagination(filteredData, 1);
+                            } else {
+                                alert('Lỗi: ' + result.message);
+                            }
+                        } catch (err) {
+                            alert('Lỗi kết nối máy chủ: ' + err.message);
+                        }
+                    }
+                    if (e.target && e.target.closest('#nguyenlieu-pagination') && e.target.tagName === 'BUTTON') {
+                        e.preventDefault();
+                        const pageNumber = parseInt(e.target.getAttribute('data-page'), 10);
+                        if (!isNaN(pageNumber) && pageNumber > 0) {
+                            const filteredData = getFilteredNguyenLieuData();
+                            renderNguyenLieuListAndPagination(filteredData, pageNumber);
+                        }
+                    }
+                    // --- ▲▲▲ KẾT THÚC SỬA CODE CHO NGUYÊN LIỆU ▲▲▲ ---
+
+                });
+            }
+        }); // Hết DOMContentLoaded
+
+        // --- PHẦN 4: TỰ ĐỘNG GỌI HÀM LOAD (KIỂM TRA URL) ---
+        (function() {
+            // (Code tự động load 'Edit' nhân viên - không đổi)
+            const pathParts = window.location.pathname.split('/');
+            const lastPart = pathParts[pathParts.length - 1];
+            const secondLastPart = pathParts[pathParts.length - 2];
+            if (secondLastPart && secondLastPart.toLowerCase() === 'edit' && !isNaN(lastPart)) {
+                // (Code xử lý load edit nhân viên)
+            }
+        })();
+    </script>
 </body>
 </html>

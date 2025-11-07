@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantManagement.Models.Entities;
 
@@ -11,9 +12,11 @@ using RestaurantManagement.Models.Entities;
 namespace RestaurantManagement.Migrations
 {
     [DbContext(typeof(QLNhaHangContext))]
-    partial class QLNhaHangContextModelSnapshot : ModelSnapshot
+    [Migration("20251105075556_AddHinhAnhToMonAn")]
+    partial class AddHinhAnhToMonAn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,44 +308,6 @@ namespace RestaurantManagement.Migrations
                     b.ToTable("Kho", (string)null);
                 });
 
-            modelBuilder.Entity("RestaurantManagement.Models.Entities.LienHe", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("DaDoc")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("HoTen")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("NgayGui")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NoiDung")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TieuDe")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LienHes");
-                });
-
             modelBuilder.Entity("RestaurantManagement.Models.Entities.MonAn", b =>
                 {
                     b.Property<int>("IdmonAn")
@@ -414,18 +379,9 @@ namespace RestaurantManagement.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("HinhAnh")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Loai")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("NgayNhap")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("SoLuong")
-                        .HasColumnType("int");
 
                     b.Property<string>("TenNl")
                         .IsRequired()
@@ -492,9 +448,6 @@ namespace RestaurantManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdnhanVien"));
 
-                    b.Property<string>("Cccd")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ChucVu")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -508,9 +461,6 @@ namespace RestaurantManagement.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("GioiTinh")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HoTenNv")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -519,9 +469,6 @@ namespace RestaurantManagement.Migrations
 
                     b.Property<decimal?>("Luong")
                         .HasColumnType("decimal(18, 2)");
-
-                    b.Property<DateOnly?>("NgaySinh")
-                        .HasColumnType("date");
 
                     b.Property<DateOnly?>("NgayVaoLam")
                         .HasColumnType("date");
@@ -627,15 +574,10 @@ namespace RestaurantManagement.Migrations
                         .HasColumnType("int")
                         .HasColumnName("IDNhanVien");
 
-                    b.Property<byte[]>("MatKhauHash")
+                    b.Property<string>("MatKhau")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varbinary(255)");
-
-                    b.Property<byte[]>("MatKhauSalt")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varbinary(255)");
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("NgayTao")
                         .ValueGeneratedOnAdd()

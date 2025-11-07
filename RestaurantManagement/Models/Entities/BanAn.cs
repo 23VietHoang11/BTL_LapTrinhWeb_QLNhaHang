@@ -13,6 +13,7 @@ public partial class BanAn
 
     public string? LoaiBan { get; set; }
 
+
     public virtual ICollection<DatBan> DatBans { get; set; } = new List<DatBan>();
 
     public virtual ICollection<HoaDon> HoaDons { get; set; } = new List<HoaDon>();
