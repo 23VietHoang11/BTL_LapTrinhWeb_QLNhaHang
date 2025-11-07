@@ -1,0 +1,73 @@
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.MonAnEditViewModel
+@{
+    ViewData["Title"] = "Cập nhật mặt hàng";
+}
+
+<h2>Cập nhật mặt hàng: @Model.TenMon</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="TenMon" /> 
+    <input type="hidden" asp-for="ExistingImage" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="menu-container">
+        <div class="menu-image" style="text-align: center;">
+            @if (!string.IsNullOrEmpty(Model.ExistingImage))
+            {
+                <img src="@Model.ExistingImage" alt="Ảnh hiện tại" style="max-width: 150px; max-height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;" id="preview-image">
+            }
+            else
+            {
+                <img src="https://via.placeholder.com/150" alt="Chưa có ảnh" style="max-width: 150px; max-height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;" id="preview-image">
+                <p>Chưa có ảnh</p>
+            }
+
+            <div class="form-group mt-2">
+                <label asp-for="ImageFile" style="font-weight: bold;">Thay đổi ảnh:</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" onchange="document.getElementById('preview-image').src = window.URL.createObjectURL(this.files[0])" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="menu-details">
+            <div class="form-group">
+                <label asp-for="TenMon">Tên mặt hàng (*)</label>
+                <input asp-for="TenMon" class="form-control">
+                <span asp-validation-for="TenMon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Loai">Loại mặt hàng (*)</label>
+                <select asp-for="Loai" class="form-control">
+                    <option value="Thức ăn">Thức ăn</option>
+                    <option value="Đồ uống">Đồ uống</option>
+                </select>
+                <span asp-validation-for="Loai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DonViTinh">Đơn vị tính (*)</label>
+                <input asp-for="DonViTinh" class="form-control">
+                @* <select asp-for="DonViTinh" class="form-control">
+                    <option value="Dĩa">Dĩa</option>
+                    <option value="Tô">Tô</option>
+                    <option value="Phần">Phần</option>
+                    <option value="Ly">Ly</option>
+                    <option value="Chai">Chai</option>
+                    <option value="Lon">Lon</option>
+                </select> *@
+                <span asp-validation-for="DonViTinh" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Gia">Giá bán (*)</label>
+                <input asp-for="Gia" class="form-control" type="number">
+                <span asp-validation-for="Gia" class="text-danger"></span>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 20px; display: flex; gap: 10px;">
+                <a asp-action="Index" class="delete-btn">Hủy</a>
+                <button type="submit" class="save-btn">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</form>

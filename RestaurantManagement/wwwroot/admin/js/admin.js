@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
     // Tập hợp các phần tử của từng phần trong giao diện
     const sections = {
         dashboard: document.getElementById("dashboard"),
@@ -13,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         staffContent: document.getElementById("staffContent")  // Thêm dòng này
     };
 
-    // Hàm ẩn tất cả các phần trong giao diện
+     //Hàm ẩn tất cả các phần trong giao diện
     function hideAllSections() {
         for (let key in sections) {
             sections[key].style.display = "none";

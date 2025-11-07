@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestaurantManagement.Controllers
 {
+    [Area("Admin")]
     [Route("api/lienhe")]
     [ApiController]
     public class LienHeController : ControllerBase

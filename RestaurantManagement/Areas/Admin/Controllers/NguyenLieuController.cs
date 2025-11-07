@@ -1,119 +1,151 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantManagement.Models.Entities;
-using RestaurantManagement.Models.DTOs; // Dùng DTO
-using System.Linq;
-using System.Threading.Tasks;
+using RestaurantManagement.Areas.Admin.Models.ViewModels;
 
-namespace RestaurantManagement.Controllers
+namespace RestaurantManagement.Areas.Admin.Controllers
 {
-    [Route("api/nguyenlieu")]
-    [ApiController]
-    public class NguyenLieuController : ControllerBase
+    [Area("Admin")]
+    public class NguyenLieuController : Controller
     {
         private readonly QLNhaHangContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public NguyenLieuController(QLNhaHangContext context)
+        public NguyenLieuController(QLNhaHangContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: api/nguyenlieu (Đã cập nhật)
-        [HttpGet]
-        public async Task<IActionResult> GetAllNguyenLieu()
+        // GET: Admin/NguyenLieu
+        public async Task<IActionResult> Index()
         {
-            var nguyenLieus = await _context.NguyenLieus
-                .Select(nl => new {
-                    nl.IdnguyenLieu,
-                    nl.TenNl,
-                    nl.DonVi,
-                    nl.Loai,
-                    nl.SoLuong,
-                    nl.NgayNhap,
-                    nl.HinhAnh
-                })
-                .OrderBy(nl => nl.TenNl)
-                .ToListAsync();
-            return Ok(nguyenLieus);
+            var data = await _context.NguyenLieus.OrderByDescending(nl => nl.NgayNhap).ToListAsync();
+            return View(data);
         }
 
-        // GET: api/nguyenlieu/{id} (Đã cập nhật)
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetNguyenLieu(int id)
+        // GET: Admin/NguyenLieu/Create
+        public IActionResult Create()
         {
-            var nguyenLieu = await _context.NguyenLieus.FindAsync(id);
-            if (nguyenLieu == null)
-            {
-                return NotFound();
-            }
-            // Trả về đầy đủ để Sửa
-            return Ok(nguyenLieu);
+            return View(new NguyenLieuCreateViewModel());
         }
 
-        // POST: api/nguyenlieu (Đã cập nhật)
+        // POST: Admin/NguyenLieu/Create
         [HttpPost]
-        public async Task<IActionResult> CreateNguyenLieu([FromBody] NguyenLieuDTO model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(NguyenLieuCreateViewModel vm)
         {
-            if (await _context.NguyenLieus.AnyAsync(m => m.TenNl == model.TenNl))
+            if (ModelState.IsValid)
             {
-                return Conflict(new { message = "Tên nguyên liệu đã tồn tại." });
-            }
+                string uniqueFileName = null;
+                if (vm.HinhAnh != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/nguyenlieu");
+                    if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.HinhAnh.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await vm.HinhAnh.CopyToAsync(fileStream);
+                    }
+                    uniqueFileName = "/images/nguyenlieu/" + uniqueFileName;
+                }
 
-            var newNguyenLieu = new NguyenLieu
+                var nguyenLieu = new NguyenLieu
+                {
+                    TenNl = vm.TenNl,
+                    DonVi = vm.DonVi,
+                    Loai = vm.Loai,
+                    SoLuong = vm.SoLuong,
+                    NgayNhap = vm.NgayNhap,
+                    HinhAnh = uniqueFileName
+                };
+                _context.Add(nguyenLieu);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(vm);
+        }
+
+        // GET: Admin/NguyenLieu/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var nl = await _context.NguyenLieus.FindAsync(id);
+            if (nl == null) return NotFound();
+
+            var vm = new NguyenLieuEditViewModel
             {
-                TenNl = model.TenNl,
-                DonVi = model.DonVi,
-                Loai = model.Loai,
-                SoLuong = model.SoLuong,
-                NgayNhap = model.NgayNhap,
-                HinhAnh = model.HinhAnh
+                IdnguyenLieu = nl.IdnguyenLieu,
+                TenNl = nl.TenNl,
+                DonVi = nl.DonVi,
+                Loai = nl.Loai,
+                SoLuong = nl.SoLuong ?? 0,
+                NgayNhap = nl.NgayNhap,
+                ExistingImage = nl.HinhAnh
             };
-
-            _context.NguyenLieus.Add(newNguyenLieu);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Thêm nguyên liệu thành công!", id = newNguyenLieu.IdnguyenLieu });
+            return View(vm);
         }
 
-        // PUT: api/nguyenlieu/{id} (Đã cập nhật)
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNguyenLieu(int id, [FromBody] NguyenLieuDTO model)
+        // POST: Admin/NguyenLieu/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, NguyenLieuEditViewModel vm)
         {
-            var nguyenLieu = await _context.NguyenLieus.FindAsync(id);
-            if (nguyenLieu == null)
+            if (id != vm.IdnguyenLieu) return NotFound();
+
+            if (ModelState.IsValid)
             {
-                return NotFound(new { message = "Không tìm thấy nguyên liệu." });
+                try
+                {
+                    var nlToUpdate = await _context.NguyenLieus.FindAsync(id);
+                    if (nlToUpdate == null) return NotFound();
+
+                    nlToUpdate.TenNl = vm.TenNl;
+                    nlToUpdate.DonVi = vm.DonVi;
+                    nlToUpdate.Loai = vm.Loai;
+                    nlToUpdate.SoLuong = vm.SoLuong;
+                    nlToUpdate.NgayNhap = vm.NgayNhap;
+
+                    if (vm.HinhAnh != null)
+                    {
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/nguyenlieu");
+                        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.HinhAnh.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await vm.HinhAnh.CopyToAsync(fileStream);
+                        }
+                        nlToUpdate.HinhAnh = "/images/nguyenlieu/" + uniqueFileName;
+                    }
+
+                    _context.Update(nlToUpdate);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.NguyenLieus.Any(e => e.IdnguyenLieu == id)) return NotFound();
+                    else throw;
+                }
+                return RedirectToAction(nameof(Index));
             }
-
-            if (await _context.NguyenLieus.AnyAsync(m => m.TenNl == model.TenNl && m.IdnguyenLieu != id))
-            {
-                return Conflict(new { message = "Tên nguyên liệu này đã bị trùng." });
-            }
-
-            nguyenLieu.TenNl = model.TenNl;
-            nguyenLieu.DonVi = model.DonVi;
-            nguyenLieu.Loai = model.Loai;
-            nguyenLieu.SoLuong = model.SoLuong;
-            nguyenLieu.NgayNhap = model.NgayNhap;
-            nguyenLieu.HinhAnh = model.HinhAnh;
-
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Cập nhật thành công." });
+            return View(vm);
         }
 
-        // DELETE: api/nguyenlieu/{id} (Không đổi)
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNguyenLieu(int id)
+        // POST: Admin/NguyenLieu/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var nguyenLieu = await _context.NguyenLieus.FindAsync(id);
-            if (nguyenLieu == null)
+            var nl = await _context.NguyenLieus.FindAsync(id);
+            if (nl != null)
             {
-                return NotFound(new { message = "Không tìm thấy nguyên liệu." });
+                _context.NguyenLieus.Remove(nl);
+                await _context.SaveChangesAsync();
             }
-
-            _context.NguyenLieus.Remove(nguyenLieu);
-            await _context.SaveChangesAsync();
-            return Ok(new { message = "Xóa nguyên liệu thành công." });
+            return RedirectToAction(nameof(Index));
         }
     }
 }

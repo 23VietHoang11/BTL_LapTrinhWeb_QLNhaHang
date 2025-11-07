@@ -192,7 +192,9 @@ button {
             width: 4px;
             background-color: #a7baff;
         }
-
+/*    .menu-item.has-submenu.active .submenu{
+        display:block !important;
+    }*/
 /* Submenu */
 .has-submenu .arrow {
     margin-left: auto;
@@ -283,14 +285,10 @@ button {
     }
 
 
-/* --- Content Wrapper (Quản lý hiển thị trang) --- */
+/* --- Content Wrapper (Nội dung trang con) --- */
 .content-wrapper {
-    display: none; /* Mặc định ẩn tất cả */
+    display: block;  
 }
-
-    .content-wrapper.active {
-        display: block; /* Hiển thị trang được chọn */
-    }
 
 /* --- Tiện ích chung --- */
 .box {

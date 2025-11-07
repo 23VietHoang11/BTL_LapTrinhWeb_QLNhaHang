@@ -4,6 +4,7 @@ using RestaurantManagement.Models.Entities;
 
 namespace RestaurantManagement.Controllers
 {
+    [Area("Admin")]
     [Route("api/banan")]
     [ApiController]
     public class BanAnController : ControllerBase

@@ -1,0 +1,60 @@
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.MonAnCreateViewModel
+
+@{
+    ViewData["Title"] = "Thêm món ăn mới";
+}
+
+<div class="content-wrapper">
+    <h2>Thêm món ăn mới</h2>
+    <div class="menu-details">
+        <form asp-area="Admin" asp-controller="AdminMonAn" asp-action="Create" method="post" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="TenMon">Tên món ăn (*)</label>
+                <input asp-for="TenMon" class="form-control" placeholder="Ví dụ: Cơm rang dưa bò" />
+                <span asp-validation-for="TenMon" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Loai">Loại món (*)</label>
+                <select asp-for="Loai" class="form-control">
+                    <option value="Món chính">Món chính</option>
+                    <option value="Đồ uống">Đồ uống</option>
+                    <option value="Khai vị">Khai vị</option>
+                </select>
+                <span asp-validation-for="Loai" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DonViTinh">Đơn vị tính (*)</label>
+                <input asp-for="DonViTinh" class="form-control" placeholder="Đĩa / Bát / Cốc" />
+                <span asp-validation-for="DonViTinh" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Gia">Giá bán (*)</label>
+                <input asp-for="Gia" type="number" class="form-control" placeholder="0" />
+                <span asp-validation-for="Gia" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile">Hình ảnh món ăn</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Lưu (Thêm mới)</button>
+                <a asp-action="Index" class="btn btn-secondary" style="margin-left: 10px;">Quay lại danh sách</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

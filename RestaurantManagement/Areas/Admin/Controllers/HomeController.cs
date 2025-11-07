@@ -17,13 +17,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            // Lấy danh sách đặt bàn (cần inject DbContext)
-            var danhSachDatBan = _context.DatBans
-                                         .Include(d => d.IdkhachHangNavigation) // Lấy thông tin khách hàng
-                                         .OrderByDescending(d => d.ThoiGian)
-                                         .ToList();
-
-            return View(danhSachDatBan); // Truyền danh sách vào View
+            return View();
         }
 
         public IActionResult LoginAdmin()

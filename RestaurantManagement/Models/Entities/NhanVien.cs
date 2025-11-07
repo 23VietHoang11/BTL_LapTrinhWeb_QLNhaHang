@@ -17,12 +17,12 @@ public partial class NhanVien
 
     public string? ChucVu { get; set; }
 
-    public DateOnly? NgayVaoLam { get; set; }
+    public DateTime? NgayVaoLam { get; set; }
 
     public decimal? Luong { get; set; }
 
     // --- BỔ SUNG CÁC TRƯỜNG CÒN THIẾU TỪ FORM ---
-    public DateOnly? NgaySinh { get; set; } // Thêm trường này cho Ngày sinh
+    public DateTime? NgaySinh { get; set; } // Thêm trường này cho Ngày sinh
 
     public string? Cccd { get; set; } // Thêm trường này cho Số CCCD
 

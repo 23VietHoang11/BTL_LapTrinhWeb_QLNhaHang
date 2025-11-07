@@ -1,0 +1,167 @@
+﻿@{
+    // Dòng @model đã được xóa. Layout không nên có model cụ thể.
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Admin Dashboard</title> @* Tiêu đề trang sẽ được đặt động *@
+
+    <link rel="stylesheet" href="~/admin/css/admin.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="~/admin/images/cutlery.png" alt="Logo"> <span>Hi Anh Admin</span>
+        </div>
+
+        @* Phần Menu đã được sửa lại:
+          1. Các thẻ <li> có "data-target" đã bị xóa.
+          2. Thay thế bằng các thẻ <a> sử dụng "asp-area", "asp-controller", "asp-action"
+             để điều hướng MVC đúng cách.
+          3. Giả sử bạn đang dùng Area "Admin".
+        *@
+
+        <ul class="main-menu">
+            <li class="menu-item">
+                @* Mục Dashboard đã sửa *@
+                <a asp-area="Admin" asp-controller="Home" asp-action="Index">
+                    <span class="icon"></span> Dashboard
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-header">Quản lý danh sách</div>
+        <ul class="main-menu">
+            <li class="menu-item has-submenu">
+                @* Mục này đã đúng trong file gốc của bạn *@
+                <span class="icon">🍴</span> Quản Lý Món Ăn
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li >
+                        <a asp-area="Admin" class="menu-item" asp-controller="AdminMonAn" asp-action="Index">Danh sách món ăn</a>
+                    </li>
+                    <li >
+                        <a asp-area="Admin" class="menu-item" asp-controller="AdminMonAn" asp-action="Create">Thêm món ăn mới</a>
+                    </li>
+                </ul>
+            </li>
+            <li >
+                @* Mục Quản Lý Đặt Bàn đã sửa *@
+                <a asp-area="Admin" class="menu-item" asp-controller="Booking" asp-action="Index">
+                    <span class="icon">🪑</span> Quản Lý Đặt Bàn
+                </a>
+            </li>
+            <li >
+                @* Mục Quản Lý Hóa Đơn đã sửa *@
+                <a asp-area="Admin" class="menu-item" asp-controller="HoaDon" asp-action="Index">
+                    <span class="icon">🧾</span> Quản Lý Hóa Đơn
+                </a>
+            </li>
+
+            <li class="menu-item has-submenu">
+                    <span class="icon">🏠</span> Quản Lý Kho
+                    <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li>
+                        <a asp-area="Admin" class="menu-item" asp-controller="NguyenLieu" asp-action="Index"> Danh sách nguyên liệu </a>
+                    </li>
+                    <li>
+                        <a asp-area="Admin" class="menu-item" asp-controller="NguyenLieu" asp-action="Create"> Thêm nguyên liệu </a>
+                    </li>
+                    
+                </ul>
+            </li>
+
+            <li class="menu-item has-submenu">
+                @* Mục Quản Lý Tài khoản đã sửa (Giả định Controller là "Staff") *@
+                <span class="icon">👥</span> Quản Lý Tài khoản
+                <span class="arrow">▶</span>
+                <ul class="submenu">
+                    <li >
+                        <a asp-area="Admin" class="menu-item" asp-controller="NhanVien" asp-action="Index">Danh sách tài khoản</a>
+                    </li>
+                    <li >
+                        <a asp-area="Admin" class="menu-item" asp-controller="NhanVien" asp-action="Create">Thêm tài khoản</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="sidebar-header">Tư vấn</div>
+        <ul class="main-menu">
+            <li >
+                @* Mục Tư vấn đã sửa (Giả định Controller là "Support") *@
+                <a asp-area="Admin" class="menu-item" asp-controller="Support" asp-action="Index">
+                    <span class="icon">💬</span> Tư vấn với khách hàng
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+
+        <header>
+            <div class="header-left">
+                <button class="toggle-sidebar">☰</button>
+                @* Tiêu đề trang giờ sẽ được lấy từ ViewData["Title"] của từng View con *@
+                <h1 id="page-title">@ViewData["Title"]</h1>
+            </div>
+            <div class="user-info">
+                <span class="user-name">Admin</span>
+                <img src="#" alt="Avatar" class="user-avatar">
+            </div>
+        </header>
+        @RenderBody()
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.sidebar .menu-item');
+            const sidebar = document.querySelector('.sidebar');
+            const toggleBtn = document.querySelector('.toggle-sidebar');
+            // --- Xử lý click vào menu ---
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // 1. Kiểm tra xem mục tiêu click có phải là link <a> không
+                    //    hoặc có nằm BÊN TRONG một link <a> không.
+                    if (e.target.closest('a')) {
+                        return;
+                    }
+                        // Nếu đúng là click vào link <a>, KHÔNG làm gì cả.
+                        // Cứ để trình duyệt thực hiện điều hướng (chuyển trang).
+                    // 2. Chỉ xử lý nếu click vào một mục cha (has-submenu)
+                    //    và KHÔNG PHẢI là click vào link <a>
+                    const isSubmenuParent = this.classList.contains('has-submenu');
+                    if (isSubmenuParent) {
+
+                        // Chặn sự kiện mặc định (vì đây không phải link)
+                        // và chỉ thực hiện việc mở/đóng submenu
+                        e.preventDefault();
+                        e.stopPropagation(); // Ngăn sự kiện lan truyền
+                        this.classList.toggle('active');
+                        // Đóng tất cả các submenu cha khác
+                        document.querySelectorAll('.has-submenu').forEach(otherParent => {
+                            if (otherParent !== this) {
+                                otherParent.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+            });
+            // --- Xử lý nút Toggle Sidebar ---
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                });
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

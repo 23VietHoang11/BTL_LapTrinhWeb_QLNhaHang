@@ -4,6 +4,7 @@ using RestaurantManagement.Models.Entities;
 
 namespace RestaurantManagement.Controllers
 {
+    [Area("Admin")]
     [Route("api/khachhang")]
     [ApiController]
     public class KhachHangController : ControllerBase

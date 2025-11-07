@@ -520,11 +520,11 @@ namespace RestaurantManagement.Migrations
                     b.Property<decimal?>("Luong")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<DateOnly?>("NgaySinh")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("NgaySinh")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateOnly?>("NgayVaoLam")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("NgayVaoLam")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Sdt")
                         .IsRequired()
