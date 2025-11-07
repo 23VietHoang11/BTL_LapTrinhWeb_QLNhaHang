@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantManagement.Models.Entities;
 
@@ -11,9 +12,11 @@ using RestaurantManagement.Models.Entities;
 namespace RestaurantManagement.Migrations
 {
     [DbContext(typeof(QLNhaHangContext))]
-    partial class QLNhaHangContextModelSnapshot : ModelSnapshot
+    [Migration("20251106153047_ThemCotVaoNguyenLieu")]
+    partial class ThemCotVaoNguyenLieu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,44 +306,6 @@ namespace RestaurantManagement.Migrations
                         .HasName("PK__Kho__939E101782446E63");
 
                     b.ToTable("Kho", (string)null);
-                });
-
-            modelBuilder.Entity("RestaurantManagement.Models.Entities.LienHe", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("DaDoc")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("HoTen")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("NgayGui")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NoiDung")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TieuDe")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LienHes");
                 });
 
             modelBuilder.Entity("RestaurantManagement.Models.Entities.MonAn", b =>

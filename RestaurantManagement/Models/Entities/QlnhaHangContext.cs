@@ -14,6 +14,8 @@ public partial class QLNhaHangContext : DbContext
         : base(options)
     {
     }
+    // (Bên trong class QLNhaHangContext)
+    public virtual DbSet<LienHe> LienHes { get; set; }
 
     public virtual DbSet<BanAn> BanAns { get; set; }
 
