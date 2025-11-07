@@ -21,6 +21,12 @@ public partial class NhanVien
 
     public decimal? Luong { get; set; }
 
+    // --- BỔ SUNG CÁC TRƯỜNG CÒN THIẾU TỪ FORM ---
+    public DateOnly? NgaySinh { get; set; } // Thêm trường này cho Ngày sinh
+
+    public string? Cccd { get; set; } // Thêm trường này cho Số CCCD
+
+    public string? GioiTinh { get; set; }
     public virtual ICollection<HoaDon> HoaDons { get; set; } = new List<HoaDon>();
 
     public virtual ICollection<PhieuNhapKho> PhieuNhapKhos { get; set; } = new List<PhieuNhapKho>();

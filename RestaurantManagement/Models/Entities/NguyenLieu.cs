@@ -13,6 +13,9 @@ public partial class NguyenLieu
 
     public string? Loai { get; set; }
 
+    public int? SoLuong { get; set; }
+    public DateTime? NgayNhap { get; set; }
+    public string? HinhAnh { get; set; }
     public virtual ICollection<ChiTietPhieuNhap> ChiTietPhieuNhaps { get; set; } = new List<ChiTietPhieuNhap>();
 
     public virtual ICollection<MonAnNguyenLieu> MonAnNguyenLieus { get; set; } = new List<MonAnNguyenLieu>();

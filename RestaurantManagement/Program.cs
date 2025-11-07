@@ -32,6 +32,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(); // Thêm Session (nếu bạn cần dùng)
 
+//Upload file
+builder.Services.AddTransient<IBufferedFileUploadService, BufferedFileUploadLocalService>();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();

@@ -14,6 +14,8 @@ public partial class QLNhaHangContext : DbContext
         : base(options)
     {
     }
+    // (Bên trong class QLNhaHangContext)
+    public virtual DbSet<LienHe> LienHes { get; set; }
 
     public virtual DbSet<BanAn> BanAns { get; set; }
 
@@ -369,7 +371,8 @@ public partial class QLNhaHangContext : DbContext
 
             entity.Property(e => e.IDTaiKhoan).HasColumnName("IDTaiKhoan");
             entity.Property(e => e.IDNhanVien).HasColumnName("IDNhanVien");
-            entity.Property(e => e.MatKhau).HasMaxLength(255);
+            entity.Property(e => e.MatKhauHash).HasMaxLength(255);
+            entity.Property(e => e.MatKhauSalt).HasMaxLength(255);
             entity.Property(e => e.NgayTao)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
