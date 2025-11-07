@@ -1,0 +1,40 @@
+﻿@model IEnumerable<RestaurantManagement.Models.Entities.HoaDon> // <-- Thêm Model phù hợp
+@{
+    ViewData["Title"] = "Đơn hiện tại";
+    //Layout = "AdminLayout";
+}
+
+<div class="content-wrapper" id="invoiceContent">
+    <h2>Đơn hiện tại</h2>
+    <button asp-area="Admin" class="create-invoice-btn" asp-controller="Invoice" asp-action="Create">Tạo đơn mới</button>
+    <div class="invoice-list">
+        @* Dùng vòng lặp @foreach (var item in Model) để render dữ liệu động *@
+        @* Dưới đây là dữ liệu tĩnh từ file của bạn, hãy thay bằng vòng lặp *@
+        <div class="invoice-card">
+            <h3>Sảnh VIP</h3>
+            <div class="invoice-details">
+                <div class="table-number"><p>Số bàn</p><p>5</p></div>
+                <div class="guest-count"><p>👥 6</p></div>
+                <div class="timer"><p>⏳ 00:01:20</p></div>
+                <div class="total-amount"><p>💰 1.200.000 đ</p></div>
+            </div>
+            <div class="invoice-actions">
+                <button class="more-options">...</button>
+                <button class="pay-btn">Thanh toán</button>
+            </div>
+        </div>
+        <div class="invoice-card">
+            <h3>Sảnh ngoài trời</h3>
+            <div class="invoice-details">
+                <div class="table-number"><p>Số bàn</p><p>10</p></div>
+                <div class="guest-count"><p>👥 8</p></div>
+                <div class="timer"><p>⏳ 00:00:35</p></div>
+                <div class="total-amount"><p>💰 3.500.000 đ</p></div>
+            </div>
+            <div class="invoice-actions">
+                <button class="more-options">...</button>
+                <button class="pay-btn">Thanh toán</button>
+            </div>
+        </div>
+    </div>
+</div>

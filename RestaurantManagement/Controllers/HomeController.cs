@@ -94,9 +94,15 @@ namespace RestaurantManagement.Controllers
             return View();
         }
 
-        public IActionResult Menu()
+        public async Task<IActionResult> Menu()
         {
-            return View();
+            // Lấy tất cả Món Ăn từ database và sắp xếp theo Loại
+            var danhSachMonAn = await _context.MonAns
+                                        .OrderBy(m => m.Loai)
+                                        .ToListAsync();
+
+            // Truyền danh sách món ăn này (Model) sang View
+            return View(danhSachMonAn);
         }
 
         public IActionResult Service()

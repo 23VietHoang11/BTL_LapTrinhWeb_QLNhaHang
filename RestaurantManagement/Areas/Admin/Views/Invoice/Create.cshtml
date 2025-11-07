@@ -1,0 +1,34 @@
+﻿<div class="content-wrapper" id="invoiceAddEdit">
+    <h2>Thêm/Sửa đơn hàng</h2>
+    <div class="menu-details">
+        <input type="hidden" id="invoice-id" value="">
+        <div class="form-group">
+            <label for="invoice-customer-phone">SĐT Khách hàng (*)</label>
+            <input type="text" id="invoice-customer-phone" placeholder="Nhập SĐT để tìm hoặc tạo mới">
+        </div>
+        <div class="form-group">
+            <label for="invoice-customer-name">Tên khách hàng (*)</label>
+            <input type="text" id="invoice-customer-name" placeholder="Nhập tên khách hàng">
+        </div>
+        <div class="form-group">
+            <label for="invoice-time-input">Thời gian (*)</label>
+            <input type="datetime-local" id="invoice-time-input">
+        </div>
+        <div class="form-group">
+            <label for="invoice-guest-count">Số lượng khách</label>
+            <input type="number" id="invoice-guest-count" placeholder="0" value="1">
+        </div>
+        <div class="form-group">
+            <label for="invoice-total-amount">Số tiền ban đầu</label>
+            <input type="number" id="invoice-total-amount" placeholder="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="invoice-notes">Ghi chú</label>
+            <textarea id="invoice-notes" placeholder="Khách yêu cầu..."></textarea>
+        </div>
+        <button id="btn-save-invoice" class="btn-primary">Lưu (Thêm mới)</button>
+        <button id="btn-update-invoice" class="btn-warning">Cập nhật (Sửa)</button>
+        <button id="btn-delete-invoice" class="btn-danger">Xóa Đơn</button>
+        <button id="btn-cancel-invoice" class="btn-secondary">Hủy</button>
+    </div>
+</div>

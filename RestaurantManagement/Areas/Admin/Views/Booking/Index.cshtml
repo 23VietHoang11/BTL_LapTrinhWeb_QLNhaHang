@@ -1,0 +1,25 @@
+﻿@model IEnumerable<RestaurantManagement.Models.Entities.DatBan>
+@{
+    ViewData["Title"] = "Lịch đặt bàn";
+    //Layout = "AdminLayout";
+}
+
+<div class="content-wrapper" id="tableBookingContent">
+    <h2>Lịch đặt bàn</h2> 
+    <button class="create-booking-btn">Tạo đơn đặt bàn</button>
+    <div class="booking-cards">
+        @foreach (var datBan in Model)
+        {
+            <div class="booking-card">
+                <h3>@datBan.IdkhachHangNavigation.HoTenKh - @datBan.IddatBan.ToString("D9")</h3> 
+                <div class="booking-details">
+                    <p>⏰ @datBan.ThoiGian.ToString("HH:mm dd/MM/yyyy")</p> 
+                    <p>👥 @datBan.SoLuongKh</p> 
+                    <p>📝 @datBan.GhiChu</p> 
+                    <p>✨ **@datBan.TrangThai**</p> 
+                </div>
+                <button class="confirm-btn">Khách nhận bàn</button> 
+            </div>
+        }
+    </div>
+</div>

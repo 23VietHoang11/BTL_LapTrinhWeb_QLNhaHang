@@ -1,0 +1,58 @@
+﻿@model RestaurantManagement.Models.Entities.MonAn
+@{
+    ViewData["Title"] = "Cập nhật mặt hàng";
+    //Layout = "AdminLayout";
+}
+
+<h2>Cập nhật mặt hàng: @Model.TenMon</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="IdmonAn" /> <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="menu-container">
+        <div class="menu-image">
+            <img src="https://via.placeholder.com/150" alt="Chọn ảnh mặt hàng" id="item-image">
+            <button class="upload-image-btn" type="button">Thay đổi ảnh</button>
+        </div>
+
+        <div class="menu-details">
+            <div class="form-group">
+                <label asp-for="TenMon">Tên mặt hàng (*)</label>
+                <input asp-for="TenMon" class="form-control">
+                <span asp-validation-for="TenMon" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Loai">Loại mặt hàng (*)</label>
+                <select asp-for="Loai" class="form-control">
+                    <option value="Thức ăn">Thức ăn</option>
+                    <option value="Đồ uống">Đồ uống</option>
+                </select>
+                <span asp-validation-for="Loai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DonViTinh">Đơn vị tính (*)</label>
+                <select asp-for="DonViTinh" class="form-control">
+                    <option value="Dĩa">Dĩa</option>
+                    <option value="Tô">Tô</option>
+                    <option value="Phần">Phần</option>
+                    <option value="Ly">Ly</option>
+                    <option value="Chai">Chai</option>
+                    <option value="Lon">Lon</option>
+                </select>
+                <span asp-validation-for="DonViTinh" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Gia">Giá bán (*)</label>
+                <input asp-for="Gia" class="form-control" type="number">
+                <span asp-validation-for="Gia" class="text-danger"></span>
+            </div>
+
+            <div class="action-buttons">
+                <a asp-action="Index" class="delete-btn">Hủy</a>
+                <button type="submit" class="save-btn">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</form>

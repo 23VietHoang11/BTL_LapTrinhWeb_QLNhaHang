@@ -1,0 +1,60 @@
+﻿@model RestaurantManagement.Models.Entities.MonAn // <-- Thêm Model phù hợp
+
+@{
+    ViewData["Title"] = "Thêm mặt hàng mới";
+    //Layout = "AdminLayout";
+}
+
+<div class="content-wrapper" id="menuAdd">
+    <h2>Thêm mặt hàng mới</h2>
+    <div class="menu-container">
+        <div class="menu-image">
+            <img src="https://via.placeholder.com/150" alt="Chọn ảnh mặt hàng" id="item-image">
+            <button class="upload-image-btn">Chọn ảnh mặt hàng</button>
+            <p>Dung lượng file tối đa 1 MB</p>
+            <p>Định dạng: JPEG, PNG</p>
+        </div>
+        <div class="menu-details">
+            <div class="form-group">
+                <label for="item-name">Tên mặt hàng (*)</label>
+                <input type="text" id="item-name" placeholder="Coca Cola">
+            </div>
+            <div class="form-group">
+                <label for="item-type">Loại mặt hàng (*)</label>
+                <select id="item-type">
+                    <option>Đồ uống</option>
+                    <option>Thức ăn</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="unit">Đơn vị tính (*)</label>
+                <select id="unit">
+                    <option>Ly</option>
+                    <option>Chai</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="notes">Ghi chú</label>
+                <input type="text" id="notes" placeholder="VD: Được tùy chọn">
+            </div>
+            <h3>Giá mặt hàng</h3>
+            <div class="form-group">
+                <label for="price-name">Tên giá (*)</label>
+                <input type="text" id="price-name" placeholder="Giá thường">
+            </div>
+            <div class="form-group">
+                <label for="sale-price">Giá bán (*)</label>
+                <input type="number" id="sale-price" placeholder="15000">
+            </div>
+            <div class="form-group">
+                <label for="cost-price">Giá vốn (*)</label>
+                <input type="number" id="cost-price" placeholder="7000">
+            </div>
+            <button class="add-price-btn">+ Thêm giá</button>
+            <div class="action-buttons">
+                <button class="delete-btn">Xóa</button>
+                <button class="save-btn">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+</div>
