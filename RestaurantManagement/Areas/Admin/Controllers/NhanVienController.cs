@@ -1,214 +1,180 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RestaurantManagement.Models.DTOs;
-// Đảm bảo using namespace của Entities và DTOs
 using RestaurantManagement.Models.Entities;
-using System.Security.Cryptography; // Cần cho băm mật khẩu
+using RestaurantManagement.Areas.Admin.Models.ViewModels;
+using System.Security.Cryptography;
 using System.Text;
 
-[Route("api/nhanvien")]
-[ApiController]
-public class NhanVienController : ControllerBase
+namespace RestaurantManagement.Areas.Admin.Controllers
 {
-    // YourDbContext là class DbContext của bạn
-    private readonly QLNhaHangContext _context;
-
-    public NhanVienController(QLNhaHangContext context)
+    [Area("Admin")]
+    public class NhanVienController : Controller
     {
-        _context = context;
-    }
+        private readonly QLNhaHangContext _context;
 
-    // --- 1. THÊM NHÂN VIÊN MỚI (POST) ---
-    // (Xử lý nút "Thêm nhân viên")
-    [HttpPost]
-    public async Task<IActionResult> ThemNhanVien([FromBody] NhanVienCreateModel model)
-    {
-        // Kiểm tra xem TenDangNhap hoặc Sdt đã tồn tại chưa
-        if (await _context.TaiKhoans.AnyAsync(tk => tk.TenDangNhap == model.TenDangNhap))
+        public NhanVienController(QLNhaHangContext context)
         {
-            return BadRequest(new { message = "Tên đăng nhập đã tồn tại." });
-        }
-        if (await _context.NhanViens.AnyAsync(nv => nv.Sdt == model.Sdt))
-        {
-            return BadRequest(new { message = "Số điện thoại đã tồn tại." });
+            _context = context;
         }
 
-        // 1. Tạo Salt và Hash cho mật khẩu
-        CreatePasswordHash(model.MatKhau, out byte[] hash, out byte[] salt);
-
-        // 2. Tạo đối tượng NhanVien
-        var newNhanVien = new NhanVien
+        // GET: Admin/NhanVien/Index
+        public async Task<IActionResult> Index()
         {
-            HoTenNv = model.HoTenNv,
-            Sdt = model.Sdt,
-            Email = model.Email,
-            DiaChi = model.DiaChi,
-            ChucVu = model.ChucVu,
-            NgayVaoLam = model.NgayVaoLam,
-            Luong = model.Luong,
-            NgaySinh = model.NgaySinh,
-            Cccd = model.Cccd,
-            GioiTinh = model.GioiTinh // (Nếu bạn đã thêm cột này vào NhanVien)
-        };
-
-        // 3. Tạo đối tượng TaiKhoan
-        var newTaiKhoan = new TaiKhoan
-        {
-            TenDangNhap = model.TenDangNhap,
-            MatKhauHash = hash,
-            MatKhauSalt = salt,
-            TrangThai = "HoatDong", // Gán trạng thái mặc định
-            NgayTao = DateTime.Now,
-            // 4. Liên kết 1-1
-            IdnhanVienNavigation = newNhanVien // Gán nhân viên cho tài khoản
-        };
-
-        // 5. Lưu TaiKhoan (EF Core sẽ tự động lưu cả NhanVien liên quan)
-        // Hoặc bạn có thể lưu NhanVien trước, tùy cấu hình CSDL
-        _context.TaiKhoans.Add(newTaiKhoan);
-        await _context.SaveChangesAsync();
-
-        return Ok(new { message = "Thêm nhân viên và tài khoản thành công!", id = newNhanVien.IdnhanVien });
-    }
-
-    // --- 2. CẬP NHẬT NHÂN VIÊN (PUT) ---
-    // (Xử lý nút "Cập nhật thông tin")
-    [HttpPut("{id}")]
-    public async Task<IActionResult> CapNhatNhanVien(int id, [FromBody] NhanVienUpdateModel model)
-    {
-        // 1. Tìm NhanVien VÀ TaiKhoan liên quan
-        var nhanVien = await _context.NhanViens
-                                     .Include(nv => nv.TaiKhoan) // Lấy cả TaiKhoan
-                                     .FirstOrDefaultAsync(nv => nv.IdnhanVien == id);
-
-        if (nhanVien == null)
-        {
-            return NotFound(new { message = "Không tìm thấy nhân viên." });
+            var data = await _context.NhanViens.Include(nv => nv.TaiKhoan)
+                                               .OrderByDescending(nv => nv.IdnhanVien).ToListAsync();
+            return View(data);
         }
 
-        // 2. Cập nhật thông tin NhanVien
-        nhanVien.HoTenNv = model.HoTenNv;
-        nhanVien.Sdt = model.Sdt;
-        nhanVien.Email = model.Email;
-        nhanVien.DiaChi = model.DiaChi;
-        nhanVien.ChucVu = model.ChucVu;
-        nhanVien.NgayVaoLam = model.NgayVaoLam;
-        nhanVien.Luong = model.Luong;
-        nhanVien.NgaySinh = model.NgaySinh;
-        nhanVien.Cccd = model.Cccd;
-        nhanVien.GioiTinh = model.GioiTinh; // (Nếu có)
+        // =================== CHỨC NĂNG THÊM MỚI (CREATE) ===================
 
-        // 3. Cập nhật mật khẩu NẾU được cung cấp
-        if (!string.IsNullOrEmpty(model.MatKhau))
+        // GET: Admin/NhanVien/Create
+        [HttpGet]
+        public IActionResult Create()
         {
-            if (nhanVien.TaiKhoan == null)
+            return View(new NhanVienCreateViewModel());
+        }
+
+        // POST: Admin/NhanVien/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(NhanVienCreateViewModel vm)
+        {
+            if (ModelState.IsValid)
             {
-                // Trường hợp hiếm: Nhân viên có nhưng tài khoản không
-                return BadRequest(new { message = "Nhân viên này không có tài khoản để đổi mật khẩu." });
+                // Kiểm tra trùng tên đăng nhập
+                if (await _context.TaiKhoans.AnyAsync(tk => tk.TenDangNhap == vm.TenDangNhap))
+                {
+                    ModelState.AddModelError("TenDangNhap", "Tên đăng nhập này đã tồn tại.");
+                    return View(vm);
+                }
+
+                CreatePasswordHash(vm.MatKhau, out byte[] hash, out byte[] salt);
+
+                var newNV = new NhanVien
+                {
+                    HoTenNv = vm.HoTenNv,
+                    Email = vm.Email,
+                    Sdt = vm.Sdt,
+                    DiaChi = vm.DiaChi,
+                    ChucVu = vm.ChucVu,
+                    NgaySinh = vm.NgaySinh,
+                    Cccd = vm.Cccd,
+                    GioiTinh = vm.GioiTinh,
+                    NgayVaoLam = vm.NgayVaoLam,
+                    Luong = vm.Luong
+                };
+
+                _context.NhanViens.Add(newNV);
+                await _context.SaveChangesAsync(); // Lúc này newNV.IdnhanVien đã có giá trị
+
+                // 4. Tạo và lưu Tài khoản (liên kết với ID nhân viên vừa tạo)
+                CreatePasswordHash(vm.MatKhau, out byte[] MatKhauHash, out byte[] MatKhauSalt);
+                var newTK = new TaiKhoan
+                {
+                    TenDangNhap = vm.TenDangNhap,
+                    MatKhauHash = hash,
+                    MatKhauSalt = salt,
+                    TrangThai = "HoatDong",
+                    NgayTao = DateTime.Now,
+                    IDNhanVien = newNV.IdnhanVien
+                };
+
+                _context.TaiKhoans.Add(newTK);
+                await _context.SaveChangesAsync();
+
+                TempData["Message"] = "Thêm mới nhân viên thành công!";
+                return RedirectToAction(nameof(Index));
             }
-
-            CreatePasswordHash(model.MatKhau, out byte[] hash, out byte[] salt);
-
-            nhanVien.TaiKhoan.MatKhauHash = hash;
-            nhanVien.TaiKhoan.MatKhauSalt = salt;
+            return View(vm);
         }
 
-        // 4. Lưu thay đổi
-        await _context.SaveChangesAsync();
-        return Ok(new { message = "Cập nhật thành công!" });
-    }
+        // =================== CHỨC NĂNG CẬP NHẬT (EDIT) ===================
 
-    // --- 3. XÓA NHÂN VIÊN (DELETE) ---
-    // (Xử lý nút "Xóa nhân viên")
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> XoaNhanVien(int id)
-    {
-        var nhanVien = await _context.NhanViens.FindAsync(id);
-        if (nhanVien == null)
+        // GET: Admin/NhanVien/Edit/5
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
         {
-            return NotFound(new { message = "Không tìm thấy nhân viên." });
-        }
+            if (id == null) return NotFound();
 
-        // Khi xóa NhanVien, CSDL (với quan hệ 1-1)
-        // nên được cấu hình để tự động xóa (Cascade Delete) TaiKhoan
-        _context.NhanViens.Remove(nhanVien);
+            var nv = await _context.NhanViens.Include(n => n.TaiKhoan)
+                                   .FirstOrDefaultAsync(n => n.IdnhanVien == id);
+            if (nv == null) return NotFound();
 
-        await _context.SaveChangesAsync();
-        return Ok(new { message = "Xóa thành công!" });
-    }
-
-    // --- HÀM BĂM MẬT KHẨU (BẮT BUỘC) ---
-    // Đặt hàm này ở cuối Controller
-    private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-    {
-        if (string.IsNullOrEmpty(password))
-            throw new ArgumentNullException(nameof(password));
-
-        using (var hmac = new HMACSHA512())
-        {
-            passwordSalt = hmac.Key;
-            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        }
-    }
-
-    // --- 4. LẤY THÔNG TIN 1 NHÂN VIÊN (ĐỂ SỬA) ---
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetNhanVien(int id)
-    {
-        var nhanVien = await _context.NhanViens
-                                     .Include(nv => nv.TaiKhoan) // Lấy cả TaiKhoan
-                                     .Where(nv => nv.IdnhanVien == id)
-                                     .Select(nv => new {
-                                         // Từ bảng NhanVien
-                                         nv.IdnhanVien,
-                                         nv.HoTenNv,
-                                         nv.Sdt,
-                                         nv.Email,
-                                         nv.DiaChi,
-                                         nv.ChucVu,
-                                         nv.NgayVaoLam,
-                                         nv.Luong,
-                                         nv.NgaySinh,
-                                         nv.Cccd,
-                                         // GioiTinh = nv.GioiTinh (Nếu bạn đã thêm cột này)
-
-                                         // Từ bảng TaiKhoan (Không lấy mật khẩu!)
-                                         TenDangNhap = nv.TaiKhoan != null ? nv.TaiKhoan.TenDangNhap : "",
-                                         TrangThai = nv.TaiKhoan != null ? nv.TaiKhoan.TrangThai : ""
-                                     })
-                                     .FirstOrDefaultAsync();
-
-        if (nhanVien == null)
-        {
-            return NotFound(new { message = "Không tìm thấy nhân viên." });
-        }
-
-        return Ok(nhanVien);
-    }
-
-    // --- 5. LẤY TẤT CẢ NHÂN VIÊN (ĐỂ HIỂN THỊ LIST) ---
-    [HttpGet] // API này sẽ là: GET /api/nhanvien
-    public async Task<IActionResult> GetAllNhanVien()
-    {
-        var danhSachNhanVien = await _context.NhanViens
-            // Không cần .Include(nv => nv.TaiKhoan) nữa
-            .Select(nv => new {
-                // Lấy các trường bạn cần cho bảng
-                Id = nv.IdnhanVien,
-                HoTen = nv.HoTenNv,
+            var vm = new NhanVienEditViewModel
+            {
+                IdnhanVien = nv.IdnhanVien,
+                TenDangNhap = nv.TaiKhoan?.TenDangNhap, // Chỉ để hiển thị
+                HoTenNv = nv.HoTenNv,
                 Email = nv.Email,
                 Sdt = nv.Sdt,
                 ChucVu = nv.ChucVu,
-
-                // --- ĐÂY LÀ PHẦN ĐÚNG ---
                 NgaySinh = nv.NgaySinh,
                 Cccd = nv.Cccd,
-                GioiTinh = nv.GioiTinh
-            })
-            .OrderByDescending(nv => nv.Id)
-            .ToListAsync();
+                GioiTinh = nv.GioiTinh,
+                DiaChi = nv.DiaChi,
+                NgayVaoLam = nv.NgayVaoLam,
+                Luong = nv.Luong
+            };
+            return View(vm);
+        }
 
-        return Ok(danhSachNhanVien);
+        // POST: Admin/NhanVien/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, NhanVienEditViewModel vm)
+        {
+            if (id != vm.IdnhanVien) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                var nvToUpdate = await _context.NhanViens.Include(n => n.TaiKhoan)
+                                               .FirstOrDefaultAsync(n => n.IdnhanVien == id);
+                if (nvToUpdate == null) return NotFound();
+
+                // Cập nhật thông tin chung
+                nvToUpdate.HoTenNv = vm.HoTenNv; nvToUpdate.Email = vm.Email;
+                nvToUpdate.Sdt = vm.Sdt; nvToUpdate.DiaChi = vm.DiaChi;
+                nvToUpdate.ChucVu = vm.ChucVu; nvToUpdate.NgaySinh = vm.NgaySinh;
+                nvToUpdate.Cccd = vm.Cccd; nvToUpdate.GioiTinh = vm.GioiTinh;
+                nvToUpdate.NgayVaoLam = vm.NgayVaoLam; nvToUpdate.Luong = vm.Luong;
+
+                // Cập nhật mật khẩu NẾU người dùng có nhập vào ô MatKhauMoi
+                if (!string.IsNullOrEmpty(vm.MatKhauMoi) && nvToUpdate.TaiKhoan != null)
+                {
+                    CreatePasswordHash(vm.MatKhauMoi, out byte[] hash, out byte[] salt);
+                    nvToUpdate.TaiKhoan.MatKhauHash = hash;
+                    nvToUpdate.TaiKhoan.MatKhauSalt = salt;
+                }
+
+                _context.Update(nvToUpdate);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Cập nhật thông tin thành công!";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(vm);
+        }
+
+        // POST: Admin/NhanVien/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var nv = await _context.NhanViens.FindAsync(id);
+            if (nv != null)
+            {
+                _context.NhanViens.Remove(nv);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
     }
 }
-

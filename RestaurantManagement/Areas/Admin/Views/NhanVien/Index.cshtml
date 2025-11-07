@@ -1,0 +1,54 @@
+﻿@model IEnumerable<RestaurantManagement.Models.Entities.NhanVien>
+@{
+    ViewData["Title"] = "Danh sách nhân viên";
+}
+
+<div class="content-wrapper">
+    <h2>Danh sách nhân viên</h2>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+    <div class="toolbar">
+        <a asp-action="Create" class="btn btn-primary">+ Thêm nhân viên mới</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>HỌ TÊN</th>
+                    <th>TÊN ĐĂNG NHẬP</th>
+                    <th>CHỨC VỤ</th>
+                    <th>SĐT / EMAIL</th>
+                    <th>THAO TÁC</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.HoTenNv</strong><br />
+                            <small>@item.GioiTinh - @item.NgaySinh?.ToString("dd/MM/yyyy")</small>
+                        </td>
+                        <td>
+                            <span class="badge role-type">@(item.TaiKhoan?.TenDangNhap ?? "Chưa có TK")</span>
+                        </td>
+                        <td>@item.ChucVu</td>
+                        <td>
+                            <div>📞 @item.Sdt</div>
+                            <div>📧 @item.Email</div>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.IdnhanVien" class="btn btn-sm btn-warning">Sửa</a>
+                            <form asp-action="Delete" asp-route-id="@item.IdnhanVien" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên @item.HoTenNv?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<RestaurantManagement.Models.Entities.MonAn>
+
+@{
+    ViewData["Title"] = "Danh sách món ăn";
+}
+
+<div class="content-wrapper" id="menuList">
+    <h2>Danh sách món ăn</h2>
+
+    <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center;">
+        <input type="text" id="monan-search-input" placeholder="Tìm kiếm món ăn..." class="search-input" style="max-width: 300px;">
+
+        <a asp-area="Admin" asp-controller="AdminMonAn" asp-action="Create" class="btn btn-primary">
+            + Thêm món ăn mới
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>HÌNH ẢNH</th>
+                    <th>TÊN SẢN PHẨM</th>
+                    <th>LOẠI</th>
+                    <th>ĐƠN VỊ TÍNH</th>
+                    <th>GIÁ BÁN</th>
+                    <th>THAO TÁC</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.HinhAnh))
+                                {
+                                    <img src="@item.HinhAnh" asp-append-version="true" alt="@item.TenMon" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;" />
+                                }
+                                else
+                                {
+                                    <span>Không có ảnh</span>
+                                }
+                            </td>
+                            <td><strong>@item.TenMon</strong></td>
+                            <td>@item.Loai</td>
+                            <td>@item.DonViTinh</td>
+                            <td style="color: #e74c3c; font-weight: bold;">
+                                @(item.Gia.ToString("N0")) đ
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 5px;">
+                                    <a asp-action="Edit" asp-route-id="@item.IdmonAn" class="btn btn-sm btn-warning">
+                                        Sửa
+                                    </a>
+
+                                    <form asp-action="Delete" asp-route-id="@item.IdmonAn" method="post"
+                                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa món @item.TenMon không?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">
+                            Chưa có món ăn nào.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

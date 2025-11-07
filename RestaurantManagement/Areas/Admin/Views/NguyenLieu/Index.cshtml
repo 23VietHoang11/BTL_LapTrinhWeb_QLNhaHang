@@ -1,0 +1,49 @@
+﻿@model IEnumerable<RestaurantManagement.Models.Entities.NguyenLieu>
+@{
+    ViewData["Title"] = "Danh sách nguyên liệu";
+}
+
+<div class="content-wrapper">
+    <h2>Danh sách nguyên liệu</h2>
+    <div class="toolbar">
+        <a asp-action="Create" class="btn btn-primary">+ Thêm nguyên liệu mới</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>HÌNH ẢNH</th>
+                    <th>TÊN NGUYÊN LIỆU</th>
+                    <th>ĐƠN VỊ TÍNH</th>
+                    <th>LOẠI</th>
+                    <th>SỐ LƯỢNG</th>
+                    <th>NGÀY NHẬP</th>
+                    <th>THAO TÁC</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@(item.HinhAnh ?? "https://via.placeholder.com/50")" asp-append-version="true"
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+                        </td>
+                        <td>@item.TenNl</td>
+                        <td>@item.DonVi</td>
+                        <td>@item.Loai</td>
+                        <td>@item.SoLuong</td>
+                        <td>@item.NgayNhap?.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.IdnguyenLieu" class="btn btn-sm btn-warning">Sửa</a>
+                            <form asp-action="Delete" asp-route-id="@item.IdnguyenLieu" method="post" style="display:inline;"
+                                  onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

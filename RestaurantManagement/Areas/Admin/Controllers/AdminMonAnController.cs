@@ -1,15 +1,14 @@
-﻿// Trong file: Controllers/AdminMonAnController.cs
-
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantManagement.Models.Entities;
 using RestaurantManagement.Models.ViewModels; // <-- Thêm ViewModel
-using Microsoft.AspNetCore.Hosting; // <-- Thêm để lấy đường dẫn wwwroot
+using Microsoft.AspNetCore.Hosting;
+using RestaurantManagement.Areas.Admin.Models.ViewModels; // <-- Thêm để lấy đường dẫn wwwroot
 
 namespace RestaurantManagement.Controllers
 {
-    // Giả sử đây là trang Admin
-    // [Area("Admin")] 
+    [Area("Admin")] 
     public class AdminMonAnController : Controller
     {
         private readonly QLNhaHangContext _context;
@@ -86,7 +85,7 @@ namespace RestaurantManagement.Controllers
                     TenMon = vm.TenMon,
                     Loai = vm.Loai,
                     DonViTinh = vm.DonViTinh,
-                    Gia = vm.GiaBan, // "Giá bán" -> "Gia"
+                    Gia = vm.Gia, // "Giá bán" -> "Gia"
                     HinhAnh = uniqueFileName // Lưu đường dẫn tương đối
 
                     // Lưu ý: Model MonAn của bạn không có "GhiChu" và "GiaVon"
@@ -102,8 +101,118 @@ namespace RestaurantManagement.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+
             // Nếu model không hợp lệ (ví dụ thiếu Tên), trả lại form
             return View(vm);
+        }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var monAn = await _context.MonAns.FindAsync(id);
+            if (monAn == null)
+            {
+                return NotFound();
+            }
+
+            // Chuyển dữ liệu từ Entity sang ViewModel để hiển thị lên form
+            var vm = new MonAnEditViewModel
+            {
+                Id = monAn.IdmonAn,
+                TenMon = monAn.TenMon,
+                Loai = monAn.Loai,
+                DonViTinh = monAn.DonViTinh,
+                Gia = monAn.Gia,
+                ExistingImage = monAn.HinhAnh
+            };
+
+            return View(vm);
+        }
+
+        // POST: /AdminMonAn/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, MonAnEditViewModel vm)
+        {
+            if (id != vm.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var monAnToUpdate = await _context.MonAns.FindAsync(id);
+                    if (monAnToUpdate == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // 1. Cập nhật thông tin cơ bản
+                    monAnToUpdate.TenMon = vm.TenMon;
+                    monAnToUpdate.Loai = vm.Loai;
+                    monAnToUpdate.DonViTinh = vm.DonViTinh;
+                    monAnToUpdate.Gia = vm.Gia;
+
+                    // 2. Xử lý ảnh mới (NẾU CÓ upload)
+                    if (vm.ImageFile != null)
+                    {
+                        
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/monan");
+                        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + vm.ImageFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await vm.ImageFile.CopyToAsync(fileStream);
+                        }
+
+                        // Cập nhật đường dẫn mới vào CSDL
+                        monAnToUpdate.HinhAnh = "/images/monan/" + uniqueFileName;
+                    }
+                    // Nếu không up ảnh mới, giữ nguyên monAnToUpdate.HinhAnh cũ
+
+                    _context.Update(monAnToUpdate);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.MonAns.Any(e => e.IdmonAn == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(vm);
+        }
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var monAn = await _context.MonAns.FindAsync(id);
+            if (monAn != null)
+            {
+                // (Tùy chọn) Xóa file ảnh khỏi server nếu cần
+                // if (!string.IsNullOrEmpty(monAn.HinhAnh))
+                // {
+                //     string filePath = Path.Combine(_webHostEnvironment.WebRootPath, monAn.HinhAnh.TrimStart('/'));
+                //     if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
+                // }
+
+                _context.MonAns.Remove(monAn);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

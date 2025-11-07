@@ -41,10 +41,10 @@
                 <span class="arrow">▶</span>
                 <ul class="submenu">
                     <li >
-                        <a asp-area="Admin" class="menu-item" asp-controller="Menu" asp-action="Index">Danh sách món ăn</a>
+                        <a asp-area="Admin" class="menu-item" asp-controller="AdminMonAn" asp-action="Index">Danh sách món ăn</a>
                     </li>
                     <li >
-                        <a asp-area="Admin" class="menu-item" asp-controller="Menu" asp-action="Create">Thêm món ăn mới</a>
+                        <a asp-area="Admin" class="menu-item" asp-controller="AdminMonAn" asp-action="Create">Thêm món ăn mới</a>
                     </li>
                 </ul>
             </li>
@@ -56,47 +56,35 @@
             </li>
             <li >
                 @* Mục Quản Lý Hóa Đơn đã sửa *@
-                <a asp-area="Admin" class="menu-item" asp-controller="Invoice" asp-action="Index">
+                <a asp-area="Admin" class="menu-item" asp-controller="HoaDon" asp-action="Index">
                     <span class="icon">🧾</span> Quản Lý Hóa Đơn
                 </a>
             </li>
 
-            <li >
-                @* Mục Quản Lý Kho đã sửa (Giả định Controller là "Warehouse") *@
-                <a asp-area="Admin" class="menu-item" asp-controller="Warehouse" asp-action="Index">
-                    <span class="icon">🏠</span> Quản Lý Kho
-                </a>
-            </li>
-
-            <li >
-                @* Mục Quản Lý Bài Viết đã sửa (Giả định Controller là "Post") *@
-                <a asp-area="Admin" class="menu-item" asp-controller="Post" asp-action="Index">
-                    <span class="icon">📄</span> Quản Lý Bài Viết
-                </a>
-            </li>
             <li class="menu-item has-submenu">
-                @* Mục Quản Lý Vai Trò đã sửa *@
-                <span class="icon">🧑‍⚖️</span> Quản Lý Vai Trò
-                <span class="arrow">▶</span>
+                    <span class="icon">🏠</span> Quản Lý Kho
+                    <span class="arrow">▶</span>
                 <ul class="submenu">
-                    <li >
-                        <a asp-area="Admin" class="menu-item" asp-controller="Role" asp-action="Index">Danh sách vai trò</a>
+                    <li>
+                        <a asp-area="Admin" class="menu-item" asp-controller="NguyenLieu" asp-action="Index"> Danh sách nguyên liệu </a>
                     </li>
-                    <li >
-                        <a asp-area="Admin" class="menu-item" asp-controller="Role" asp-action="Permissions">Phân quyền</a>
+                    <li>
+                        <a asp-area="Admin" class="menu-item" asp-controller="NguyenLieu" asp-action="Create"> Thêm nguyên liệu </a>
                     </li>
+                    
                 </ul>
             </li>
+
             <li class="menu-item has-submenu">
                 @* Mục Quản Lý Tài khoản đã sửa (Giả định Controller là "Staff") *@
                 <span class="icon">👥</span> Quản Lý Tài khoản
                 <span class="arrow">▶</span>
                 <ul class="submenu">
                     <li >
-                        <a asp-area="Admin" class="menu-item" asp-controller="Staff" asp-action="Index">Danh sách tài khoản</a>
+                        <a asp-area="Admin" class="menu-item" asp-controller="NhanVien" asp-action="Index">Danh sách tài khoản</a>
                     </li>
                     <li >
-                        <a asp-area="Admin" class="menu-item" asp-controller="Staff" asp-action="Create">Thêm/Sửa tài khoản</a>
+                        <a asp-area="Admin" class="menu-item" asp-controller="NhanVien" asp-action="Create">Thêm tài khoản</a>
                     </li>
                 </ul>
             </li>
@@ -122,7 +110,7 @@
                 <h1 id="page-title">@ViewData["Title"]</h1>
             </div>
             <div class="user-info">
-                <span class="user-name">Đỗ Hoàng Hiếu</span>
+                <span class="user-name">Admin</span>
                 <img src="#" alt="Avatar" class="user-avatar">
             </div>
         </header>
@@ -172,7 +160,7 @@
             }
         });
     </script>
- 
+
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

@@ -1,38 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-public class BufferedFileUploadController : Controller
+namespace RestaurantManagement.Controllers
 {
-    readonly IBufferedFileUploadService _bufferedFileUploadService;
-
-    public BufferedFileUploadController(IBufferedFileUploadService bufferedFileUploadService)
+    [Area("Admin")]
+    public class BufferedFileUploadController : Controller
     {
-        _bufferedFileUploadService = bufferedFileUploadService;
-    }
+        
+        readonly IBufferedFileUploadService _bufferedFileUploadService;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<ActionResult> Index(IFormFile file)
-    {
-        try
+        public BufferedFileUploadController(IBufferedFileUploadService bufferedFileUploadService)
         {
-            if (await _bufferedFileUploadService.UploadFile(file))
+            _bufferedFileUploadService = bufferedFileUploadService;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Index(IFormFile file)
+        {
+            try
             {
-                ViewBag.Message = "File Upload Successful";
+                if (await _bufferedFileUploadService.UploadFile(file))
+                {
+                    ViewBag.Message = "File Upload Successful";
+                }
+                else
+                {
+                    ViewBag.Message = "File Upload Failed";
+                }
             }
-            else
+            catch (Exception ex)
             {
+                //Log ex
                 ViewBag.Message = "File Upload Failed";
             }
+            return View();
         }
-        catch (Exception ex)
-        {
-            //Log ex
-            ViewBag.Message = "File Upload Failed";
-        }
-        return View();
     }
 }
