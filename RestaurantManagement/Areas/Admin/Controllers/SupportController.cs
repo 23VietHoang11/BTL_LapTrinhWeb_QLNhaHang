@@ -162,19 +162,21 @@ namespace RestaurantManagement.Areas.Admin.Controllers
             // ------------------------------------------------------------------
 
             // DELETE: api/lienhe/5
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteMessage(int id)
+            [HttpPost, ActionName("Delete")] // Bắt yêu cầu POST từ form có asp-action="Delete"
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> DeleteConfirmed(int id)
             {
                 var message = await _context.LienHes.FindAsync(id);
-                if (message == null)
+
+                if (message != null)
                 {
-                    return NotFound(new { message = "Không tìm thấy tin nhắn để xóa." });
+                    _context.LienHes.Remove(message);
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = "Tin nhắn đã được xóa thành công."; // Tùy chọn
                 }
 
-                _context.LienHes.Remove(message);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Tin nhắn đã được xóa thành công." });
+                // Chuyển hướng trở lại trang Index để tải lại danh sách
+                return RedirectToAction(nameof(Index));
             }
         }
     }
