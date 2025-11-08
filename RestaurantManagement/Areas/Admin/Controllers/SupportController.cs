@@ -1,183 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RestaurantManagement.Areas.Admin.Models.ViewModels;
 using RestaurantManagement.Models.Entities;
+using RestaurantManagement.Areas.Admin.Models.ViewModels;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RestaurantManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("api/lienhe")]
-    [ApiController]
-    public class SupportController : ControllerBase // Đổi tên class thành LienHeController cho rõ ràng hơn
+    public class SupportController : Controller
     {
         private readonly QLNhaHangContext _context;
-        public SupportController(QLNhaHangContext context) { _context = context; }
 
-        // DTO để nhận dữ liệu từ Form Home (Giữ nguyên)
-        public class LienHeSubmitModel
+        public SupportController(QLNhaHangContext context)
         {
-            public string Name { get; set; }
-            public string Email { get; set; }
-            public string Subject { get; set; }
-            public string Message { get; set; }
+            _context = context;
         }
-    }
-        namespace RestaurantManagement.Areas.Admin.Controllers
-    {
-        [Area("Admin")]
-        // KHÔNG cần [Route("api/lienhe")] và [ApiController] nữa vì nó là MVC
-        public class SupportController : Controller // PHẢI KẾ THỪA TỪ Controller
+
+        // ✅ Hiển thị danh sách liên hệ (có phân trang + tìm kiếm)
+        public IActionResult Index(string searchTerm, int pageNumber = 1, int pageSize = 5)
         {
-            private readonly QLNhaHangContext _context;
+            var query = _context.LienHes.AsQueryable();
 
-            public SupportController(QLNhaHangContext context)
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                _context = context;
+                query = query.Where(x =>
+                    x.HoTen.Contains(searchTerm) ||
+                    x.Email.Contains(searchTerm) ||
+                    x.TieuDe.Contains(searchTerm) ||
+                    x.NoiDung.Contains(searchTerm));
             }
 
-            // GET: Admin/Support/Index (Action mặc định)
-            public async Task<IActionResult> Index(string searchTerm, int? pageNumber, int pageSize = 10)
+            int totalItems = query.Count();
+            int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize); // Tính tổng số trang
+
+            // 🛑 BẮT ĐẦU SỬA LỖI: CHUẨN HÓA pageNumber 
+
+            // 1. Đảm bảo pageNumber không nhỏ hơn 1
+            if (pageNumber < 1)
             {
-                if (pageSize < 1) pageSize = 10;
-
-                var lienHeQuery = _context.LienHes.AsQueryable();
-
-                // 1. Xử lý TÌM KIẾM
-                if (!string.IsNullOrEmpty(searchTerm))
-                {
-                    lienHeQuery = lienHeQuery.Where(lh =>
-                        lh.HoTen.Contains(searchTerm) ||
-                        lh.Email.Contains(searchTerm) ||
-                        lh.NoiDung.Contains(searchTerm)
-                    );
-                }
-
-                // 2. Xử lý PHÂN TRANG
-                int totalItems = await lienHeQuery.CountAsync();
-                int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-                int actualPageNumber = pageNumber ?? 1;
-                if (actualPageNumber < 1) actualPageNumber = 1;
-                if (actualPageNumber > totalPages && totalPages > 0) actualPageNumber = totalPages;
-
-                int skipAmount = (actualPageNumber - 1) * pageSize;
-
-                var paginatedLienHes = await lienHeQuery
-                    .OrderByDescending(lh => lh.NgayGui)
-                    .Skip(skipAmount)
-                    .Take(pageSize)
-                    .ToListAsync();
-
-                // 3. Tạo ViewModel và trả về View
-                var viewModel = new SupportIndexViewModel
-                {
-                    LienHes = paginatedLienHes,
-                    PageNumber = actualPageNumber,
-                    PageSize = pageSize,
-                    TotalPages = totalPages,
-                    SearchTerm = searchTerm ?? string.Empty
-                };
-
-                // Trả về View trong thư mục Views/Support/Index.cshtml
-                return View(viewModel);
-            }
-            // ------------------------------------------------------------------
-            // API POST: Gửi tin nhắn (Contact Form)
-            // ------------------------------------------------------------------
-
-            [HttpPost]
-            public async Task<IActionResult> SubmitContact([FromBody] LienHeSubmitModel model)
-            {
-                if (model == null || !ModelState.IsValid)
-                {
-                    return BadRequest(new { message = "Dữ liệu không hợp lệ." });
-                }
-
-                var newContact = new LienHe
-                {
-                    HoTen = model.Name,
-                    Email = model.Email,
-                    TieuDe = model.Subject,
-                    NoiDung = model.Message,
-                    NgayGui = DateTime.Now,
-                    DaDoc = false
-                };
-
-                _context.LienHes.Add(newContact);
-                await _context.SaveChangesAsync();
-
-                return Ok();
+                pageNumber = 1;
             }
 
-            // ------------------------------------------------------------------
-            // API GET: Lấy danh sách tin nhắn (Dùng cho trang Admin)
-            // ------------------------------------------------------------------
-
-            [HttpGet] // 🛑 ĐÃ SỬA LỖI: Chỉ giữ lại một [HttpGet] duy nhất
-            public async Task<IActionResult> GetAllMessages()
+            // 2. Đảm bảo pageNumber không vượt quá tổng số trang (trừ trường hợp không có mục nào)
+            if (totalPages > 0 && pageNumber > totalPages)
             {
-                var messages = await _context.LienHes
-                    .OrderByDescending(m => m.NgayGui)
-                    .Select(m => new {
-                        // ĐẢM BẢO TÊN THUỘC TÍNH KHỚP VỚI JAVASCRIPT
-                        idLienHe = m.Id,
-                        hoTen = m.HoTen,
-                        email = m.Email,
-                        tieuDe = m.TieuDe,
-                        noiDung = m.NoiDung,
-                        ngayGui = m.NgayGui,
-                        daDoc = m.DaDoc
-                    })
-                    .ToListAsync();
-
-                return Ok(messages);
+                pageNumber = totalPages;
             }
 
-            // ------------------------------------------------------------------
-            // API PUT: Đánh dấu đã đọc (Chức năng SỬA)
-            // ------------------------------------------------------------------
+            // 🛑 KẾT THÚC SỬA LỖI
 
-            // PUT: api/lienhe/markread/5
-            [HttpPut("markread/{id}")]
-            public async Task<IActionResult> MarkAsRead(int id)
+            // Tính toán OFFSET an toàn
+            var lienHes = query
+                .OrderByDescending(x => x.NgayGui)
+                // Phép tính .Skip() giờ đây đảm bảo không bao giờ âm
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var vm = new SupportIndexViewModel
             {
-                var message = await _context.LienHes.FindAsync(id);
+                LienHes = lienHes,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages, // Sử dụng biến totalPages đã tính
+                SearchTerm = searchTerm
+            };
 
-                if (message == null)
-                {
-                    return NotFound(new { message = "Không tìm thấy tin nhắn." });
-                }
+            return View(vm);
+        }
 
-                message.DaDoc = true;
-                _context.LienHes.Update(message);
-                await _context.SaveChangesAsync();
-
-                return Ok(new { message = "Tin nhắn đã được đánh dấu là đã đọc." });
+        // ✅ Xóa liên hệ
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var lienHe = _context.LienHes.Find(id);
+            if (lienHe != null)
+            {
+                _context.LienHes.Remove(lienHe);
+                _context.SaveChanges();
             }
 
-            // ------------------------------------------------------------------
-            // API DELETE: Xóa tin nhắn
-            // ------------------------------------------------------------------
-
-            // DELETE: api/lienhe/5
-            [HttpPost, ActionName("Delete")] // Bắt yêu cầu POST từ form có asp-action="Delete"
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> DeleteConfirmed(int id)
-            {
-                var message = await _context.LienHes.FindAsync(id);
-
-                if (message != null)
-                {
-                    _context.LienHes.Remove(message);
-                    await _context.SaveChangesAsync();
-                    TempData["Message"] = "Tin nhắn đã được xóa thành công."; // Tùy chọn
-                }
-
-                // Chuyển hướng trở lại trang Index để tải lại danh sách
-                return RedirectToAction(nameof(Index));
-            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
