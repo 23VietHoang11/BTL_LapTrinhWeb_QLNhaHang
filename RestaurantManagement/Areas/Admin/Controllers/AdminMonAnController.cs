@@ -25,11 +25,58 @@ namespace RestaurantManagement.Controllers
 
         // GET: /AdminMonAn/Index
         // (Trang "Danh sách món ăn" - Ảnh 1)
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchTerm, int? pageNumber, int pageSize = 10)
         {
-            var monAns = await _context.MonAns.ToListAsync();
-            // Bạn cần tạo View cho trang Index này
-            return View(monAns);
+            // Đảm bảo kích thước trang hợp lệ
+            if (pageSize < 1) pageSize = 10;
+
+            // 1. Chuẩn bị truy vấn ban đầu
+            var monAnsQuery = _context.MonAns.AsQueryable();
+
+            // 2. Xử lý TÌM KIẾM (Filtering)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Lọc theo Tên món ăn hoặc Loại món ăn
+                monAnsQuery = monAnsQuery.Where(m =>
+                    m.TenMon.Contains(searchTerm) ||
+                    m.Loai.Contains(searchTerm)
+                );
+            }
+
+            // 3. Xử lý PHÂN TRANG (Pagination)
+
+            // Tính tổng số mục sau khi lọc
+            int totalItems = await monAnsQuery.CountAsync();
+
+            // Tính tổng số trang
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            // Đảm bảo số trang hợp lệ
+            int actualPageNumber = pageNumber ?? 1;
+            if (actualPageNumber < 1) actualPageNumber = 1;
+            if (actualPageNumber > totalPages && totalPages > 0) actualPageNumber = totalPages;
+
+            // Tính số lượng mục cần bỏ qua
+            int skipAmount = (actualPageNumber - 1) * pageSize;
+
+            // Lấy dữ liệu cho trang hiện tại
+            var paginatedMonAns = await monAnsQuery
+                .OrderBy(m => m.TenMon) // Sắp xếp để phân trang nhất quán
+                .Skip(skipAmount)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // 4. Tạo ViewModel và trả về View
+            var viewModel = new MonAnIndexViewModel
+            {
+                MonAns = paginatedMonAns,
+                PageNumber = actualPageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                SearchTerm = searchTerm
+            };
+
+            return View(viewModel);
         }
 
         // GET: /AdminMonAn/Create

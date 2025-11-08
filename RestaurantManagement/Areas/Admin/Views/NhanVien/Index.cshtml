@@ -1,17 +1,42 @@
-﻿@model IEnumerable<RestaurantManagement.Models.Entities.NhanVien>
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.NhanVienIndexViewModel 
 @{
     ViewData["Title"] = "Danh sách nhân viên";
+    
+    // Lấy thông tin phân trang từ Model
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.TotalPages;
+    string searchTerm = Model.SearchTerm;
 }
 
-<div class="content-wrapper">
+<div class="content-wrapper" id="staffList">
     <h2>Danh sách nhân viên</h2>
+    
     @if (TempData["Message"] != null)
     {
         <div class="alert alert-success">@TempData["Message"]</div>
     }
-    <div class="toolbar">
-        <a asp-action="Create" class="btn btn-primary">+ Thêm nhân viên mới</a>
-    </div>
+
+    <form asp-action="Index" method="get" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        
+        <div class="list-controls" style="display: flex; gap: 15px; align-items: center;">
+            <div class="search-box">
+                <input type="text" name="searchTerm" value="@searchTerm" placeholder="Tìm kiếm nhân viên..." class="search-input" style="width: 250px;">
+            </div>
+            <div class="pagination-controls">
+                <label for="pageSize" style="font-weight: normal;">Mục/trang:</label>
+                <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
+                    <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                    <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+                </select>
+            </div>
+            <button type="submit" style="display:none;"></button> 
+        </div>
+        
+        <div class="toolbar">
+            <a asp-action="Create" class="btn btn-primary">+ Thêm nhân viên mới</a>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -24,31 +49,79 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @if (Model.NhanViens != null && Model.NhanViens.Any())
+                {
+                    @foreach (var item in Model.NhanViens)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@item.HoTenNv</strong><br />
+                                <small>@item.GioiTinh - @item.NgaySinh?.ToString("dd/MM/yyyy")</small>
+                            </td>
+                            <td>
+                                <span class="badge role-type">@(item.TaiKhoan?.TenDangNhap ?? "Chưa có TK")</span>
+                            </td>
+                            <td>@item.ChucVu</td>
+                            <td>
+                                <div>📞 @item.Sdt</div>
+                                <div>📧 @item.Email</div>
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.IdnhanVien" class="btn btn-sm btn-warning">Sửa</a>
+                                <form asp-action="Delete" asp-route-id="@item.IdnhanVien" method="post" style="display:inline;"
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên @item.HoTenNv?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>
-                            <strong>@item.HoTenNv</strong><br />
-                            <small>@item.GioiTinh - @item.NgaySinh?.ToString("dd/MM/yyyy")</small>
-                        </td>
-                        <td>
-                            <span class="badge role-type">@(item.TaiKhoan?.TenDangNhap ?? "Chưa có TK")</span>
-                        </td>
-                        <td>@item.ChucVu</td>
-                        <td>
-                            <div>📞 @item.Sdt</div>
-                            <div>📧 @item.Email</div>
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.IdnhanVien" class="btn btn-sm btn-warning">Sửa</a>
-                            <form asp-action="Delete" asp-route-id="@item.IdnhanVien" method="post" style="display:inline;"
-                                  onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên @item.HoTenNv?');">
-                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                            </form>
+                        <td colspan="5" style="text-align: center; padding: 20px;">
+                            Không tìm thấy nhân viên nào.
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+
     </div>
-</div>
+
+    <div class="pages" id="staff-pagination" style="margin-top: 20px; text-align: right;">
+        
+        @if (totalPages > 1)
+        {
+            // Nút "Trước"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage - 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
+                &laquo; Trước
+            </a>
+
+            // Các nút số trang
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
+                    @i
+                </a>
+            }
+
+            // Nút "Sau"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage + 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
+                Sau &raquo;
+            </a>
+        }
+    </div>
+    </div>

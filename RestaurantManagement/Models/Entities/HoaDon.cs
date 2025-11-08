@@ -34,7 +34,7 @@ public partial class HoaDon
     public virtual NhanVien? IdnhanVienNavigation { get; set; }
 
     public virtual ICollection<ThanhToan> ThanhToans { get; set; } = new List<ThanhToan>();
-    public virtual DatBan DatBan { get; set; }
-    public virtual BanAn BanAn { get; set; }
-    public virtual KhachHang KhachHang { get; set; }
+    //public virtual DatBan DatBan { get; set; }
+    //public virtual BanAn BanAn { get; set; }
+    //public virtual KhachHang KhachHang { get; set; }
 }

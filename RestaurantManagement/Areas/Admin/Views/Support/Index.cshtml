@@ -1,8 +1,115 @@
-﻿@{
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.SupportIndexViewModel
+@{
     ViewData["Title"] = "Tư vấn với khách hàng";
+
+    // Lấy thông tin phân trang từ Model
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.TotalPages;
+    string searchTerm = Model.SearchTerm;
+    int pageSize = Model.PageSize;
 }
 
-<div class="content-wrapper" id="supportContent">
-    <h1>Tư vấn với khách hàng</h1>
-    <p>Nội dung trang tư vấn với khách hàng sẽ hiển thị ở đây...</p>
-</div>
+<div class="content-wrapper" id="postContent">
+    <h2>Hòm thư liên hệ</h2>
+
+    <form asp-action="Index" method="get" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+
+        <div class="list-controls" style="display: flex; gap: 15px; align-items: center;">
+
+            <input type="text" name="searchTerm" id="lienhe-search-input" value="@searchTerm" placeholder="Tìm kiếm tin nhắn..." class="search-input" style="width: 250px;">
+
+            <div class="pagination-controls">
+                <label for="pageSize" style="font-weight: normal;">Mục/trang:</label>
+                <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
+                    <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                    <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+                </select>
+            </div>
+             <button type="submit" class="btn btn-secondary">Tìm</button>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>NGÀY GỬI</th>
+                    <th>NGƯỜI GỬI</th>
+                    <th>EMAIL</th>
+                    <th>TIÊU ĐỀ</th>
+                    <th>NỘI DUNG</th>
+                    <th>TRẠNG THÁI</th>
+                    <th>THAO TÁC</th> @* <--- CỘT THAO TÁC *@
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.LienHes.Any())
+                {
+                    @foreach (var item in Model.LienHes)
+                    {
+                        <tr>
+                            <td>@item.NgayGui.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><strong>@item.HoTen</strong></td>
+                            <td>@item.Email</td>
+                            <td>@item.TieuDe</td>
+                            <td>@(item.NoiDung.Length > 50 ? item.NoiDung.Substring(0, 50) + "..." : item.NoiDung)</td>
+                            <td><span class="badge @(item.DaDoc ? "bg-secondary" : "bg-primary")">@(item.DaDoc ? "Đã đọc" : "Mới")</span></td>
+                            <td>
+                                @* <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Xem</a>
+                                @if (!item.DaDoc)
+                                {
+                                    <a asp-action="MarkRead" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Đánh dấu đọc</a>
+                                } *@
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;"
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa tin nhắn này?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding: 15px;">Không tìm thấy tin nhắn nào.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pages" id="lienhe-pagination" style="margin-top: 20px; text-align: right;">
+        @if (totalPages > 1)
+        {
+            // Nút "Trước"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage - 1)"
+               asp-route-pageSize="@pageSize"
+               asp-route-searchTerm="@searchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
+                &laquo; Trước
+            </a>
+
+            // Các nút số trang
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-pageSize="@pageSize"
+                   asp-route-searchTerm="@searchTerm"
+                   class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
+                    @i
+                </a>
+            }
+
+            // Nút "Sau"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage + 1)"
+               asp-route-pageSize="@pageSize"
+               asp-route-searchTerm="@searchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
+                Sau &raquo;
+            </a>
+        }
+    </div>
+    </div>

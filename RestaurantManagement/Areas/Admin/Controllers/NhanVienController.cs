@@ -18,13 +18,59 @@ namespace RestaurantManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/NhanVien/Index
-        public async Task<IActionResult> Index()
+        // ĐÃ SỬA: Thêm tham số tìm kiếm và phân trang
+        public async Task<IActionResult> Index(string searchTerm, int? pageNumber, int pageSize = 10)
         {
-            var data = await _context.NhanViens.Include(nv => nv.TaiKhoan)
-                                               .OrderByDescending(nv => nv.IdnhanVien).ToListAsync();
-            return View(data);
-        }
+            if (pageSize < 1) pageSize = 10;
 
+            // 1. Chuẩn bị truy vấn ban đầu (bao gồm TaiKhoan)
+            var nhanViensQuery = _context.NhanViens
+                .Include(nv => nv.TaiKhoan)
+                .AsQueryable();
+
+            // 2. Xử lý TÌM KIẾM (Filtering)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Lọc theo HoTenNv, Email, Sdt, ChucVu, TenDangNhap
+                nhanViensQuery = nhanViensQuery.Where(nv =>
+                    nv.HoTenNv.Contains(searchTerm) ||
+                    nv.Email.Contains(searchTerm) ||
+                    nv.Sdt.Contains(searchTerm) ||
+                    nv.ChucVu.Contains(searchTerm) ||
+                    (nv.TaiKhoan != null && nv.TaiKhoan.TenDangNhap.Contains(searchTerm))
+                );
+            }
+
+            // 3. Xử lý PHÂN TRANG (Pagination)
+
+            int totalItems = await nhanViensQuery.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            int actualPageNumber = pageNumber ?? 1;
+            if (actualPageNumber < 1) actualPageNumber = 1;
+            if (actualPageNumber > totalPages && totalPages > 0) actualPageNumber = totalPages;
+
+            int skipAmount = (actualPageNumber - 1) * pageSize;
+
+            // Lấy dữ liệu cho trang hiện tại
+            var paginatedNhanViens = await nhanViensQuery
+                .OrderByDescending(nv => nv.IdnhanVien) // Sắp xếp
+                .Skip(skipAmount)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // 4. Tạo ViewModel và trả về View
+            var viewModel = new NhanVienIndexViewModel
+            {
+                NhanViens = paginatedNhanViens,
+                PageNumber = actualPageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                SearchTerm = searchTerm ?? string.Empty
+            };
+
+            return View(viewModel);
+        }
         // =================== CHỨC NĂNG THÊM MỚI (CREATE) ===================
 
         // GET: Admin/NhanVien/Create

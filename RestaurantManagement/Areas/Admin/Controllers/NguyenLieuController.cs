@@ -18,10 +18,53 @@ namespace RestaurantManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/NguyenLieu
-        public async Task<IActionResult> Index()
+        // ĐÃ SỬA: Thêm tham số tìm kiếm và phân trang
+        public async Task<IActionResult> Index(string searchTerm, int? pageNumber, int pageSize = 10)
         {
-            var data = await _context.NguyenLieus.OrderByDescending(nl => nl.NgayNhap).ToListAsync();
-            return View(data);
+            if (pageSize < 1) pageSize = 10;
+
+            // 1. Chuẩn bị truy vấn ban đầu
+            var nguyenLieuQuery = _context.NguyenLieus.AsQueryable();
+
+            // 2. Xử lý TÌM KIẾM (Filtering)
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Lọc theo Tên nguyên liệu hoặc Loại
+                nguyenLieuQuery = nguyenLieuQuery.Where(nl =>
+                    nl.TenNl.Contains(searchTerm) ||
+                    nl.Loai.Contains(searchTerm)
+                );
+            }
+
+            // 3. Xử lý PHÂN TRANG (Pagination)
+
+            int totalItems = await nguyenLieuQuery.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            int actualPageNumber = pageNumber ?? 1;
+            if (actualPageNumber < 1) actualPageNumber = 1;
+            if (actualPageNumber > totalPages && totalPages > 0) actualPageNumber = totalPages;
+
+            int skipAmount = (actualPageNumber - 1) * pageSize;
+
+            // Lấy dữ liệu cho trang hiện tại
+            var paginatedNguyenLieus = await nguyenLieuQuery
+                .OrderByDescending(nl => nl.NgayNhap) // Giữ nguyên cách sắp xếp cũ
+                .Skip(skipAmount)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // 4. Tạo ViewModel và trả về View
+            var viewModel = new NguyenLieuIndexViewModel
+            {
+                NguyenLieus = paginatedNguyenLieus,
+                PageNumber = actualPageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                SearchTerm = searchTerm ?? string.Empty
+            };
+
+            return View(viewModel);
         }
 
         // GET: Admin/NguyenLieu/Create

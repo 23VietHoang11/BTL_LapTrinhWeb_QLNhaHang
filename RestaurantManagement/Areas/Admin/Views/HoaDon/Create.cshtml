@@ -1,34 +1,41 @@
-﻿<div class="content-wrapper" id="invoiceAddEdit">
-    <h2>Thêm/Sửa đơn hàng</h2>
-    <div class="menu-details">
-        <input type="hidden" id="invoice-id" value="">
-        <div class="form-group">
-            <label for="invoice-customer-phone">SĐT Khách hàng (*)</label>
-            <input type="text" id="invoice-customer-phone" placeholder="Nhập SĐT để tìm hoặc tạo mới">
-        </div>
-        <div class="form-group">
-            <label for="invoice-customer-name">Tên khách hàng (*)</label>
-            <input type="text" id="invoice-customer-name" placeholder="Nhập tên khách hàng">
-        </div>
-        <div class="form-group">
-            <label for="invoice-time-input">Thời gian (*)</label>
-            <input type="datetime-local" id="invoice-time-input">
-        </div>
-        <div class="form-group">
-            <label for="invoice-guest-count">Số lượng khách</label>
-            <input type="number" id="invoice-guest-count" placeholder="0" value="1">
-        </div>
-        <div class="form-group">
-            <label for="invoice-total-amount">Số tiền ban đầu</label>
-            <input type="number" id="invoice-total-amount" placeholder="0" value="0">
-        </div>
-        <div class="form-group">
-            <label for="invoice-notes">Ghi chú</label>
-            <textarea id="invoice-notes" placeholder="Khách yêu cầu..."></textarea>
-        </div>
-        <button id="btn-save-invoice" class="btn-primary">Lưu (Thêm mới)</button>
-        <button id="btn-update-invoice" class="btn-warning">Cập nhật (Sửa)</button>
-        <button id="btn-delete-invoice" class="btn-danger">Xóa Đơn</button>
-        <button id="btn-cancel-invoice" class="btn-secondary">Hủy</button>
+﻿@* @model RestaurantManagement.Areas.Admin.Models.ViewModels.HoaDonCreateEditViewModel
+@{
+    ViewData["Title"] = "Thêm Hóa đơn mới";
+}
+
+<h2>Thêm Hóa đơn mới</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="IdkhachHang" class="control-label"></label>
+                <input asp-for="IdkhachHang" class="form-control" placeholder="ID Khách hàng (để trống nếu khách vãng lai)" />
+                <span asp-validation-for="IdkhachHang" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TrangThai" class="control-label"></label>
+                <select asp-for="TrangThai" class="form-control">
+                    <option value="Mới">Mới</option>
+                    <option value="Đã thanh toán">Đã thanh toán</option>
+                    <option value="Đã hủy">Đã hủy</option>
+                </select>
+                <span asp-validation-for="TrangThai" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <input type="submit" value="Tạo và Thêm Chi tiết" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@

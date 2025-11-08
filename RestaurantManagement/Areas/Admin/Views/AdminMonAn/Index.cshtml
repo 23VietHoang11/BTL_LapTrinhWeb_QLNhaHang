@@ -1,14 +1,35 @@
-﻿@model IEnumerable<RestaurantManagement.Models.Entities.MonAn>
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.MonAnIndexViewModel
 
 @{
     ViewData["Title"] = "Danh sách món ăn";
+}
+@{
+    // Lấy thông tin phân trang từ Model
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.TotalPages;
+    string searchTerm = Model.SearchTerm;
 }
 
 <div class="content-wrapper" id="menuList">
     <h2>Danh sách món ăn</h2>
 
-    <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center;">
-        <input type="text" id="monan-search-input" placeholder="Tìm kiếm món ăn..." class="search-input" style="max-width: 300px;">
+    <div class="toolbar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        
+        <form asp-action="Index" method="get" style="display: flex; gap: 15px; align-items: center;">
+            
+            <div class="search-box">
+                <input type="text" name="searchTerm" value="@searchTerm" placeholder="Tìm kiếm món ăn..." class="search-input" style="width: 250px;">
+            </div>
+            
+            <div class="pagination-controls">
+                <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
+                    <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                    <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+                </select>
+            </div>
+            <button type="submit" style="display:none;"></button> 
+        </form>
 
         <a asp-area="Admin" asp-controller="AdminMonAn" asp-action="Create" class="btn btn-primary">
             + Thêm món ăn mới
@@ -17,21 +38,12 @@
 
     <div class="table-responsive">
         <table class="table">
-            <thead>
-                <tr>
-                    <th>HÌNH ẢNH</th>
-                    <th>TÊN SẢN PHẨM</th>
-                    <th>LOẠI</th>
-                    <th>ĐƠN VỊ TÍNH</th>
-                    <th>GIÁ BÁN</th>
-                    <th>THAO TÁC</th>
-                </tr>
-            </thead>
             <tbody>
-                @if (Model != null && Model.Any())
+                @if (Model.MonAns != null && Model.MonAns.Any())
                 {
-                    foreach (var item in Model)
+                    @foreach (var item in Model.MonAns)
                     {
+                        // ... (Vòng lặp hiển thị từng hàng giữ nguyên) ...
                         <tr>
                             <td>
                                 @if (!string.IsNullOrEmpty(item.HinhAnh))
@@ -51,12 +63,8 @@
                             </td>
                             <td>
                                 <div style="display: flex; gap: 5px;">
-                                    <a asp-action="Edit" asp-route-id="@item.IdmonAn" class="btn btn-sm btn-warning">
-                                        Sửa
-                                    </a>
-
-                                    <form asp-action="Delete" asp-route-id="@item.IdmonAn" method="post"
-                                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa món @item.TenMon không?');">
+                                    <a asp-area="Admin" asp-controller="AdminMonAn" asp-action="Edit" asp-route-id="@item.IdmonAn" class="btn btn-sm btn-warning">Sửa</a>
+                                    <form asp-area="Admin" asp-controller="AdminMonAn" asp-action="Delete" asp-route-id="@item.IdmonAn" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa món @item.TenMon không?');">
                                         <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
                                     </form>
                                 </div>
@@ -68,7 +76,7 @@
                 {
                     <tr>
                         <td colspan="6" style="text-align: center; padding: 20px;">
-                            Chưa có món ăn nào.
+                            Không tìm thấy món ăn nào.
                         </td>
                     </tr>
                 }
@@ -76,4 +84,36 @@
         </table>
     </div>
 
-</div>
+    <div class="pages" id="monan-pagination" style="margin-top: 20px; text-align: right;">
+        
+        @if (totalPages > 1)
+        {
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage - 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
+                &laquo; Trước
+            </a>
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
+                    @i
+                </a>
+            }
+
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage + 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
+                Sau &raquo;
+            </a>
+        }
+    </div>
+    </div>

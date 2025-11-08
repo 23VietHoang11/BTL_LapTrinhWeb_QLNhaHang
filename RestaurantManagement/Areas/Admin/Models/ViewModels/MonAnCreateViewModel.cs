@@ -20,5 +20,6 @@ namespace RestaurantManagement.Areas.Admin.Models.ViewModels
 
         // Dùng IFormFile để nhận file ảnh từ form
         public IFormFile? ImageFile { get; set; }
+        public decimal GiaBan { get; internal set; }
     }
 }

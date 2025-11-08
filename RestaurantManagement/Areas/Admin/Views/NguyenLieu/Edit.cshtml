@@ -7,6 +7,9 @@
     <h2>Cập nhật nguyên liệu</h2>
     <div class="menu-details">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="IdnguyenLieu" />
             <input type="hidden" asp-for="ExistingImage" />
 
@@ -19,6 +22,7 @@
                 <label>Thay đổi ảnh:</label>
                 <input asp-for="HinhAnh" type="file" class="form-control" accept="image/*"
                        onchange="document.getElementById('preview-image').src = window.URL.createObjectURL(this.files[0])" />
+                <span asp-validation-for="HinhAnh" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -26,10 +30,30 @@
                 <input asp-for="TenNl" class="form-control" />
                 <span asp-validation-for="TenNl" class="text-danger"></span>
             </div>
-            <div class="form-group"><label asp-for="DonVi">Đơn vị tính (*)</label><input asp-for="DonVi" class="form-control" /></div>
-            <div class="form-group"><label asp-for="Loai">Loại nguyên liệu (*)</label><input asp-for="Loai" class="form-control" /></div>
-            <div class="form-group"><label asp-for="SoLuong">Số lượng</label><input asp-for="SoLuong" type="number" class="form-control" /></div>
-            <div class="form-group"><label asp-for="NgayNhap">Ngày nhập</label><input asp-for="NgayNhap" type="date" class="form-control" /></div>
+
+            <div class="form-group">
+                <label asp-for="DonVi">Đơn vị tính (*)</label>
+                <input asp-for="DonVi" class="form-control" />
+                <span asp-validation-for="DonVi" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Loai">Loại nguyên liệu (*)</label>
+                <input asp-for="Loai" class="form-control" />
+                <span asp-validation-for="Loai" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SoLuong">Số lượng</label>
+                <input asp-for="SoLuong" type="number" class="form-control" />
+                <span asp-validation-for="SoLuong" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="NgayNhap">Ngày nhập</label>
+                <input asp-for="NgayNhap" type="date" class="form-control" />
+                <span asp-validation-for="NgayNhap" class="text-danger"></span>
+            </div>
 
             <button type="submit" class="btn btn-warning mt-3">Cập nhật</button>
             <a asp-action="Index" class="btn btn-secondary mt-3 ml-2">Quay lại</a>

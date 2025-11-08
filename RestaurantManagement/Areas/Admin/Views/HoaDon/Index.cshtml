@@ -1,10 +1,118 @@
-﻿@* XÓA HOẶC COMMENT DÒNG NÀY NẾU KHÔNG DÙNG SERVER-SIDE RENDERING *@
-@* @model IEnumerable<RestaurantManagement.Models.Entities.HoaDon> *@
-
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.HoaDonIndexViewModel
 @{
-    ViewData["Title"] = "Đơn hiện tại";
-    // Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml"; // Đảm bảo dòng này có nếu _ViewStart không chạy đúng
+    ViewData["Title"] = "Danh sách hóa đơn";
+    
+    // Lấy thông tin phân trang từ Model
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.TotalPages;
+    string searchTerm = Model.SearchTerm;
 }
 
-<div class="content-wrapper" id="invoiceContent">
+<div class="content-wrapper" id="invoiceList">
+    <h2>Danh sách hóa đơn</h2>
+
+    <form asp-action="Index" method="get" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        
+        <div class="list-controls" style="display: flex; gap: 15px; align-items: center;">
+            <div class="search-box">
+                <input type="text" name="searchTerm" value="@searchTerm" placeholder="Tìm kiếm theo Trạng thái / Tên KH..." class="search-input" style="width: 250px;">
+            </div>
+            <div class="pagination-controls">
+                <label for="pageSize" style="font-weight: normal;">Mục/trang:</label>
+                <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
+                    <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                    <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+                </select>
+            </div>
+            <button type="submit" style="display:none;"></button> 
+        </div>
+        
+        @* <a asp-action="Create" class="btn btn-primary">+ Tạo hóa đơn mới (Tùy chọn)</a> *@
+    </form>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>KHÁCH HÀNG</th>
+                    <th>NGÀY LẬP</th>
+                    <th>TỔNG TIỀN</th>
+                    <th>TRẠNG THÁI</th>
+                    <th>THAO TÁC</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.HoaDons.Any())
+                {
+                    @foreach (var item in Model.HoaDons)
+                    {
+                        <tr>
+                            <td>@item.IdhoaDon</td>
+                            <td>@(item.IdkhachHangNavigation?.HoTenKh ?? "Guest")</td>
+                            <td>@item.NgayLap.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@(item.TongTien?.ToString("N0") ?? "0") đ</td>
+                            <td><span class="badge @(item.TrangThai == "Hoàn thành" ? "bg-success" : "bg-warning")">@item.TrangThai</span></td>
+                            
+                            @* START: THÊM NÚT SỬA/XOÁ/CHI TIẾT *@
+                            <td> 
+                                @* <a asp-action="Details" asp-route-id="@item.IdhoaDon" class="btn btn-sm btn-info">Chi tiết</a>
+                                <a asp-action="Edit" asp-route-id="@item.IdhoaDon" class="btn btn-sm btn-warning">Sửa</a> *@
+                                <form asp-action="Delete" asp-route-id="@item.IdhoaDon" method="post" style="display:inline;"
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa hóa đơn @item.IdhoaDon?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                            @* END: THÊM NÚT SỬA/XOÁ/CHI TIẾT *@
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">
+                            Không tìm thấy hóa đơn nào.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pages" id="hoadon-pagination" style="margin-top: 20px; text-align: right;">
+        
+        @if (totalPages > 1)
+        {
+            // Nút "Trước"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage - 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
+                &laquo; Trước
+            </a>
+
+            // Các nút số trang
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
+                    @i
+                </a>
+            }
+
+            // Nút "Sau"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage + 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
+                Sau &raquo;
+            </a>
+        }
+    </div>
 </div>

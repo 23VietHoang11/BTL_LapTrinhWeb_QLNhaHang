@@ -1,44 +1,120 @@
-﻿@model List<RestaurantManagement.Models.ViewModels.DatBanAdminViewModel>
+﻿@model RestaurantManagement.Models.ViewModels.DatBanIndexViewModel
+@{
+    ViewData["Title"] = "Danh sách đặt bàn";
+    
+    // Lấy thông tin phân trang từ Model
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.TotalPages;
+    string searchTerm = Model.SearchTerm;
+}
 
 <h2>Danh sách đặt bàn</h2>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tên KH</th>
-            <th>SĐT</th>
-            <th>Thời gian</th>
-            <th>Số lượng</th>
-            <th>Trạng thái</th>
-            <th>Ghi chú</th>
-            <th>Bàn</th>
-            <th>Thao tác</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<form asp-action="Index" method="get" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    
+    <div class="list-controls" style="display: flex; gap: 15px; align-items: center;">
+        <div class="search-box">
+            <input type="text" name="searchTerm" value="@searchTerm" placeholder="Tìm kiếm theo Tên KH / SĐT..." class="search-input" style="width: 250px;">
+        </div>
+        <div class="pagination-controls">
+            <label for="pageSize" style="font-weight: normal;">Mục/trang:</label>
+            <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
+                <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+            </select>
+        </div>
+    </div>
+    
+    <button type="submit" style="display:none;"></button> 
+    
+</form>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td>@item.IDDatBan</td>
-                <td>@item.TenKhachHang</td>
-                <td>@item.SDT</td>
-                <td>@item.ThoiGian.ToString("HH:mm dd/MM/yyyy")</td>
-                <td>@item.SoLuongKH</td>
-                <td>@item.TrangThai</td>
-                <td>@item.GhiChu</td>
-                <td>@(item.IDBanAn ?? 0)</td>
-                <td>
-                    @if (item.TrangThai == "Chờ xác nhận")
-                    {
-                        <a href="@Url.Action("AssignTable", "DatBan", new { id = item.IDDatBan })" class="btn btn-primary">Phân bàn</a>
-                    }
-                    else
-                    {
-                        <span class="text-success">✓ Đã xử lý</span>
-                    }
-                </td>
+                <th>ID</th>
+                <th>Tên KH</th>
+                <th>SĐT</th>
+                <th>Thời gian</th>
+                <th>Số lượng</th>
+                <th>Trạng thái</th>
+                <th>Ghi chú</th>
+                <th>Bàn</th>
+                <th>Thao tác</th>
             </tr>
+        </thead>
+        <tbody>
+            @if (Model.DatBans.Any())
+            {
+                @foreach (var item in Model.DatBans)
+                {
+                    <tr>
+                        <td>@item.IDDatBan</td>
+                        <td>@item.TenKhachHang</td>
+                        <td>@item.SDT</td>
+                        <td>@item.ThoiGian.ToString("HH:mm dd/MM/yyyy")</td>
+                        <td>@item.SoLuongKH</td>
+                        <td>@item.TrangThai</td>
+                        <td>@item.GhiChu</td>
+                        <td>@(item.IDBanAn ?? 0)</td>
+                        <td>
+                            @if (item.TrangThai == "Chờ xác nhận")
+                            {
+                                <a href="@Url.Action("AssignTable", "DatBanAdmin", new { id = item.IDDatBan })" class="btn btn-primary">Phân bàn</a>
+                            }
+                            else
+                            {
+                                <span class="text-success">✓ Đã xử lý</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" style="text-align: center; padding: 20px;">
+                        Không tìm thấy đơn đặt bàn nào.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="pages" id="datban-pagination" style="margin-top: 20px; text-align: right;">
+    
+    @if (totalPages > 1)
+    {
+        // Nút "Trước"
+        <a asp-action="Index"
+           asp-route-pageNumber="@(currentPage - 1)"
+           asp-route-pageSize="@Model.PageSize"
+           asp-route-searchTerm="@Model.SearchTerm"
+           class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
+            &laquo; Trước
+        </a>
+
+        // Các nút số trang
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <a asp-action="Index"
+               asp-route-pageNumber="@i"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
+                @i
+            </a>
         }
-    </tbody>
-</table>
+
+        // Nút "Sau"
+        <a asp-action="Index"
+           asp-route-pageNumber="@(currentPage + 1)"
+           asp-route-pageSize="@Model.PageSize"
+           asp-route-searchTerm="@Model.SearchTerm"
+           class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
+            Sau &raquo;
+        </a>
+    }
+</div>

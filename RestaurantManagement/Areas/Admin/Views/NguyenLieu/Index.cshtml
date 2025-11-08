@@ -1,13 +1,35 @@
-﻿@model IEnumerable<RestaurantManagement.Models.Entities.NguyenLieu>
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.NguyenLieuIndexViewModel 
 @{
     ViewData["Title"] = "Danh sách nguyên liệu";
+    
+    // Lấy thông tin phân trang từ Model
+    int currentPage = Model.PageNumber;
+    int totalPages = Model.TotalPages;
+    string searchTerm = Model.SearchTerm;
 }
 
-<div class="content-wrapper">
+<div class="content-wrapper" id="nguyenLieuList">
     <h2>Danh sách nguyên liệu</h2>
-    <div class="toolbar">
+
+    <form asp-action="Index" method="get" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        
+        <div class="list-controls" style="display: flex; gap: 15px; align-items: center;">
+            <div class="search-box">
+                <input type="text" name="searchTerm" value="@searchTerm" placeholder="Tìm kiếm nguyên liệu..." class="search-input" style="width: 250px;">
+            </div>
+            <div class="pagination-controls">
+                <label for="pageSize" style="font-weight: normal;">Mục/trang:</label>
+                <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
+                    <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                    <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
+                </select>
+            </div>
+            <button type="submit" style="display:none;"></button> 
+        </div>
+        
         <a asp-action="Create" class="btn btn-primary">+ Thêm nguyên liệu mới</a>
-    </div>
+    </form>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -22,28 +44,75 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @if (Model.NguyenLieus.Any())
+                {
+                    @foreach (var item in Model.NguyenLieus)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@(item.HinhAnh ?? "https://via.placeholder.com/50")" asp-append-version="true"
+                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
+                            </td>
+                            <td>@item.TenNl</td>
+                            <td>@item.DonVi</td>
+                            <td>@item.Loai</td>
+                            <td>@item.SoLuong</td>
+                            <td>@item.NgayNhap?.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.IdnguyenLieu" class="btn btn-sm btn-warning">Sửa</a>
+                                <form asp-action="Delete" asp-route-id="@item.IdnguyenLieu" method="post" style="display:inline;"
+                                      onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>
-                            <img src="@(item.HinhAnh ?? "https://via.placeholder.com/50")" asp-append-version="true"
-                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />
-                        </td>
-                        <td>@item.TenNl</td>
-                        <td>@item.DonVi</td>
-                        <td>@item.Loai</td>
-                        <td>@item.SoLuong</td>
-                        <td>@item.NgayNhap?.ToString("dd/MM/yyyy")</td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.IdnguyenLieu" class="btn btn-sm btn-warning">Sửa</a>
-                            <form asp-action="Delete" asp-route-id="@item.IdnguyenLieu" method="post" style="display:inline;"
-                                  onsubmit="return confirm('Bạn có chắc muốn xóa?');">
-                                <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                            </form>
+                        <td colspan="7" style="text-align: center; padding: 20px;">
+                            Không tìm thấy nguyên liệu nào.
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-</div>
+
+    <div class="pages" id="nguyenlieu-pagination" style="margin-top: 20px; text-align: right;">
+        
+        @if (totalPages > 1)
+        {
+            // Nút "Trước"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage - 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
+                &laquo; Trước
+            </a>
+
+            // Các nút số trang
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
+                    @i
+                </a>
+            }
+
+            // Nút "Sau"
+            <a asp-action="Index"
+               asp-route-pageNumber="@(currentPage + 1)"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-searchTerm="@Model.SearchTerm"
+               class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
+                Sau &raquo;
+            </a>
+        }
+    </div>
+    </div>
