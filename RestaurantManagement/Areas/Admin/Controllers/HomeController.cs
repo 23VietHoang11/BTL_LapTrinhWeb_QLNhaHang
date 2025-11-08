@@ -1,49 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RestaurantManagement.Areas.Admin.Models;
-using RestaurantManagement.Models.Entities;
-using System.Data.Common;
+using RestaurantManagement.Areas.Admin.Models.ViewModels;
+using RestaurantManagement.Models.Entities; // Thay thế bằng namespace chứa DbContext của bạn
+using System.Threading.Tasks;
 
 namespace RestaurantManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class HomeController : Controller
+    public class HomeController : Controller // Controller MVC chuẩn
     {
         private readonly QLNhaHangContext _context;
+
         public HomeController(QLNhaHangContext context)
         {
             _context = context;
         }
 
-        public IActionResult Index()
+        // GET: Admin/Home/Index (Action hiển thị Dashboard)
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            // 1. Thực hiện truy vấn đếm số lượng từ các bảng
+            var totalAccounts = await _context.NhanViens.CountAsync(); // Giả sử Tài khoản là bảng NhanViens
+            var totalContacts = await _context.LienHes.CountAsync(); // Bảng Liên hệ
+            var totalMenuItems = await _context.MonAns.CountAsync(); // Bảng Món ăn
+            var totalInvoices = await _context.HoaDons.CountAsync(); // Bảng Hóa đơn
 
-        public IActionResult LoginAdmin()
-        {
-            return View();
-        }
-
-
-        [HttpGet]
-        public IActionResult RegisterAcc()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult RegisterAcc(DangKiNV model)
-        {
-            if (ModelState.IsValid)
+            // 2. Tạo ViewModel
+            var viewModel = new DashboardViewModel
             {
-                return RedirectToAction("LoginAdmin");
-            }
-            return View(model);
+                TotalAccounts = totalAccounts,
+                TotalContacts = totalContacts,
+                TotalMenuItems = totalMenuItems,
+                TotalInvoices = totalInvoices
+            };
+
+            // 3. Trả về View với dữ liệu động
+            return View(viewModel);
         }
 
-        // Ví dụ: BookingViewModel.cs
-
-        
+        // Các Action khác (nếu có)
     }
 }

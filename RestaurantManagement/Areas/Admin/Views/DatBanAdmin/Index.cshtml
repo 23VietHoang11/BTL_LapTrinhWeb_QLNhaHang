@@ -35,12 +35,11 @@
             <tr>
                 <th>ID</th>
                 <th>Tên KH</th>
-                <th>SĐT</th>
+                @* <th>SĐT</th> *@
                 <th>Thời gian</th>
                 <th>Số lượng</th>
                 <th>Trạng thái</th>
                 <th>Ghi chú</th>
-                <th>Bàn</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -52,29 +51,43 @@
                     <tr>
                         <td>@item.IDDatBan</td>
                         <td>@item.TenKhachHang</td>
-                        <td>@item.SDT</td>
+                        @* <td>@item.SDT</td> *@
                         <td>@item.ThoiGian.ToString("HH:mm dd/MM/yyyy")</td>
                         <td>@item.SoLuongKH</td>
                         <td>@item.TrangThai</td>
                         <td>@item.GhiChu</td>
-                        <td>@(item.IDBanAn ?? 0)</td>
                         <td>
+                            @* Điều kiện 1: Hiển thị các nút xử lý chính (Phân bàn, Xác nhận) khi CHỜ XÁC NHẬN *@
                             @if (item.TrangThai == "Chờ xác nhận")
                             {
-                                <a href="@Url.Action("AssignTable", "DatBanAdmin", new { id = item.IDDatBan })" class="btn btn-primary">Phân bàn</a>
+                                @* <a href="@Url.Action("AssignTable", "DatBanAdmin", new { id = item.IDDatBan })" class="btn btn-sm btn-primary mb-1">Phân bàn</a> *@
+
+                                <form asp-action="ConfirmBooking" asp-route-id="@item.IDDatBan" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xác nhận đơn đặt bàn ID @item.IDDatBan này?');" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-success mb-1">Xác nhận</button>
+                                </form>
                             }
-                            else
+                            @* Điều kiện 2: Nút XÓA hiển thị cho các trạng thái chưa hoàn thành *@
+                            @if (item.TrangThai == "Chờ xác nhận" || item.TrangThai == "Đã xác nhận")
                             {
-                                <span class="text-success">✓ Đã xử lý</span>
+                                // Nút Xóa (Hiển thị cho cả "Chờ xác nhận" và "Đã xác nhận")
+                                <form asp-action="Delete" asp-route-id="@item.IDDatBan" method="post" onsubmit="return confirm('CẢNH BÁO: Bạn có chắc chắn muốn XÓA đơn đặt bàn ID @item.IDDatBan? Thao tác này có thể giải phóng bàn đã gán.');" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger mb-1">Xóa</button>
+                                </form>
+                            }
+                            @* Trường hợp đã được xử lý (Đã nhận bàn, Đã hoàn thành, v.v.) *@
+                            @if (item.TrangThai != "Chờ xác nhận" && item.TrangThai != "Đã xác nhận")
+                            {
+                                <span class="text-success">✓ @item.TrangThai</span>
                             }
                         </td>
                     </tr>
                 }
             }
+
             else
             {
                 <tr>
-                    <td colspan="9" style="text-align: center; padding: 20px;">
+                    <td colspan="7" style="text-align: center; padding: 20px;">
                         Không tìm thấy đơn đặt bàn nào.
                     </td>
                 </tr>

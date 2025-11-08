@@ -5,7 +5,7 @@ namespace RestaurantManagement.Controllers
     [Area("Admin")]
     public class BufferedFileUploadController : Controller
     {
-        
+
         readonly IBufferedFileUploadService _bufferedFileUploadService;
 
         public BufferedFileUploadController(IBufferedFileUploadService bufferedFileUploadService)
