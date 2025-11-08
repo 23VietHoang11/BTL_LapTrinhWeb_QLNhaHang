@@ -1,65 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
+﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard Quản Trị";
 }
-        <div class="dashboard content-wrapper active" id="dashboard">
-            <div class="filters">
-                <button>Hôm nay</button>
-                <button>Tháng này</button>
-                <button>Năm nay</button>
-                <button class="active">Tất cả</button>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-details">
-                        <h3>Số lượng tài khoản</h3>
-                        <p>16</p>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">📄</div>
-                    <div class="stat-details">
-                        <h3>Số lượng bài viết</h3>
-                        <p>4</p>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🍴</div>
-                    <div class="stat-details">
-                        <h3>Số lượng món ăn</h3>
-                        <p>10</p>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon">🧾</div>
-                    <div class="stat-details">
-                        <h3>Số lượng danh mục</h3>
-                        <p>7</p>
-                    </div>
-                </div>
-            </div>
-            <div class="chart-section">
-                <h3>Thống Kê Hóa Đơn</h3>
-                <div class="chart-filters">
-                    <select>
-                        <option>Cả năm</option>
-                        <option>Tháng 1</option>
-                        <option>Tháng 2</option>
-                    </select>
-                </div>
-                <div class="chart-container">
-                    <p>Biểu đồ sẽ hiển thị ở đây</p>
-                </div>
-                <div class="chart-legend">
-                    <div><span class="legend-color" style="background-color: #6c5ce7;"></span> Hủy đơn</div>
-                    <div><span class="legend-color" style="background-color: #00b894;"></span> Chờ thanh toán cọc</div>
-                    <div><span class="legend-color" style="background-color: #fdcb6e;"></span> Hết hạn thanh toán cọc</div>
-                    <div><span class="legend-color" style="background-color: #e84393;"></span> Đã thanh toán cọc</div>
-                    <div><span class="legend-color" style="background-color: #0984e3;"></span> Chờ thanh toán toàn bộ đơn</div>
-                    <div><span class="legend-color" style="background-color: #f1c40f;"></span> Hoàn thành đơn</div>
-                </div>
+
+<div class="dashboard content-wrapper active" id="dashboard">
+
+    <div class="filters">
+        <button>Hôm nay</button>
+        <button>Tháng này</button>
+        <button>Năm nay</button>
+        <button class="active">Tất cả</button>
+    </div>
+
+@* --- SỬ DỤNG DỮ LIỆU ĐỘNG TỪ MODEL --- *@
+    <div class="stats-grid">
+
+        <div class="stat-item">
+            <div class="stat-icon">👥</div>
+            <div class="stat-details">
+                <h3>Số lượng tài khoản</h3>
+                <p>@Model.TotalAccounts</p>
             </div>
         </div>
+
+        <div class="stat-item">
+            <div class="stat-icon">📞</div>
+            <div class="stat-details">
+                <h3>Số lượng contact</h3>
+                <p>@Model.TotalContacts</p>
+            </div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-icon">🍴</div>
+            <div class="stat-details">
+                <h3>Số lượng món ăn</h3>
+                <p>@Model.TotalMenuItems</p>
+            </div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-icon">🧾</div>
+            <div class="stat-details">
+                <h3>Số lượng hoá đơn</h3>
+                <p>@Model.TotalInvoices</p>
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts {
+    @* Đây là nơi bạn sẽ thêm mã JavaScript để gọi API lấy dữ liệu và vẽ biểu đồ *@
+    <script>
+        // Ví dụ: Gọi API để lấy dữ liệu thống kê khi trang tải xong
+        // function loadDashboardStats() { ... }
+    </script>
+}
 
 <script>
     // --- BIẾN TOÀN CỤC ---
