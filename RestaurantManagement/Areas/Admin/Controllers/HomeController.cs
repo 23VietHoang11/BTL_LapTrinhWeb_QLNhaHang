@@ -24,6 +24,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
             var totalContacts = await _context.LienHes.CountAsync(); // Bảng Liên hệ
             var totalMenuItems = await _context.MonAns.CountAsync(); // Bảng Món ăn
             var totalInvoices = await _context.HoaDons.CountAsync(); // Bảng Hóa đơn
+            var totalCustomers = await _context.DatBans.CountAsync(); // Đếm Khách hàng
 
             // 2. Tạo ViewModel
             var viewModel = new DashboardViewModel
@@ -31,7 +32,9 @@ namespace RestaurantManagement.Areas.Admin.Controllers
                 TotalAccounts = totalAccounts,
                 TotalContacts = totalContacts,
                 TotalMenuItems = totalMenuItems,
-                TotalInvoices = totalInvoices
+                TotalInvoices = totalInvoices,
+                // THÊM: Gán giá trị Khách hàng vào ViewModel
+                TotalCustomers = totalCustomers
             };
 
             // 3. Trả về View với dữ liệu động

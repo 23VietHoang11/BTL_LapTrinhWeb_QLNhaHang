@@ -7,7 +7,7 @@
         public int TotalContacts { get; set; }
         public int TotalMenuItems { get; set; }
         public int TotalInvoices { get; set; }
-
+        public int TotalCustomers { get; set; }
         // Bạn có thể thêm các thuộc tính khác cho biểu đồ ở đây
     }
 }

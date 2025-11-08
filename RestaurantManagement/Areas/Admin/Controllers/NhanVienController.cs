@@ -18,7 +18,6 @@ namespace RestaurantManagement.Areas.Admin.Controllers
         }
 
         // GET: Admin/NhanVien/Index
-        // ĐÃ SỬA: Thêm tham số tìm kiếm và phân trang
         public async Task<IActionResult> Index(string searchTerm, int? pageNumber, int pageSize = 10)
         {
             if (pageSize < 1) pageSize = 10;
@@ -42,7 +41,6 @@ namespace RestaurantManagement.Areas.Admin.Controllers
             }
 
             // 3. Xử lý PHÂN TRANG (Pagination)
-
             int totalItems = await nhanViensQuery.CountAsync();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
@@ -54,7 +52,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
 
             // Lấy dữ liệu cho trang hiện tại
             var paginatedNhanViens = await nhanViensQuery
-                .OrderByDescending(nv => nv.IdnhanVien) // Sắp xếp
+                .OrderByDescending(nv => nv.IdnhanVien) // Sắp xếp theo ID mới nhất
                 .Skip(skipAmount)
                 .Take(pageSize)
                 .ToListAsync();
@@ -71,6 +69,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
 
             return View(viewModel);
         }
+
         // =================== CHỨC NĂNG THÊM MỚI (CREATE) ===================
 
         // GET: Admin/NhanVien/Create
@@ -94,8 +93,10 @@ namespace RestaurantManagement.Areas.Admin.Controllers
                     return View(vm);
                 }
 
+                // 1. Tạo Hash và Salt MỘT LẦN duy nhất
                 CreatePasswordHash(vm.MatKhau, out byte[] hash, out byte[] salt);
 
+                // 2. Tạo và lưu Nhân viên
                 var newNV = new NhanVien
                 {
                     HoTenNv = vm.HoTenNv,
@@ -111,10 +112,9 @@ namespace RestaurantManagement.Areas.Admin.Controllers
                 };
 
                 _context.NhanViens.Add(newNV);
-                await _context.SaveChangesAsync(); // Lúc này newNV.IdnhanVien đã có giá trị
+                await _context.SaveChangesAsync();
 
-                // 4. Tạo và lưu Tài khoản (liên kết với ID nhân viên vừa tạo)
-                CreatePasswordHash(vm.MatKhau, out byte[] MatKhauHash, out byte[] MatKhauSalt);
+                // 3. Tạo và lưu Tài khoản (sử dụng hash/salt từ bước 1)
                 var newTK = new TaiKhoan
                 {
                     TenDangNhap = vm.TenDangNhap,
@@ -128,7 +128,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
                 _context.TaiKhoans.Add(newTK);
                 await _context.SaveChangesAsync();
 
-                TempData["Message"] = "Thêm mới nhân viên thành công!";
+                TempData["SuccessMessage"] = "Thêm mới nhân viên thành công!";
                 return RedirectToAction(nameof(Index));
             }
             return View(vm);
@@ -149,7 +149,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
             var vm = new NhanVienEditViewModel
             {
                 IdnhanVien = nv.IdnhanVien,
-                TenDangNhap = nv.TaiKhoan?.TenDangNhap, // Chỉ để hiển thị
+                TenDangNhap = nv.TaiKhoan?.TenDangNhap,
                 HoTenNv = nv.HoTenNv,
                 Email = nv.Email,
                 Sdt = nv.Sdt,
@@ -174,7 +174,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var nvToUpdate = await _context.NhanViens.Include(n => n.TaiKhoan)
-                                               .FirstOrDefaultAsync(n => n.IdnhanVien == id);
+                                                   .FirstOrDefaultAsync(n => n.IdnhanVien == id);
                 if (nvToUpdate == null) return NotFound();
 
                 // Cập nhật thông tin chung
@@ -194,7 +194,7 @@ namespace RestaurantManagement.Areas.Admin.Controllers
 
                 _context.Update(nvToUpdate);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Cập nhật thông tin thành công!";
+                TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
                 return RedirectToAction(nameof(Index));
             }
             return View(vm);
@@ -205,11 +205,19 @@ namespace RestaurantManagement.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var nv = await _context.NhanViens.FindAsync(id);
+            var nv = await _context.NhanViens.Include(n => n.TaiKhoan) // Kèm theo Tài khoản để xóa
+                                            .FirstOrDefaultAsync(n => n.IdnhanVien == id);
             if (nv != null)
             {
+                // Xóa Tài khoản liên kết trước để tránh dữ liệu mồ côi
+                if (nv.TaiKhoan != null)
+                {
+                    _context.TaiKhoans.Remove(nv.TaiKhoan);
+                }
+
                 _context.NhanViens.Remove(nv);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Xóa nhân viên thành công!";
             }
             return RedirectToAction(nameof(Index));
         }

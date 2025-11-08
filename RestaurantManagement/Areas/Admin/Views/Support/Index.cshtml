@@ -1,69 +1,87 @@
 ﻿@model RestaurantManagement.Areas.Admin.Models.ViewModels.SupportIndexViewModel
 @{
-    ViewData["Title"] = "Tư vấn với khách hàng";
+    ViewData["Title"] = "Hòm thư liên hệ";
 
-    // Lấy thông tin phân trang từ Model
     int currentPage = Model.PageNumber;
     int totalPages = Model.TotalPages;
-    string searchTerm = Model.SearchTerm;
+    string searchTerm = Model.SearchTerm ?? "";
     int pageSize = Model.PageSize;
 }
 
-<div class="content-wrapper" id="postContent">
-    <h2>Hòm thư liên hệ</h2>
+<div class="content-wrapper p-4">
+    <h2 class="mb-4 text-primary">📩 Hòm thư liên hệ khách hàng</h2>
 
-    <form asp-action="Index" method="get" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-
-        <div class="list-controls" style="display: flex; gap: 15px; align-items: center;">
-
-            <input type="text" name="searchTerm" id="lienhe-search-input" value="@searchTerm" placeholder="Tìm kiếm tin nhắn..." class="search-input" style="width: 250px;">
-
-            <div class="pagination-controls">
-                <label for="pageSize" style="font-weight: normal;">Mục/trang:</label>
-                <select name="pageSize" onchange="this.form.submit()" style="padding: 5px; border-radius: 4px;">
-                    <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
-                    <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
-                    <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20</option>
-                </select>
-            </div>
-             <button type="submit" class="btn btn-secondary">Tìm</button>
+    <!-- Thanh công cụ tìm kiếm + chọn số mục -->
+    <form asp-action="Index" method="get" class="row mb-3 align-items-center g-2">
+        <div class="col-md-4">
+            <input type="text"
+                   name="searchTerm"
+                   value="@searchTerm"
+                   class="form-control"
+                   placeholder="🔍 Tìm theo tên, email, nội dung..." />
+        </div>
+        <div class="col-md-2">
+            <select name="pageSize" class="form-select" onchange="this.form.submit()">
+                <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5 mục/trang</option>
+                <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10 mục/trang</option>
+                <option value="20" selected="@(Model.PageSize == 20 ? "selected" : null)">20 mục/trang</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-secondary w-100">
+                Tìm kiếm
+            </button>
         </div>
     </form>
-    <div class="table-responsive">
-        <table>
-            <thead>
+
+    <!-- Bảng danh sách -->
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-primary">
                 <tr>
-                    <th>NGÀY GỬI</th>
-                    <th>NGƯỜI GỬI</th>
-                    <th>EMAIL</th>
-                    <th>TIÊU ĐỀ</th>
-                    <th>NỘI DUNG</th>
-                    <th>TRẠNG THÁI</th>
-                    <th>THAO TÁC</th> @* <--- CỘT THAO TÁC *@
+                    <th style="width: 10%;">Ngày gửi</th>
+                    <th style="width: 15%;">Người gửi</th>
+                    <th style="width: 15%;">Email</th>
+                    <th style="width: 15%;">Tiêu đề</th>
+                    <th style="width: 25%;">Nội dung</th>
+                    <th style="width: 10%;">Trạng thái</th>
+                    <th style="width: 10%;">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 @if (Model.LienHes.Any())
                 {
-                    @foreach (var item in Model.LienHes)
+                    foreach (var item in Model.LienHes)
                     {
                         <tr>
                             <td>@item.NgayGui.ToString("dd/MM/yyyy HH:mm")</td>
                             <td><strong>@item.HoTen</strong></td>
                             <td>@item.Email</td>
                             <td>@item.TieuDe</td>
-                            <td>@(item.NoiDung.Length > 50 ? item.NoiDung.Substring(0, 50) + "..." : item.NoiDung)</td>
-                            <td><span class="badge @(item.DaDoc ? "bg-secondary" : "bg-primary")">@(item.DaDoc ? "Đã đọc" : "Mới")</span></td>
+                            <td>@(item.NoiDung.Length > 60 ? item.NoiDung.Substring(0, 60) + "..." : item.NoiDung)</td>
                             <td>
-                                @* <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Xem</a>
-                                @if (!item.DaDoc)
-                                {
-                                    <a asp-action="MarkRead" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Đánh dấu đọc</a>
-                                } *@
-                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline;"
-                                      onsubmit="return confirm('Bạn có chắc chắn muốn xóa tin nhắn này?');">
-                                    <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
-                                </form>
+                                <span class="badge @(item.DaDoc ? "bg-secondary" : "bg-success")">
+                                    @(item.DaDoc ? "Đã đọc" : "Mới")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                    @* <a asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-sm btn-info text-white">
+                                        <i class="bi bi-eye"></i> Xem
+                                    </a> *@
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.Id"
+                                          method="post"
+                                          onsubmit="return confirm('Bạn có chắc chắn muốn xóa tin nhắn này không?');"
+                                          style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i> Xóa
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     }
@@ -71,45 +89,55 @@
                 else
                 {
                     <tr>
-                        <td colspan="7" style="text-align:center; padding: 15px;">Không tìm thấy tin nhắn nào.</td>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            Không tìm thấy tin nhắn nào.
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 
-    <div class="pages" id="lienhe-pagination" style="margin-top: 20px; text-align: right;">
-        @if (totalPages > 1)
-        {
-            // Nút "Trước"
-            <a asp-action="Index"
-               asp-route-pageNumber="@(currentPage - 1)"
-               asp-route-pageSize="@pageSize"
-               asp-route-searchTerm="@searchTerm"
-               class="btn btn-sm btn-outline-secondary @(currentPage == 1 ? "disabled" : "")">
-                &laquo; Trước
-            </a>
+    <!-- Phân trang -->
+    @if (totalPages > 1)
+    {
+        <div class="d-flex justify-content-end mt-3">
+            <nav aria-label="Phân trang">
+                <ul class="pagination">
+                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-pageNumber="@(currentPage - 1)"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-searchTerm="@searchTerm">
+                            &laquo; Trước
+                        </a>
+                    </li>
 
-            // Các nút số trang
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                <a asp-action="Index"
-                   asp-route-pageNumber="@i"
-                   asp-route-pageSize="@pageSize"
-                   asp-route-searchTerm="@searchTerm"
-                   class="btn btn-sm @(i == currentPage ? "btn-primary" : "btn-outline-primary")">
-                    @i
-                </a>
-            }
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        <li class="page-item @(i == currentPage ? "active" : "")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-pageNumber="@i"
+                               asp-route-pageSize="@pageSize"
+                               asp-route-searchTerm="@searchTerm">
+                                @i
+                            </a>
+                        </li>
+                    }
 
-            // Nút "Sau"
-            <a asp-action="Index"
-               asp-route-pageNumber="@(currentPage + 1)"
-               asp-route-pageSize="@pageSize"
-               asp-route-searchTerm="@searchTerm"
-               class="btn btn-sm btn-outline-secondary @(currentPage == totalPages ? "disabled" : "")">
-                Sau &raquo;
-            </a>
-        }
-    </div>
-    </div>
+                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-pageNumber="@(currentPage + 1)"
+                           asp-route-pageSize="@pageSize"
+                           asp-route-searchTerm="@searchTerm">
+                            Sau &raquo;
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+</div>
